@@ -23,6 +23,9 @@
       "node_modules/@types"
     ],
   },
+  "watchOptions": {
+    "excludeDirectories": ["node_modules"]
+  },
   "includes" : [
     "**/*"
   ],

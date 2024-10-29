@@ -17,9 +17,13 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node AppServer.js",
-    "build": "tsc"
+    "start": "nodemon AppServer.js",
+    "build": "tsc",
+    "watch": "tsc --watch"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
 }

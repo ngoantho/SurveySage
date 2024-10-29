@@ -15,6 +15,7 @@ const bodyParser = require("body-parser");
 const ListModel_1 = require("./model/ListModel");
 const TaskModel_1 = require("./model/TaskModel");
 const crypto = require("crypto");
+const SurveyModel_1 = require("./model/SurveyModel");
 // Creates and configures an ExpressJS web server.
 class App {
     //Run configuration methods on the Express instance.
@@ -24,6 +25,7 @@ class App {
         this.routes();
         this.Lists = new ListModel_1.ListModel(mongoDBConnection);
         this.Tasks = new TaskModel_1.TaskModel(mongoDBConnection);
+        this.Surveys = new SurveyModel_1.SurveyModel(mongoDBConnection);
     }
     // Configure Express middleware.
     middleware() {
@@ -85,6 +87,10 @@ class App {
         router.get('/app/list/', (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log('Query All list');
             yield this.Lists.retrieveAllLists(res);
+        }));
+        router.get('/survey', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            console.log(req);
+            yield this.Surveys.getAllSurveys(res);
         }));
         router.get('/app/listcount', (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log('Query the number of list elements in db');

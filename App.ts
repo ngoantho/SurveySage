@@ -3,6 +3,7 @@ import * as bodyParser from 'body-parser';
 import {ListModel} from './model/ListModel';
 import {TaskModel} from './model/TaskModel';
 import * as crypto from 'crypto';
+import { SurveyModel } from './model/SurveyModel';
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -11,6 +12,7 @@ class App {
   public expressApp: express.Application;
   public Lists:ListModel;
   public Tasks:TaskModel;
+  public Surveys: SurveyModel
 
   //Run configuration methods on the Express instance.
   constructor(mongoDBConnection:string)
@@ -20,6 +22,7 @@ class App {
     this.routes();
     this.Lists = new ListModel(mongoDBConnection);
     this.Tasks = new TaskModel(mongoDBConnection);
+    this.Surveys = new SurveyModel(mongoDBConnection)
   }
 
   // Configure Express middleware.
@@ -90,6 +93,11 @@ class App {
         await this.Lists.retrieveAllLists(res);
     });
 
+    router.get('/survey', async (req, res) => {
+      console.log(req)
+      await this.Surveys.getAllSurveys(res)
+    })
+
     router.get('/app/listcount', async (req, res) => {
       console.log('Query the number of list elements in db');
       await this.Lists.retrieveListCount(res);
@@ -100,9 +108,7 @@ class App {
     this.expressApp.use('/app/json/', express.static(__dirname+'/app/json'));
     this.expressApp.use('/images', express.static(__dirname+'/img'));
     this.expressApp.use('/', express.static(__dirname+'/pages'));
-    
   }
-
 }
 
 export {App};

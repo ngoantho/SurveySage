@@ -17,7 +17,7 @@ class ListModel {
             {
                 name: String,
                 description: String,
-                listId: String,
+                listId: Number,
                 due: String,
                 state: String,
                 owner: String

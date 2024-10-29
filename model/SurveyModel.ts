@@ -1,20 +1,11 @@
 import { Schema, Model, connect, model } from "mongoose";
 import { ISurveyModel } from "../interfaces/ISurveyModel";
 import { Response } from "express";
+import { CommonModel } from "../utils/CommonModel";
 
-class SurveyModel {
-  public schema: Schema;
-  public model: Model<ISurveyModel>;
-  public dbConnectionString: string;
-
-  public constructor(DB_CONNECTION_STRING: string) {
-    this.dbConnectionString = DB_CONNECTION_STRING;
-    this.createSchema();
-    this.createModel();
-  }
-
-  public createSchema() {
-    this.schema = new Schema(
+class SurveyModel extends CommonModel<ISurveyModel> {
+  createSchema(): Schema {
+    return new Schema(
       {
         surveyId: Number,
         name: String,
@@ -25,16 +16,14 @@ class SurveyModel {
     );
   }
 
-  public async createModel() {
-    try {
-      await connect(this.dbConnectionString, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-      this.model = model<ISurveyModel>("Surveys", this.schema);
-    } catch (e) {
-      console.error(e);
-    }
+  createModel(): Model<ISurveyModel> {
+    connect(this.dbConnectionString, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }).then(() => {
+      return model<ISurveyModel>("Surveys", this.schema)
+    })
+    return null
   }
 
   public async getAllSurveys(response: Response) {

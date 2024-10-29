@@ -11,14 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SurveyModel = void 0;
 const mongoose_1 = require("mongoose");
-class SurveyModel {
-    constructor(DB_CONNECTION_STRING) {
-        this.dbConnectionString = DB_CONNECTION_STRING;
-        this.createSchema();
-        this.createModel();
-    }
+const CommonModel_1 = require("../utils/CommonModel");
+class SurveyModel extends CommonModel_1.CommonModel {
     createSchema() {
-        this.schema = new mongoose_1.Schema({
+        return new mongoose_1.Schema({
             surveyId: Number,
             name: String,
             description: String,
@@ -26,18 +22,13 @@ class SurveyModel {
         }, { collection: "surveys" });
     }
     createModel() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield (0, mongoose_1.connect)(this.dbConnectionString, {
-                    useNewUrlParser: true,
-                    useUnifiedTopology: true,
-                });
-                this.model = (0, mongoose_1.model)("Surveys", this.schema);
-            }
-            catch (e) {
-                console.error(e);
-            }
+        (0, mongoose_1.connect)(this.dbConnectionString, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }).then(() => {
+            return (0, mongoose_1.model)("Surveys", this.schema);
         });
+        return null;
     }
     getAllSurveys(response) {
         return __awaiter(this, void 0, void 0, function* () {

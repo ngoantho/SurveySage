@@ -43,7 +43,7 @@ class TaskModel {
     }
     retrieveTasksDetails(response, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            var query = this.model.findOne({ listId: value });
+            var query = this.model.findOne();
             try {
                 const itemArray = yield query.exec();
                 response.json(itemArray);
@@ -53,9 +53,9 @@ class TaskModel {
             }
         });
     }
-    retrieveTasksCount(response, filter) {
+    retrieveTasksCount(response, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            var query = this.model.findOne(filter);
+            var query = this.model.findOne({ listId: value });
             try {
                 const innerTaskList = yield query.exec();
                 if (innerTaskList == null) {

@@ -40,7 +40,7 @@ class TaskModel {
     }
     
     public async retrieveTasksDetails(response:any, value:number) {
-        var query = this.model.findOne({listId: value});
+        var query = this.model.findOne();
         try {
             const itemArray = await query.exec();
             response.json(itemArray);
@@ -50,8 +50,8 @@ class TaskModel {
         }
     }
 
-    public async retrieveTasksCount(response:any, filter:Object) {
-        var query = this.model.findOne(filter);
+    public async retrieveTasksCount(response:any, value:number) {
+        var query = this.model.findOne({listId: value});
         try {
             const innerTaskList = await query.exec();
             if (innerTaskList == null) {

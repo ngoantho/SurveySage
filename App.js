@@ -43,7 +43,7 @@ class App {
         router.get('/app/list/:listId/count', (req, res) => __awaiter(this, void 0, void 0, function* () {
             var id = req.params.listId;
             console.log('Query single list with id: ' + id);
-            yield this.Tasks.retrieveTasksCount(res, { listId: id });
+            yield this.Tasks.retrieveTasksCount(res, id);
         }));
         router.get('/app/list/:listId', (req, res) => __awaiter(this, void 0, void 0, function* () {
             var id = req.params.listId;

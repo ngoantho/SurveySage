@@ -16,7 +16,7 @@ class TaskModel {
     public createSchema(): void {
         this.schema = new Mongoose.Schema(
             {
-                listId: String,
+                listId: Number,
                 tasks: [
                     {
                         description: String,
@@ -39,8 +39,8 @@ class TaskModel {
         }
     }
     
-    public async retrieveTasksDetails(response:any, filter:Object) {
-        var query = this.model.findOne(filter);
+    public async retrieveTasksDetails(response:any, value:number) {
+        var query = this.model.findOne({listId: value});
         try {
             const itemArray = await query.exec();
             response.json(itemArray);

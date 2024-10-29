@@ -85,7 +85,7 @@ class App {
     router.get('/app/list/:listId/tasks', async (req, res) => {
         var id = req.params.listId;
         console.log('Query single list with id: ' + id);
-        await this.Tasks.retrieveTasksDetails(res, {listId: id});
+        await this.Tasks.retrieveTasksDetails(res, id);
     });
 
     router.get('/app/list/', async (req, res) => {

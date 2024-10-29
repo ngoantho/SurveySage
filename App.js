@@ -82,7 +82,7 @@ class App {
         router.get('/app/list/:listId/tasks', (req, res) => __awaiter(this, void 0, void 0, function* () {
             var id = req.params.listId;
             console.log('Query single list with id: ' + id);
-            yield this.Tasks.retrieveTasksDetails(res, { listId: id });
+            yield this.Tasks.retrieveTasksDetails(res, id);
         }));
         router.get('/app/list/', (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log('Query All list');

@@ -19,7 +19,7 @@ class TaskModel {
     }
     createSchema() {
         this.schema = new Mongoose.Schema({
-            listId: String,
+            listId: Number,
             tasks: [
                 {
                     description: String,
@@ -41,9 +41,9 @@ class TaskModel {
             }
         });
     }
-    retrieveTasksDetails(response, filter) {
+    retrieveTasksDetails(response, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            var query = this.model.findOne(filter);
+            var query = this.model.findOne({ listId: value });
             try {
                 const itemArray = yield query.exec();
                 response.json(itemArray);

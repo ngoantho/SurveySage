@@ -16,7 +16,8 @@ class QuestionModel extends CommonModel<IQuestionModel> {
               type: Boolean,
               default: true,
             },
-            payload: [String],
+            text: String,
+            payload: [String]
           },
         ],
       },

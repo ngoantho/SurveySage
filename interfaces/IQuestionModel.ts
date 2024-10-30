@@ -7,6 +7,7 @@ interface IQuestionModel extends Document {
     surveyId: number;
     type: string;
     isRequired: boolean;
+    text: string;
     payload: string[];
   }];
 }

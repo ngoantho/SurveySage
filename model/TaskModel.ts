@@ -40,7 +40,7 @@ class TaskModel {
     }
     
     public async retrieveTasksDetails(response:any, value:number) {
-        var query = this.model.findOne();
+        var query = this.model.findOne({listId: value});
         try {
             const itemArray = await query.exec();
             response.json(itemArray);

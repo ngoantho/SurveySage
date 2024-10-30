@@ -15,18 +15,22 @@ const CommonModel_1 = require("../utils/CommonModel");
 class QuestionModel extends CommonModel_1.CommonModel {
     createSchema() {
         return new mongoose_1.Schema({
-            questionId: Number,
             surveyId: Number,
-            type: String,
-            text: String,
-            isRequired: {
-                type: Boolean,
-                default: true
-            },
-            options: {
-                type: [String],
-                default: []
-            }
+            questions: [
+                {
+                    questionId: Number,
+                    type: String,
+                    text: String,
+                    isRequired: {
+                        type: Boolean,
+                        default: true
+                    },
+                    options: {
+                        type: [String],
+                        default: []
+                    }
+                }
+            ]
         }, { collection: 'questions' });
     }
     createModel() {

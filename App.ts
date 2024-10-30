@@ -101,6 +101,12 @@ class App {
       await this.Lists.retrieveListCount(res);
     });
 
+    //SURVEYSAGE APP
+    router.get("/app/surveycount", async (req, res) => {
+      console.log("Query the number of survey elements in db");
+      await this.Surveys.retrieveSurveyCount(res);
+    });
+
     this.expressApp.use("/", router);
 
     this.expressApp.use("/app/json/", express.static(__dirname + "/app/json"));

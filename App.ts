@@ -96,11 +96,6 @@ class App {
       await this.Lists.retrieveAllLists(res);
     });
 
-    router.get("/survey", async (req, res) => {
-      console.log(req);
-      await this.Surveys.getAllSurveys(res);
-    });
-
     router.get("/app/listcount", async (req, res) => {
       console.log("Query the number of list elements in db");
       await this.Lists.retrieveListCount(res);

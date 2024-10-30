@@ -16,14 +16,9 @@ class SurveyModel extends CommonModel<ISurveyModel> {
     );
   }
 
-  createModel(): Model<ISurveyModel> {
-    connect(this.dbConnectionString, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }).then(() => {
-      return model<ISurveyModel>("Surveys", this.schema)
-    })
-    return null
+  async createModel(): Promise<Model<ISurveyModel>> {
+    await this.connect()
+    return model<ISurveyModel>("Surveys", this.schema, "surveys")
   }
 
   public async getAllSurveys(response: Response) {

@@ -40,18 +40,19 @@ class App {
     // Configure API endpoints.
     routes() {
         let router = express.Router();
-        router.get('/app/list/:listId/count', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.get("/app/list/:listId/count", (req, res) => __awaiter(this, void 0, void 0, function* () {
             var id = req.params.listId;
-            console.log('Query single list with id: ' + id);
+            console.log("Query single list with id: " + id);
             yield this.Tasks.retrieveTasksCount(res, id);
         }));
-        router.get('/app/list/:listId', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.get("/app/list/:listId", (req, res) => __awaiter(this, void 0, void 0, function* () {
             var id = req.params.listId;
-            console.log('Query single list with id: ' + id);
+            console.log("Query single list with id: " + id);
             yield this.Lists.retrieveLists(res, id);
         }));
-        router.post('/app/list/', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const id = crypto.randomBytes(16).toString("hex");
+        router.post("/app/list/", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const hex = crypto.randomBytes(4).toString("hex");
+            const id = parseInt(hex, 16);
             console.log(req.body);
             var jsonObj = req.body;
             jsonObj.listId = id;
@@ -61,11 +62,12 @@ class App {
             }
             catch (e) {
                 console.error(e);
-                console.log('object creation failed');
+                console.log("object creation failed");
             }
         }));
-        router.post('/app/list2/', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const id = crypto.randomBytes(16).toString("hex");
+        router.post("/app/list2/", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const hex = crypto.randomBytes(4).toString("hex");
+            const id = parseInt(hex, 16);
             console.log(req.body);
             var jsonObj = req.body;
             jsonObj.listId = id;
@@ -75,31 +77,31 @@ class App {
                 res.send('{"id":"' + id + '"}');
             }
             catch (e) {
-                console.log('object creation failed');
+                console.log("object creation failed");
                 console.error(e);
             }
         }));
-        router.get('/app/list/:listId/tasks', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.get("/app/list/:listId/tasks", (req, res) => __awaiter(this, void 0, void 0, function* () {
             var id = req.params.listId;
-            console.log('Query single list with id: ' + id);
+            console.log("Query single list with id: " + id);
             yield this.Tasks.retrieveTasksDetails(res, id);
         }));
-        router.get('/app/list/', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            console.log('Query All list');
+        router.get("/app/list/", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            console.log("Query All list");
             yield this.Lists.retrieveAllLists(res);
         }));
-        router.get('/survey', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.get("/survey", (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log(req);
             yield this.Surveys.getAllSurveys(res);
         }));
-        router.get('/app/listcount', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            console.log('Query the number of list elements in db');
+        router.get("/app/listcount", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            console.log("Query the number of list elements in db");
             yield this.Lists.retrieveListCount(res);
         }));
-        this.expressApp.use('/', router);
-        this.expressApp.use('/app/json/', express.static(__dirname + '/app/json'));
-        this.expressApp.use('/images', express.static(__dirname + '/img'));
-        this.expressApp.use('/', express.static(__dirname + '/pages'));
+        this.expressApp.use("/", router);
+        this.expressApp.use("/app/json/", express.static(__dirname + "/app/json"));
+        this.expressApp.use("/images", express.static(__dirname + "/img"));
+        this.expressApp.use("/", express.static(__dirname + "/pages"));
     }
 }
 exports.App = App;

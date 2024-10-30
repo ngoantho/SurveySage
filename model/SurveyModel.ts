@@ -10,7 +10,8 @@ class SurveyModel extends CommonModel<ISurveyModel> {
         surveyId: Number,
         name: String,
         description: String,
-        status: String,
+        owner: String,
+        status: String
       },
       { collection: "surveys" }
     );
@@ -31,8 +32,8 @@ class SurveyModel extends CommonModel<ISurveyModel> {
     }
   }
 
-  public async getSurveyById(response: Response, surveyId: number) {
-    let query = this.model.findOne({surveyId})
+  public async getSurveyById(response: Response, id: number) {
+    let query = this.model.findOne({surveyId: id})
     try {
       const survey = await query.exec()
       response.json(survey)

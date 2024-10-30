@@ -11,15 +11,11 @@ class QuestionModel extends CommonModel<IQuestionModel> {
         {
           questionId: Number,
           type: String,
-          text: String,
           isRequired: {
             type: Boolean,
             default: true
           },
-          options: {
-            type: [String],
-            default: []
-          }
+          payload: [String]
         }
       ]
     }, { collection: 'questions' }

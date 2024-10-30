@@ -20,14 +20,8 @@
     "nodemon": "nodemon",
     "build": "tsc",
     "watch": "tsc --watch",
-<<<<<<< HEAD
-    "database": "mongod -port 3000 -dbpath ./db",
-    "concurrently": "concurrently \"nodemon\" \"tsc --watch\"\"",
-    "dev": "npm-run-all --parallel database concurrently"
-=======
     "db": "mongod -port 3000 -dbpath ./db",
     "dev": "npm-run-all --parallel db watch nodemon"
->>>>>>> 485b9a7a18694bf9a28f9c334bb1631cdd90858d
   },
   "author": "",
   "license": "ISC",

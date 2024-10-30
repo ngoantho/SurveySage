@@ -30,26 +30,26 @@ questionsCollection.insert(
     {
       questionId: 1,
       type: "text-response",
-     isRequired: TRUE,
+     isRequired: true,
      payload: "What do you think about our product?"
     },
     {
       questionId: 2,
      type: "single-choice",
-     isRequired: TRUE,
+     isRequired: true,
       text: "How satisfied are you with our service?",
       payload: ["Very Satisfied", "Satisfied", "Neutral", "Unsatisfied", "Very Unsatisfied"]
     },
     {
       questionId: 3,
      type: "single-choice",
-     isRequired: TRUE,
+     isRequired: true,
       payload: "Would you recommend our product to others?",
     },
     {
       questionId: 4,
      type: "text-response",
-    isRequired: TRUE,
+    isRequired: true,
       payload: "What improvements would you like to see?",
     }
   ]

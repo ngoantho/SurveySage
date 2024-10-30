@@ -20,7 +20,7 @@
     "nodemon": "nodemon",
     "build": "tsc",
     "watch": "tsc --watch",
-    "dev": "concurrently \"nodemon\" \"tsc --watch\" \"mongod -port 3000 -dbpath \"./db\"\""
+    "dev": "concurrently \"nodemon\" \"tsc --watch\"\""
   },
   "author": "",
   "license": "ISC",

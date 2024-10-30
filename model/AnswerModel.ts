@@ -7,11 +7,13 @@ class AnswerModel extends CommonModel<IAnswerModel> {
   createSchema(): Schema {
     return new Schema(
       {
-        answerId: Number,
         surveyId: Number,
         questionId: Number,
-        respondentId: Number,
-        answerText: String,
+        answers: [{
+          answerId: Number,
+          answerText: String,
+          selectedOptions: [String]
+        }]
       },
       { collection: "answers" }
     );
@@ -27,22 +29,22 @@ class AnswerModel extends CommonModel<IAnswerModel> {
     return null
   }
 
-  async getSurveyAnswers(response: Response, surveyId: number) {
+  async getAnswersBySurvey(response: Response, surveyId: number) {
     let query = this.model.find({ surveyId })
     try {
       let answers = await query.exec()
       response.json(answers)
-    } catch(e) {
+    } catch (e) {
       response.send(e)
     }
   }
 
-  async getSurveyAnswer(response: Response, surveyId: number, questionId: number) {
+  async getAnswersBySurveyQuestion(response: Response, surveyId: number, questionId: number) {
     let query = this.model.findOne({ surveyId, questionId })
     try {
       let answer = await query.exec()
       response.json(answer)
-    } catch(e) {
+    } catch (e) {
       response.send(e)
     }
   }

@@ -40,5 +40,17 @@ class SurveyModel extends CommonModel<ISurveyModel> {
       response.send(e)
     }
   }
+  public async retrieveSurveyCount(response:any) {
+    console.log("retrieve Survey Count ...");
+    var query = this.model.estimatedDocumentCount();
+    try {
+        const numberOfLists = await query.exec();
+        console.log("numberOfSurvey: " + numberOfLists);
+        response.json(numberOfLists);
+    }
+    catch (e) {
+        console.error(e);
+    }
+}
 }
 export { SurveyModel };

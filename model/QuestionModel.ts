@@ -6,20 +6,23 @@ import { IQuestionModel } from "../interfaces/IQuestionModel";
 class QuestionModel extends CommonModel<IQuestionModel> {
   createSchema(): Schema {
     return new Schema({
-      questionId: Number,
       surveyId: Number,
-      type: String,
-      text: String,
-      isRequired: {
-        type: Boolean,
-        default: true
-      },
-      options: {
-        type: [String],
-        default: []
-      }
-    }, 
-    { collection: 'questions' }
+      questions: [
+        {
+          questionId: Number,
+          type: String,
+          text: String,
+          isRequired: {
+            type: Boolean,
+            default: true
+          },
+          options: {
+            type: [String],
+            default: []
+          }
+        }
+      ]
+    }, { collection: 'questions' }
     )
   }
 
@@ -38,10 +41,10 @@ class QuestionModel extends CommonModel<IQuestionModel> {
     try {
       let questions = await query.exec()
       response.json(questions)
-    } catch(e) {
+    } catch (e) {
       response.send(e)
     }
   }
 }
 
-export {QuestionModel}
+export { QuestionModel }

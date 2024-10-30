@@ -1,1 +1,0 @@
-{"version":3,"file":"CommonModel.js","sourceRoot":"","sources":["CommonModel.ts"],"names":[],"mappings":";;;AAEA,MAAe,WAAW;IAKxB,YAAY,oBAA4B;QACtC,IAAI,CAAC,kBAAkB,GAAG,oBAAoB,CAAA;QAC9C,IAAI,CAAC,MAAM,GAAG,IAAI,CAAC,YAAY,EAAE,CAAA;QACjC,IAAI,CAAC,KAAK,GAAG,IAAI,CAAC,WAAW,EAAE,CAAA;IACjC,CAAC;CAIF;AAEO,kCAAW"}

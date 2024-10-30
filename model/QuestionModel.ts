@@ -26,7 +26,7 @@ class QuestionModel extends CommonModel<IQuestionModel> {
 
   async createModel(): Promise<Model<IQuestionModel>> {
     await this.connect()
-    return model<IQuestionModel>("Questions", this.schema, "questions");
+    return model<IQuestionModel>("QuestionModel", this.schema, "questions");
   }
 
   async getSurveyQuestions(response: Response, surveyId: number) {

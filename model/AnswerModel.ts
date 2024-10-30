@@ -22,7 +22,7 @@ class AnswerModel extends CommonModel<IAnswerModel> {
 
   async createModel(): Promise<Model<IAnswerModel>> {
     await this.connect()
-    return model<IAnswerModel>("Answers", this.schema, "answers");
+    return model<IAnswerModel>("AnswerModel", this.schema, "answers");
   }
 
   async getAnswersBySurvey(response: Response, surveyId: number) {

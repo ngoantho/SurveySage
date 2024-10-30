@@ -3,10 +3,11 @@ import { IAnswerModel } from "./IAnswerModel";
 
 interface IQuestionModel extends Document {
   questionId: number;
-  surveyId: number;
-  type: string;
-  text: string;
-  isRequired: boolean;
-  options: string[];
+  questions: [{
+    surveyId: number;
+    type: string;
+    isRequired: boolean;
+    payload: string[];
+  }];
 }
-export {IQuestionModel}
+export { IQuestionModel }

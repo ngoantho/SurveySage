@@ -102,9 +102,36 @@ class App {
     });
 
     //SURVEYSAGE APP
+
+
+    //Get survey using surveyId
+    router.get("/app/survey/:surveyId", async (req, res) => {
+      var id = req.params.surveyId;
+      console.log("Query single list with id: " + id);
+      await this.Surveys.getSurveyById(res, id);
+    });
+
+    //Get number of survey
     router.get("/app/surveycount", async (req, res) => {
       console.log("Query the number of survey elements in db");
       await this.Surveys.retrieveSurveyCount(res);
+    });
+
+    //Create new survey
+    router.post("/app/survey", async (req, res) => {
+      const hex = crypto.randomBytes(4).toString("hex");
+      const id = parseInt(hex, 16);
+
+      console.log(req.body);
+      var jsonObj = req.body;
+      jsonObj.surveyId = id;
+      try {
+        await this.Surveys.model.create([jsonObj]);
+        res.send('{"id":"' + id + '"}');
+      } catch (e) {
+        console.error(e);
+        console.log("object creation failed");
+      }
     });
 
     this.expressApp.use("/", router);
@@ -114,5 +141,6 @@ class App {
     this.expressApp.use("/", express.static(__dirname + "/pages"));
   }
 }
+
 
 export { App };

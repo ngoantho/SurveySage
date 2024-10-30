@@ -11,8 +11,7 @@ class AnswerModel extends CommonModel<IAnswerModel> {
         questionId: Number,
         answers: [{
           answerId: Number,
-          answerText: String,
-          selectedOptions: [String]
+          payload: [String]
         }]
       },
       { collection: "answers" }

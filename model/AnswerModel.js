@@ -15,11 +15,13 @@ const CommonModel_1 = require("../utils/CommonModel");
 class AnswerModel extends CommonModel_1.CommonModel {
     createSchema() {
         return new mongoose_1.Schema({
-            answerId: Number,
             surveyId: Number,
             questionId: Number,
-            respondentId: Number,
-            answerText: String,
+            answers: [{
+                    answerId: Number,
+                    answerText: String,
+                    selectedOptions: [String]
+                }]
         }, { collection: "answers" });
     }
     createModel() {
@@ -31,7 +33,7 @@ class AnswerModel extends CommonModel_1.CommonModel {
         });
         return null;
     }
-    getSurveyAnswers(response, surveyId) {
+    getAnswersBySurvey(response, surveyId) {
         return __awaiter(this, void 0, void 0, function* () {
             let query = this.model.find({ surveyId });
             try {
@@ -43,7 +45,7 @@ class AnswerModel extends CommonModel_1.CommonModel {
             }
         });
     }
-    getSurveyAnswer(response, surveyId, questionId) {
+    getAnswersBySurveyQuestion(response, surveyId, questionId) {
         return __awaiter(this, void 0, void 0, function* () {
             let query = this.model.findOne({ surveyId, questionId });
             try {

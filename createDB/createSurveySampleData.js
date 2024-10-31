@@ -25,6 +25,16 @@ surveysCollection.insert(
     status: "active" // Added status field
   }
 )
+
+surveysCollection.insert(
+  {
+    surveyId: 3,
+    name: "Favorite Game Survey",
+    description: "Survey to gather customer feedback on their favorite PC games",
+    owner: "ANgo",
+    status: "active" // Added status field
+  }
+)
 // Create the 'questions' collection
 db.createCollection('questions')
 questionsCollection = db.getCollection("questions")
@@ -102,6 +112,41 @@ questionsCollection.insert(
   }
 )
 
+questionsCollection.insert(
+  {
+    surveyId: 3,
+    questions: [
+      {
+        questionId: 1,
+        type: "multiple-choice",
+        isRequired: true,
+        text: "Which type of games are you usually playing?",
+        payload: ["FPS", "AAA", "ESport", "RPG", "TabletopGame"]
+      },
+      {
+        questionId: 2,
+        type: "text-response",
+        isRequired: false,
+        text: "Please tell us a bit more about your gaming experience on your PC",
+        payload: []
+      },
+      {
+        questionId: 3,
+        type: "single-choice",
+        isRequired: true,
+        text: "Do you feel like you need a better PC?",
+        payload: ["Yes", "No"]
+      },
+      {
+        questionId: 4,
+        type: "single-choice",
+        isRequired: true,
+        text: "How many hours do you usually spend for gaming?",
+        payload: ["1", "2", "3", "4", "5"]
+      }
+    ]
+  }
+)
 // Create the 'answers' collection
 db.createCollection('answers')
 answersCollection = db.getCollection("answers")
@@ -253,6 +298,90 @@ answersCollection.insert(
       {
         answerId: 2,
         payload: ["My system works good. But I prefer to have programmable thermostat for my convenience."]
+      }
+    ]
+  }
+)
+
+answersCollection.insert(
+  {
+    surveyId: 3,
+    questionId: 1,
+    answers: [
+      {
+        answerId: 1,
+        payload: ["RPG"]
+      },
+      {
+        answerId: 2,
+        payload: ["ESport"]
+      },
+      {
+        answerId: 3,
+        payload: ["RPG"]
+      }
+    ]
+  }
+)
+
+answersCollection.insert(
+  {
+    surveyId: 3,
+    questionId: 2,
+    answers: [
+      {
+        answerId: 1,
+        payload: ["It's all good. I spent a lot on my PC and games collection"]
+      },
+      {
+        answerId: 2,
+        payload: ["My PC is kinda slow. But it is good enough for average games."]
+      },
+      {
+        answerId: 3,
+        payload: ["No Comment"]
+      }
+    ]
+  }
+)
+
+answersCollection.insert(
+  {
+    surveyId: 3,
+    questionId: 3,
+    answers: [
+      {
+        answerId: 1,
+        payload: ["Yes"]
+      },
+      {
+        answerId: 2,
+        payload: ["No"]
+      },
+      {
+        answerId: 3,
+        payload: ["No"]
+      }
+    ]
+  }
+)
+
+answersCollection.insert(
+  {
+    surveyId: 3,
+    questionId: 4,
+    answers: [
+      {
+        answerId: 1,
+        payload: ["5"]
+      },
+      {
+        answerId: 2,
+        payload: ["5"]
+      },
+      {
+        answerId: 3,
+        payload: ["2"]
       }
     ]
   }

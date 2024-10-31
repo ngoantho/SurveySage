@@ -4,6 +4,9 @@ import { ListModel } from "./model/ListModel";
 import { TaskModel } from "./model/TaskModel";
 import * as crypto from "crypto";
 import { SurveyModel } from "./model/SurveyModel";
+import { QueuingStrategy } from "stream/web";
+import { QuestionModel } from "./model/QuestionModel";
+import { AnswerModel } from "./model/AnswerModel";
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -12,6 +15,8 @@ class App {
   public Lists: ListModel;
   public Tasks: TaskModel;
   public Surveys: SurveyModel;
+  public Questions: QuestionModel;
+  public Answers: AnswerModel;
 
   //Run configuration methods on the Express instance.
   constructor(mongoDBConnection: string) {
@@ -21,6 +26,8 @@ class App {
     this.Lists = new ListModel(mongoDBConnection);
     this.Tasks = new TaskModel(mongoDBConnection);
     this.Surveys = new SurveyModel(mongoDBConnection);
+    this.Questions = new QuestionModel(mongoDBConnection);
+    this.Answers = new AnswerModel(mongoDBConnection);
   }
 
   // Configure Express middleware.
@@ -103,11 +110,12 @@ class App {
 
     //SURVEYSAGE APP
 
+    //SURVEY ROUTES
 
     //Get survey using surveyId
     router.get("/app/survey/:surveyId", async (req, res) => {
       var id = req.params.surveyId;
-      console.log("Query single list with id: " + id);
+      console.log("Query single survey with id: " + id);
       await this.Surveys.getSurveyById(res, id);
     });
 
@@ -133,6 +141,24 @@ class App {
         console.log("object creation failed");
       }
     });
+
+    // ANSWER ROUTE
+    //Get all answers of an survey
+
+    router.get("/app/survey/:surveyId/answers", async (req, res) => {
+      var id = req.params.surveyId;
+      console.log("Query all answers for survey with id:  " + id);
+      await this.Answers.getAnswersBySurvey(res, id);
+    });
+
+    //Get all answers of a question in a survey
+    router.get("/app/survey/:surveyId/:questionId/answers", async (req, res) => {
+      var sid = req.params.surveyId;
+      var qid = req.params.questionId;
+      console.log("Query all answers of question with id " + qid + " from survey with id " + sid);
+      await this.Answers.getAnswersBySurveyQuestion(res, sid, qid);
+    });
+
 
     this.expressApp.use("/", router);
 

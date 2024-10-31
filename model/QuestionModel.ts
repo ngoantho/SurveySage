@@ -28,10 +28,9 @@ class QuestionModel extends CommonModel<IQuestionModel> {
   }
 
   async getSurveyQuestions(response: Response, surID: number) {
-    console.log("QUESTION: Query for survey " + surID);
     let query = this.model.find({surveyId: surID});
     try {
-      let questions = await query.exec();
+      let questions = await query.lean().exec();
       response.json(questions);
     } catch (e) {
       response.send(e);

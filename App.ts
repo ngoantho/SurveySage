@@ -119,6 +119,10 @@ class App {
       await this.Surveys.getSurveyById(res, id);
     });
 
+    router.get("/app/surveys", async (req, res) => {
+      await this.Surveys.getAllSurveys(res)
+    })
+
     //Get number of survey
     router.get("/app/surveycount", async (req, res) => {
       console.log("Query the number of survey elements in db");

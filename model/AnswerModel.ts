@@ -28,7 +28,7 @@ class AnswerModel extends CommonModel<IAnswerModel> {
   async getAnswersBySurvey(response: Response, surID: number) {
     let query = this.model.find({ surveyId: surID });
     try {
-      let answers = await query.exec();
+      let answers = await query.lean().exec();
       response.json(answers);
     } catch (e) {
       response.send(e);

@@ -1,10 +1,9 @@
 import { Document } from "mongoose";
-import { IAnswerModel } from "./IAnswerModel";
 
 interface IQuestionModel extends Document {
-  questionId: number;
+  surveyId: number,
   questions: [{
-    surveyId: number;
+    questionId: number,
     type: string;
     isRequired: boolean;
     text: string;

@@ -12,12 +12,9 @@ class QuestionModel extends CommonModel<IQuestionModel> {
           {
             questionId: Number,
             type: String,
-            isRequired: {
-              type: Boolean,
-              default: true,
-            },
+            isRequired: Boolean,
             text: String,
-            payload: [String]
+            payload: [String],
           },
         ],
       },
@@ -26,12 +23,13 @@ class QuestionModel extends CommonModel<IQuestionModel> {
   }
 
   async createModel(): Promise<Model<IQuestionModel>> {
-    await this.connect()
+    await this.connect();
     return model<IQuestionModel>("QuestionModel", this.schema, "questions");
   }
 
   async getSurveyQuestions(response: Response, surID: number) {
-    let query = this.model.find({ surveyId: surID });
+    console.log("QUESTION: Query for survey " + surID);
+    let query = this.model.find({surveyId: surID});
     try {
       let questions = await query.exec();
       response.json(questions);

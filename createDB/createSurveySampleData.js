@@ -40,7 +40,7 @@ questionsCollection.insert(
         type: "text-response",
         isRequired: true,
         text: "What do you think about our product?",
-        payload: null,
+        payload: [],
       },
       {
         questionId: 2,
@@ -61,7 +61,7 @@ questionsCollection.insert(
         type: "text-response",
         isRequired: true,
         text: "What improvements would you like to see?",
-        payload: null
+        payload: []
       }
     ]
   }
@@ -82,7 +82,7 @@ questionsCollection.insert(
         type: "text-response",
         isRequired: false,
         text: "Please input your ZIP code: ",
-        payload: null
+        payload: []
       },
       {
         questionId: 3,
@@ -96,7 +96,7 @@ questionsCollection.insert(
         type: "text-response",
         isRequired: true,
         text: "Is there anything you would like to share about your HVAC?",
-        payload: null
+        payload: []
       }
     ]
   }
@@ -133,7 +133,7 @@ answersCollection.insert(
     answers: [
       {
         answerId: 1,
-        Payload: ["Satisfied"]
+        payload: ["Satisfied"]
       },
       {
         answerId: 2,

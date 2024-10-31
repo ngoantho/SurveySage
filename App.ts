@@ -146,6 +146,12 @@ class App {
       }
     });
 
+    // Questions Route
+    router.get("/app/survey/:surveyId/questions", async (req, res) => {
+      var id = req.params.surveyId;
+      await this.Questions.getSurveyQuestions(res, id)
+    })
+
     // ANSWER ROUTE
     //Get all answers of an survey
 

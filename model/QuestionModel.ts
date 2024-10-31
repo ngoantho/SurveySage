@@ -30,8 +30,8 @@ class QuestionModel extends CommonModel<IQuestionModel> {
     return model<IQuestionModel>("QuestionModel", this.schema, "questions");
   }
 
-  async getSurveyQuestions(response: Response, surveyId: number) {
-    let query = this.model.find({ surveyId });
+  async getSurveyQuestions(response: Response, surID: number) {
+    let query = this.model.find({ surveyId: surID });
     try {
       let questions = await query.exec();
       response.json(questions);

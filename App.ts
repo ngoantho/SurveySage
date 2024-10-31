@@ -7,6 +7,7 @@ import { SurveyModel } from "./model/SurveyModel";
 import { QueuingStrategy } from "stream/web";
 import { QuestionModel } from "./model/QuestionModel";
 import { AnswerModel } from "./model/AnswerModel";
+import { isNumberObject } from "util/types";
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -48,13 +49,13 @@ class App {
   private routes(): void {
     let router = express.Router();
     router.get("/app/list/:listId/count", async (req, res) => {
-      var id = req.params.listId;
+      var id = Number(req.params.listId);
       console.log("Query single list with id: " + id);
       await this.Tasks.retrieveTasksCount(res, id);
     });
 
     router.get("/app/list/:listId", async (req, res) => {
-      var id = req.params.listId;
+      var id = Number(req.params.listId);
       console.log("Query single list with id: " + id);
       await this.Lists.retrieveLists(res, id);
     });
@@ -93,7 +94,7 @@ class App {
     });
 
     router.get("/app/list/:listId/tasks", async (req, res) => {
-      var id = req.params.listId;
+      var id = Number(req.params.listId);
       console.log("Query single list with id: " + id);
       await this.Tasks.retrieveTasksDetails(res, id);
     });
@@ -114,7 +115,7 @@ class App {
 
     //Get survey using surveyId
     router.get("/app/survey/:surveyId", async (req, res) => {
-      var id = req.params.surveyId;
+      var id = Number(req.params.surveyId);
       console.log("Query single survey with id: " + id);
       await this.Surveys.getSurveyById(res, id);
     });
@@ -148,7 +149,7 @@ class App {
 
     // Questions Route
     router.get("/app/survey/:surveyId/questions", async (req, res) => {
-      var id = req.params.surveyId;
+      var id = Number(req.params.surveyId);
       console.log("QUESTION: Query for survey " + id);
       await this.Questions.getSurveyQuestions(res, id)
     })
@@ -157,15 +158,15 @@ class App {
     //Get all answers of an survey
 
     router.get("/app/survey/:surveyId/answers", async (req, res) => {
-      var id = req.params.surveyId;
+      var id = Number(req.params.surveyId);
       console.log("Query all answers for survey with id:  " + id);
       await this.Answers.getAnswersBySurvey(res, id);
     });
 
     //Get all answers of a question in a survey
     router.get("/app/survey/:surveyId/:questionId/answers", async (req, res) => {
-      var sid = req.params.surveyId;
-      var qid = req.params.questionId;
+      var sid = Number(req.params.surveyId);
+      var qid = Number(req.params.questionId);
       console.log("Query all answers of question with id " + qid + " from survey with id " + sid);
       await this.Answers.getAnswersBySurveyQuestion(res, sid, qid);
     });

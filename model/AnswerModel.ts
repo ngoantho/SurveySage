@@ -25,8 +25,8 @@ class AnswerModel extends CommonModel<IAnswerModel> {
     return model<IAnswerModel>("AnswerModel", this.schema, "answers");
   }
 
-  async getAnswersBySurvey(response: Response, surveyId: number) {
-    let query = this.model.find({ surveyId });
+  async getAnswersBySurvey(response: Response, surID: number) {
+    let query = this.model.find({ surveyId: surID });
     try {
       let answers = await query.exec();
       response.json(answers);
@@ -37,10 +37,10 @@ class AnswerModel extends CommonModel<IAnswerModel> {
 
   async getAnswersBySurveyQuestion(
     response: Response,
-    surveyId: number,
-    questionId: number
+    surId: number,
+    quesId: number
   ) {
-    let query = this.model.findOne({ surveyId, questionId });
+    let query = this.model.findOne({ surveyId : surId, questionId : quesId});
     try {
       let answer = await query.exec();
       response.json(answer);

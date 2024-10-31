@@ -170,7 +170,6 @@ class App {
       await this.Answers.getAnswersBySurveyQuestion(res, sid, qid);
     });
 
-
     this.expressApp.use("/", router);
     this.expressApp.use("/jquery", express.static(__dirname + '/node_modules/jquery/dist/jquery.min.js'))
     this.expressApp.use("/bootstrap/css", express.static(__dirname + '/node_modules/bootstrap/dist/css/bootstrap.min.css'))

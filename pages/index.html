@@ -1,13 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>SurveySage</title>
     <link rel="stylesheet" href="/bootstrap/css" />
+    <link rel="stylesheet" href="/main.css"/>
+    <style>
+      body {
+        background-image: url("https://i.pinimg.com/564x/75/98/19/759819a4cce0f0310e96c7c1b4167e7e.jpg");
+        background-size: 200%;
+      }
+    </style>
   </head>
   <body>
-    <div class="container"></div>
+    <main class="container">
+      <h1>SurveySage</h1>
+      <hr />
+
+      <div>Survey 1 - 10/10/2024</div>
+      <br/>
+
+      <div class="d-flex align-items-center">
+        <div class="question flex-grow-1">Question 1: How would we improve our service?</div>
+        <button class="btn btn-outline-danger btn-sm" style="margin-left: 2px">🗑️</button>
+      </div>
+      <div class="mt-1"></div>
+      <input type="text" class="form-control answer" placeholder="Answer:" />
+
+      <br/>
+      <div class="d-flex justify-content-center">
+        <button class="btn btn-outline-primary">Add Question</button>
+      </div>
+      <br/>
+
+      <div class="d-flex justify-content-center">
+        <button class="btn btn-outline-primary mx-2">Save</button>
+        <button class="btn btn-outline-primary mx-2">Cancel</button>
+        <button class="btn btn-outline-primary mx-2">Finish</button>
+      </div>
+    </main>
     <script src="/jquery"></script>
     <script src="/bootstrap/js"></script>
     <script type="module" src="/main.js"></script>

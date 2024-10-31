@@ -153,6 +153,13 @@ class App {
       console.log("QUESTION: Query for survey " + id);
       await this.Questions.getSurveyQuestions(res, id)
     })
+    //Get Question by id
+    router.get("/app/survey/:surveyId/question/:questionId", async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      const questionId = Number(req.params.questionId);
+      console.log(`Query question with id ${questionId} from survey with id ${surveyId}`);
+      await this.Questions.getQuestionById(res, surveyId, questionId);
+    });
 
     // ANSWER ROUTE
     //Get all answers of an survey

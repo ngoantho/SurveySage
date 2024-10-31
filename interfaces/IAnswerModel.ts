@@ -4,7 +4,7 @@ interface IAnswerModel extends Document {
 
   surveyId: number;
   questionId: number;
-  answer: [{
+  answers: [{
     answerId: number;
     payload: string[];
   }];

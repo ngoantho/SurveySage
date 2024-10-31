@@ -149,6 +149,7 @@ class App {
     // Questions Route
     router.get("/app/survey/:surveyId/questions", async (req, res) => {
       var id = req.params.surveyId;
+      console.log("QUESTION: Query for survey " + id);
       await this.Questions.getSurveyQuestions(res, id)
     })
 

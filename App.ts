@@ -185,7 +185,7 @@ class App {
     this.expressApp.use("/bootstrap/js", express.static(__dirname + '/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'))
     this.expressApp.use("/app/json/", express.static(__dirname + "/app/json"));
     this.expressApp.use("/images", express.static(__dirname + "/img"));
-    this.expressApp.use("/app/survey", express.static(__dirname + "/pages"));
+    this.expressApp.use("/", express.static(__dirname + "/pages"));
   }
 }
 

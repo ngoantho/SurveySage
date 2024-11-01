@@ -31,7 +31,7 @@ surveysCollection.insert(
     surveyId: 3,
     name: "Favorite Game Survey",
     description: "Survey to gather customer feedback on their favorite PC games",
-    owner: "ANgo",
+    owner: "Anthony Ngo",
     status: "active" // Added status field
   }
 )

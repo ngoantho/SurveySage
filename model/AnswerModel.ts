@@ -42,8 +42,8 @@ class AnswerModel extends CommonModel<IAnswerModel> {
   ) {
     let query = this.model.findOne({ surveyId : surId, questionId : quesId});
     try {
-      let answerDoc = await query.exec();
-      const payload = answerDoc.answers.map(answer => answer.payload).flat();
+      let answerContent = await query.exec();
+      const payload = answerContent.answers.map(answer => answer.payload).flat();
       response.json(payload);
     } catch (e) {
       response.send(e);

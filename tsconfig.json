@@ -25,7 +25,10 @@
     "skipLibCheck": true
   },
   "watchOptions": {
-    "excludeDirectories": ["node_modules"]
+    "excludeDirectories": [
+      "node_modules",
+      "angular"
+    ]
   },
   "includes" : [
     "**/*"

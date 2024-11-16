@@ -25,12 +25,16 @@
     "skipLibCheck": true
   },
   "watchOptions": {
-    "excludeDirectories": ["node_modules"]
+    "excludeDirectories": [
+      "node_modules",
+      "surveysage"
+    ]
   },
   "includes" : [
     "**/*"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "surveysage"
   ]
 }

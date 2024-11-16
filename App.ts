@@ -121,6 +121,7 @@ class App {
     });
 
     router.get("/app/surveys", async (req, res) => {
+      console.log("Get all surveys");
       await this.Surveys.getAllSurveys(res)
     })
 

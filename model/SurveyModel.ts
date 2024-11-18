@@ -41,6 +41,9 @@ class SurveyModel extends CommonModel<ISurveyModel> {
       response.send(e)
     }
   }
+
+  
+
   public async retrieveSurveyCount(response:any) {
     console.log("retrieve Survey Count ...");
     var query = this.model.estimatedDocumentCount();
@@ -52,6 +55,17 @@ class SurveyModel extends CommonModel<ISurveyModel> {
     catch (e) {
         console.error(e);
     }
+}
+
+//RETURN SURVEY INSTEAD OF RESPONSE
+public async returnSurveyById( id: number) {
+  let query = this.model.findOne({surveyId: id})
+  try {
+    const survey = await query.exec()
+    return survey;
+  } catch(e) {
+    throw new Error("Failed to retrieve survey");
+  }
 }
 }
 export { SurveyModel };

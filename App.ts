@@ -179,6 +179,33 @@ class App {
       await this.Answers.getAnswersBySurveyQuestion(res, sid, qid);
     });
 
+    // SURVEY GENERATE ROUTE
+
+    router.get("/app/survey/:surveyId/generateSurvey", async (req, res) => {
+      var surveyId = Number(req.params.surveyId);
+      const survey = await this.Surveys.returnSurveyById(surveyId);
+      const questionsLoad = await this.Questions.returnSurveyQuestions(surveyId);
+      
+      // Combine survey, questions, and answers
+      const surveyDetails = {
+        surveyName: survey.name, // Use 'name' for survey title
+        questions: await Promise.all(
+          questionsLoad[0].questions.map(async (question: any) => {
+            const answers = await this.Answers.returnAnswersBySurveyQuestion(
+              surveyId,
+              question.questionId
+            );
+            return {
+              question: question.text, // Assuming 'text' is inside the nested objects
+              answers, // Include the answer payload for the question
+            };
+          })
+        ),
+      };
+    console.log("Generate survey with id:", surveyId)
+    res.json(surveyDetails);
+
+    });
 
     this.expressApp.use("/", router);
     this.expressApp.use("/jquery", express.static(__dirname + '/node_modules/jquery/dist/jquery.min.js'))

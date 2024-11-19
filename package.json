@@ -23,10 +23,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node AppServer.js",
     "nodemon": "nodemon",
-    "build": "tsc",
-    "watch": "tsc --watch",
+    "tsc:build": "tsc",
+    "tsc:watch": "tsc --watch",
     "db": "mongod -port 3000 -dbpath ./db",
-    "dev": "npm-run-all --parallel db watch nodemon"
+    "dev": "npm-run-all --parallel tsc:watch nodemon"
   },
   "author": "",
   "license": "ISC"

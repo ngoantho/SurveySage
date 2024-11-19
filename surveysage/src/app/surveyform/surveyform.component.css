@@ -1,0 +1,81 @@
+/* Apply a gradient background to the entire container */
+.container {
+    background: linear-gradient(to bottom, #a7dbd8, #f0f4ff);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style the panel header */
+  .panel {
+    background-color: #a7dbd8;
+    color: white;
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 20px;
+  }
+  
+  .panel h3 {
+    margin: 0;
+    font-size: 1.5em;
+  }
+  
+  /* Style the action icons */
+  .panel a {
+    margin-right: 10px;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .panel a:hover {
+    color: #d9d9d9;
+  }
+  
+  /* Style the table */
+  .table {
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .table th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+  }
+  
+  .table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Style the input group */
+  .input-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-group-addon {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    font-weight: bold;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .panel h3 {
+      font-size: 1.2em;
+    }
+  
+    .table th, .table td {
+      padding: 8px;
+    }
+  }
+  

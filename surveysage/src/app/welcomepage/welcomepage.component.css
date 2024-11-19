@@ -1,10 +1,72 @@
+/* Main background styling */
 .jb-body {
-    /*
-    background-image: url ("https://www.istockphoto.com/photo/to-do-list-text-on-notepad-gm1285308242-382184795");
-    */
-    background-color: rgb(239, 193, 113);
+    background: linear-gradient(135deg, #a7dbd8, #f0f4ff); /* Light blue and white gradient */
+    color: #333; /* Darker text for readability */
+    min-height: 100vh; /* Full height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
 }
-.bt-body {
-    background-color: rgb(23, 95, 228);
-    color: white;
+
+/* Jumbotron styling */
+.jumbotron {
+    background: #ffffff; /* Pure white for clean contrast */
+    padding: 40px 50px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.jumbotron:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Subtle hover effect */
+}
+
+/* Heading styles */
+.jumbotron h1 {
+    font-size: 2.5rem;
+    color: #1877f2; /* Meta-inspired blue */
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.jumbotron p {
+    color: #606770; /* Light gray for secondary text */
+    font-size: 1.2rem;
+}
+
+/* Button styling */
+.btn-primary {
+    display: inline-block;
+    background: #1877f2; /* Meta blue */
+    color: #ffffff; /* White text for contrast */
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #a7dbd8; /* Darker blue on hover */
+    transform: scale(1.05); /* Slightly enlarges on hover */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .jumbotron h1 {
+        font-size: 2rem;
+    }
+
+    .jumbotron p {
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+    }
 }

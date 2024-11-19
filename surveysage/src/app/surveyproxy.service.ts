@@ -10,9 +10,11 @@ export class SurveyproxyService {
   constructor(private httpClient: HttpClient) { }
 
   getListsIndex() {
-    
-    return this.httpClient.get<any[]>( this.hostUrl + 'app/surveys');
-    
+    return this.httpClient.get<any[]>( this.hostUrl + 'app/surveys');  
+  }
+
+  getSurvey(index: string) {
+    return this.httpClient.get<Object>(this.hostUrl + 'app/survey/' + index);
   }
 
   getItems(index: string) {

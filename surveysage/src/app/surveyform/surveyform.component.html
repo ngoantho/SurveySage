@@ -1,9 +1,8 @@
-
 <div class="container">
   <div class="panel panel-default">
     <!-- Default panel contents -->
     <div class="panel" style="color:white; background-color:#a7dbd8, #f0f4ff">
-      <h3>  Questions for Survey#{{surveyId}}.</h3>
+      <h3>Questions for Survey#{{surveyId}}.</h3>
       <div>
         <a style="color:#ffffff" href="#"><span class="glyphicon glyphicon-edit"></span></a>
         <a style="color:white" href="#"><span class="glyphicon glyphicon-trash"></span></a>
@@ -17,7 +16,7 @@
         <tr>
           <th>Questions</th>
           <th>Question Type</th>
-          <th width="10%">Payload</th>
+          <th width="10%">Question Choice</th> <!-- Changed from "Payload" to "Question Choice" -->
           <th width="10%">isRequired?</th>
         </tr>
       </thead>
@@ -26,20 +25,19 @@
           <td>{{i + 1}}. {{result.text}}</td>
           <td>{{result.type}}</td>
           <td>
-            <!-- Display Payload -->
+            <!-- Changed "No Payload" to "Text Response" -->
             <span *ngIf="result.payload?.length > 0">
               {{ result.payload.join(', ') }}
             </span>
-            <span *ngIf="result.payload?.length === 0">No Payload</span>
+            <span *ngIf="result.payload?.length === 0">Text Response</span>
           </td>
           <td>
             <div class="input-group">
               <span class="input-group-addon" style="border-style:none;">
                 <td>
-                    <span *ngIf="result.isRequired">Yes</span>
-                    <span *ngIf="!result.isRequired">No</span>
-                  </td>
-                  
+                  <span *ngIf="result.isRequired">Yes</span>
+                  <span *ngIf="!result.isRequired">No</span>
+                </td>
               </span>
             </div>
           </td>

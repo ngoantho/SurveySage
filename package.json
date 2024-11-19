@@ -8,6 +8,9 @@
     "@types/body-parser": "^1.19.5",
     "@types/express": "^5.0.0",
     "@types/node": "^22.8.4",
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.8.4",
     "body-parser": "^1.20.0",
     "bootstrap": "^5.3.3",
     "crypto": "^1.0.1",
@@ -25,10 +28,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node AppServer.js",
     "nodemon": "nodemon",
-    "build": "tsc",
-    "watch": "tsc --watch",
+    "tsc:build": "tsc",
+    "tsc:watch": "tsc --watch",
     "db": "mongod -port 3000 -dbpath ./db",
-    "dev": "npm-run-all --parallel db watch nodemon"
+    "dev": "npm-run-all --parallel tsc:watch nodemon"
   },
   "author": "",
   "license": "ISC"

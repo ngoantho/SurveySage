@@ -8,9 +8,8 @@ import { ActivatedRoute, Params } from '@angular/router';
   styleUrl: './surveyform.component.css'
 })
 export class SurveyformComponent {
-
-  name: string = "";
   surveyId: string;
+  surveyName: string | undefined;
   surveyQuestions: any;
 
   constructor(
@@ -18,11 +17,16 @@ export class SurveyformComponent {
     private list$: SurveyproxyService
   ) { 
     this.surveyId = route.snapshot.params['id'];
-    this.list$.getItems(this.surveyId).subscribe((res: any) => {
-      this.name = res.name;
+    
+    this.list$.getSurvey(this.surveyId).subscribe((res:any) => {
+      this.surveyName = res.name
+    })
+
+    this.list$.getQuestions(this.surveyId).subscribe((res: any) => {
       this.surveyQuestions = res[0];
       console.log("surveyQuestions:", this.surveyQuestions);
       console.log("surveyQuestions.questions:", this.surveyQuestions?.questions);
+      console.log("surveyQuestions.answers:", this.surveyQuestions?.answers)
     });
   }
 

@@ -55,6 +55,7 @@ class QuestionModel extends CommonModel<IQuestionModel> {
       response.status(500).send('Internal server error');
     }
   }
+  
   //RETURN INSTEAD OF RESPONSE
   async returnSurveyQuestions( surID: number) {
     let query = this.model.find({ surveyId: surID });

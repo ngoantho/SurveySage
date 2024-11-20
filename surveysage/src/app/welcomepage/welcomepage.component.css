@@ -1,72 +1,116 @@
 /* Main background styling */
 .jb-body {
-    background: linear-gradient(135deg, #a7dbd8, #f0f4ff); /* Light blue and white gradient */
-    color: #333; /* Darker text for readability */
-    min-height: 100vh; /* Full height */
+    background: linear-gradient(135deg, #a7dbd8, #f0f4ff); /* Keeping your original colors */
+    color: #333;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Arial', sans-serif;
-    padding: 20px;
+    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif; /* Professional font stack */
+    padding: 30px;
 }
 
 /* Jumbotron styling */
 .jumbotron {
-    background: #ffffff; /* Pure white for clean contrast */
-    padding: 40px 50px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    background: #ffffff;
+    padding: 50px 60px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 75%;
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+/* Subtle hover effect */
 .jumbotron:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Subtle hover effect */
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
 }
 
 /* Heading styles */
 .jumbotron h1 {
-    font-size: 2.5rem;
-    color: #1877f2; /* Meta-inspired blue */
-    margin-bottom: 10px;
-    font-weight: bold;
+    font-size: 2.8rem;
+    color: #1877f2; /* Keeping your Meta blue */
+    margin-bottom: 25px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
 }
 
 .jumbotron p {
-    color: #606770; /* Light gray for secondary text */
-    font-size: 1.2rem;
+    color: #606770; /* Keeping your original text color */
+    font-size: 1.25rem;
+    margin-bottom: 35px;
+    line-height: 1.6;
+    font-weight: 400;
 }
 
 /* Button styling */
 .btn-primary {
-    display: inline-block;
-    background: #1877f2; /* Meta blue */
-    color: #ffffff; /* White text for contrast */
-    padding: 10px 20px;
-    border-radius: 8px;
+    background: #1877f2; /* Keeping your Meta blue */
+    color: #ffffff;
+    padding: 14px 32px;
+    border-radius: 6px;
     text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2rem;
-    transition: background 0.3s ease, transform 0.2s ease;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: background-color 0.2s ease;
+    border: none;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover {
-    background: #a7dbd8; /* Darker blue on hover */
-    transform: scale(1.05); /* Slightly enlarges on hover */
+    background: #a7dbd8; /* Keeping your hover color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
 }
 
 /* Responsive styles */
+@media (max-width: 992px) {
+    .jumbotron {
+        width: 85%;
+        padding: 40px 50px;
+    }
+
+    .jumbotron h1 {
+        font-size: 2.5rem;
+    }
+}
+
 @media (max-width: 768px) {
+    .jumbotron {
+        width: 90%;
+        padding: 35px 30px;
+    }
+
+    .jumbotron h1 {
+        font-size: 2.2rem;
+        margin-bottom: 20px;
+    }
+
+    .jumbotron p {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+    }
+
+    .btn-primary {
+        padding: 12px 28px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .jumbotron {
+        width: 95%;
+        padding: 30px 20px;
+    }
+
     .jumbotron h1 {
         font-size: 2rem;
     }
 
     .jumbotron p {
-        font-size: 1rem;
-    }
-
-    .btn-primary {
         font-size: 1rem;
     }
 }

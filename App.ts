@@ -169,6 +169,7 @@ class App {
       console.log("QUESTION: Query for survey " + id);
       await this.Questions.getSurveyQuestions(res, id)
     })
+
     //Get Question by id
     router.get("/app/survey/:surveyId/question/:questionId", async (req, res) => {
       const surveyId = Number(req.params.surveyId);
@@ -176,6 +177,31 @@ class App {
       console.log(`Query question with id ${questionId} from survey with id ${surveyId}`);
       await this.Questions.getQuestionById(res, surveyId, questionId);
     });
+
+    router.get("/app/survey/:surveyId/responses", async (req, res) => {
+      try {
+        const surveyId = Number(req.params.surveyId);
+        const questions = await this.Questions.returnSurveyQuestions(surveyId);
+        
+        if (!questions || !questions[0]?.questions) {
+          res.status(404).json({ error: "No questions found" });
+        }
+    
+        let questionId = null;
+        for (const question of questions[0].questions) {
+          if (question.isRequired) {
+            questionId = question.questionId;
+            break;
+          }
+        }
+    
+        let answers = await this.Answers.returnAnswersBySurveyQuestion(surveyId, questionId)
+        res.json(answers.length)
+      } catch (error) {
+        console.error('Error fetching survey responses:', error);
+        res.status(500).json({ error: "Internal server error" });
+      }
+    })
 
     // ANSWER ROUTE
     //Get all answers of an survey
@@ -187,7 +213,7 @@ class App {
     });
 
     //Get all answers of a question in a survey
-    router.get("/app/survey/:surveyId/:questionId/answers", async (req, res) => {
+    router.get("/app/survey/:surveyId/question/:questionId/answers", async (req, res) => {
       var sid = Number(req.params.surveyId);
       var qid = Number(req.params.questionId);
       console.log("Query all answers of question with id " + qid + " from survey with id " + sid);

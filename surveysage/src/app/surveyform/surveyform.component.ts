@@ -22,10 +22,11 @@ export class SurveyformComponent {
       this.surveyName = res.name
     })
 
-    this.list$.getItems(this.surveyId).subscribe((res: any) => {
+    this.list$.getQuestions(this.surveyId).subscribe((res: any) => {
       this.surveyQuestions = res[0];
       console.log("surveyQuestions:", this.surveyQuestions); // Log surveyQuestions
       console.log("surveyQuestions.questions:", this.surveyQuestions?.questions);
+      console.log("surveyQuestions.answers:", this.surveyQuestions?.answers)
     });
   }
 

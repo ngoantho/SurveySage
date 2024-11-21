@@ -13,7 +13,7 @@ describe('API call for /survey/<number>', () => {
   it('Should return null for survey 123', () => {
     chai
       .request('http://localhost:8080')
-      .get('/app/survey/1')
+      .get('/app/survey/123')
       .end((err, res) => {
         expect(res).to.have.status(200)
         expect(res).to.be.null

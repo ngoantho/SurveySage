@@ -16,7 +16,7 @@ describe("API call for /survey/<number>", () => {
       .get("/app/survey/123")
       .end((err, res) => {
         expect(res).to.have.status(200);
-        expect(err).to.be.null;
+        expect(err).to.be.null; // null is stored in err
       });
   });
 });

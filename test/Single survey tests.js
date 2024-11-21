@@ -39,13 +39,13 @@ describe('Test Survey Object result', function () {
         });
           });
       
-          it('Should contain _id, surveyId, name, description, owner, and status', function() {
-            expect(response.body).to.have.property('_id');
-            expect(response.body).to.have.property('surveyId').that.is.a('number');
-            expect(response.body).to.have.property('name');
-            expect(response.body).to.have.property('description');
-            expect(response.body).to.have.property('owner');
-            expect(response.body).to.have.property('status');
+          it('Should contain the values _id, surveyId, name, description, owner, and status as expected for Survey 1', function() {
+            expect(response.body).to.have.property('_id','6736c5ae13fa536769eb2bbc');
+            expect(response.body).to.have.property('surveyId', 1).that.is.a('number');
+            expect(response.body).to.have.property('name','Customer Feedback Survey');
+            expect(response.body).to.have.property('description','Survey to gather customer feedback on our products and services.');
+            expect(response.body).to.have.property('owner', 'VSomwanshi');
+            expect(response.body).to.have.property('status','active');
     });
     
   });

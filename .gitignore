@@ -50,3 +50,6 @@ Thumbs.db
 *.js.map
 
 .env
+
+# keep tests
+!tests/*.js

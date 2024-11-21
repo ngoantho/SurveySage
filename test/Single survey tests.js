@@ -20,3 +20,33 @@ describe("API call for /survey/<number>", () => {
       });
   });
 });
+
+describe('Test Survey Object result', function () {
+  //	this.timeout(15000);
+  
+    var requestResult;
+    var response;
+       
+      before(function (done) {
+          chai.request("http://localhost:8080")
+        .get("/app/survey/1")
+        .end(function (err, res) {
+          requestResult = res.body;
+          response = res;
+                  expect(err).to.be.null;
+                  expect(res).to.have.status(200);
+          done();
+        });
+          });
+      
+          it('Should contain _id, surveyId, name, description, owner, and status', function() {
+            expect(response.body).to.have.property('_id');
+            expect(response.body).to.have.property('surveyId').that.is.a('number');
+            expect(response.body).to.have.property('name');
+            expect(response.body).to.have.property('description');
+            expect(response.body).to.have.property('owner');
+            expect(response.body).to.have.property('status');
+    });
+    
+  });
+

@@ -41,7 +41,7 @@ describe('Test Survey Object result', function () {
       
           it('Should contain _id, surveyId, name, description, owner, and status', function() {
             expect(response.body).to.have.property('_id');
-            expect(response.body).to.have.property('surveyId').that.is.a('number');
+            expect(response.body).to.have.property('surveyId', 1).to.be.a('number')
             expect(response.body).to.have.property('name');
             expect(response.body).to.have.property('description');
             expect(response.body).to.have.property('owner');

@@ -49,6 +49,23 @@ class AnswerModel extends CommonModel<IAnswerModel> {
       response.send(e);
     }
   }
+  
+  //RETURN INSTEAD OF RESPONSE
+  async returnAnswersBySurveyQuestion(
+    surId: number,
+    quesId: number
+  ) {
+    let query = this.model.findOne({ surveyId : surId, questionId : quesId});
+    try {
+      let answerContent = await query.exec();
+      const payload = answerContent.answers.map(answer => answer.payload).flat();
+      return payload;
+    } catch (e) {
+      throw new Error("Failed to retrieve answers");
+    }
+  }
+
+  
 }
 
 export { AnswerModel };

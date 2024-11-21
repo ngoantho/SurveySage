@@ -8,6 +8,21 @@ import { QueuingStrategy } from "stream/web";
 import { QuestionModel } from "./model/QuestionModel";
 import { AnswerModel } from "./model/AnswerModel";
 import { isNumberObject } from "util/types";
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { OpenAI} from 'openai';
+import * as dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
+
+// Retrieve the GEMINI API key from environment variables
+const apiKey = process.env.GEMINI_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+// Retrieve the OPENAI API key from environment variables
+const OpenAIKey = process.env.OPENAI_API_KEY;
+const openai = new OpenAI();
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -121,6 +136,7 @@ class App {
     });
 
     router.get("/app/surveys", async (req, res) => {
+      console.log("Get all surveys");
       await this.Surveys.getAllSurveys(res)
     })
 
@@ -153,6 +169,7 @@ class App {
       console.log("QUESTION: Query for survey " + id);
       await this.Questions.getSurveyQuestions(res, id)
     })
+
     //Get Question by id
     router.get("/app/survey/:surveyId/question/:questionId", async (req, res) => {
       const surveyId = Number(req.params.surveyId);
@@ -160,6 +177,31 @@ class App {
       console.log(`Query question with id ${questionId} from survey with id ${surveyId}`);
       await this.Questions.getQuestionById(res, surveyId, questionId);
     });
+
+    router.get("/app/survey/:surveyId/responses", async (req, res) => {
+      try {
+        const surveyId = Number(req.params.surveyId);
+        const questions = await this.Questions.returnSurveyQuestions(surveyId);
+        
+        if (!questions || !questions[0]?.questions) {
+          res.status(404).json({ error: "No questions found" });
+        }
+    
+        let questionId = null;
+        for (const question of questions[0].questions) {
+          if (question.isRequired) {
+            questionId = question.questionId;
+            break;
+          }
+        }
+    
+        let answers = await this.Answers.returnAnswersBySurveyQuestion(surveyId, questionId)
+        res.json(answers.length)
+      } catch (error) {
+        console.error('Error fetching survey responses:', error);
+        res.status(500).json({ error: "Internal server error" });
+      }
+    })
 
     // ANSWER ROUTE
     //Get all answers of an survey
@@ -171,14 +213,142 @@ class App {
     });
 
     //Get all answers of a question in a survey
-    router.get("/app/survey/:surveyId/:questionId/answers", async (req, res) => {
+    router.get("/app/survey/:surveyId/question/:questionId/answers", async (req, res) => {
       var sid = Number(req.params.surveyId);
       var qid = Number(req.params.questionId);
       console.log("Query all answers of question with id " + qid + " from survey with id " + sid);
       await this.Answers.getAnswersBySurveyQuestion(res, sid, qid);
     });
 
+    // SURVEY&ANALYSIS GENERATE ROUTE
 
+    router.get("/app/survey/:surveyId/generateSurvey", async (req, res) => {
+      var surveyId = Number(req.params.surveyId);
+      const survey = await this.Surveys.returnSurveyById(surveyId);
+      const questionsLoad = await this.Questions.returnSurveyQuestions(surveyId);
+      
+      // Combine survey, questions, and answers
+      const surveyDetails = {
+        surveyName: survey.name, // Use 'name' for survey title
+        questions: await Promise.all(
+          questionsLoad[0].questions.map(async (question: any) => {
+            const answers = await this.Answers.returnAnswersBySurveyQuestion(
+              surveyId,
+              question.questionId
+            );
+            return {
+              question: question.text, // Assuming 'text' is inside the nested objects
+              answers, // Include the answer payload for the question
+            };
+          })
+        ),
+      };
+
+      
+    console.log("Generate survey with id:", surveyId)
+    res.json(surveyDetails);
+
+    });
+
+    //Gemini Analysis
+    router.get("/app/survey/:surveyId/generateAnalysis", async (req, res) => {
+      var surveyId = Number(req.params.surveyId);
+      const survey = await this.Surveys.returnSurveyById(surveyId);
+      const questionsLoad = await this.Questions.returnSurveyQuestions(surveyId);
+      
+      // Combine survey, questions, and answers
+      const surveyDetails = {
+        surveyName: survey.name, // Use 'name' for survey title
+        questions: await Promise.all(
+          questionsLoad[0].questions.map(async (question: any) => {
+            const answers = await this.Answers.returnAnswersBySurveyQuestion(
+              surveyId,
+              question.questionId
+            );
+            return {
+              question: question.text, // Assuming 'text' is inside the nested objects
+              answers, // Include the answer payload for the question
+            };
+          })
+        ),
+      };
+
+      const prompt = `${JSON.stringify(
+        surveyDetails
+      )} Provide the thoughtful analysis for the answers of each question for this survey (Despite the size of the survey sample). For your context, answers are the collection of answers from the responders who completed the survey (i.e, if answers = ['No','Yes','No'], that means Respondant 1 answers no, Respondent 2 answer yes, Respondent 3 answer no)
+Return result as a JSON object with the format: [{question:analysis}, {question:analysis}, ...]`;
+      
+      const result = await model.generateContent(prompt);
+      const rawResponse = await result.response.text();
+
+    console.log("Raw Response:", rawResponse); // Debug raw response
+
+    // Clean up the response by removing the backticks and `json` markers
+    const cleanedResponse = rawResponse
+      .replace(/```json/g, "") // Remove starting code block marker
+      .replace(/```/g, ""); // Remove ending code block marker
+
+    console.log("Cleaned Response:", cleanedResponse); // Debug cleaned response
+
+    const report = JSON.parse(cleanedResponse); // Parse the cleaned response
+
+    res.json(report); // Send JSON response
+    console.log("Generate analysis with id:", surveyId);
+    });
+
+    //CHATGPT Analysis
+    router.get("/app/survey/:surveyId/ChatGPTAnalysis", async (req, res) => {
+      var surveyId = Number(req.params.surveyId);
+      const survey = await this.Surveys.returnSurveyById(surveyId);
+      const questionsLoad = await this.Questions.returnSurveyQuestions(surveyId);
+      
+      // Combine survey, questions, and answers
+      const surveyDetails = {
+        surveyName: survey.name, // Use 'name' for survey title
+        questions: await Promise.all(
+          questionsLoad[0].questions.map(async (question: any) => {
+            const answers = await this.Answers.returnAnswersBySurveyQuestion(
+              surveyId,
+              question.questionId
+            );
+            return {
+              question: question.text, // Assuming 'text' is inside the nested objects
+              answers, // Include the answer payload for the question
+            };
+          })
+        ),
+      };
+
+      const prompt = `${JSON.stringify(
+        surveyDetails
+      )} Provide the thoughtful analysis for the answers of each question for this survey (Despite the size of the survey sample). For your context, answers are the collection of answers from the responders who completed the survey (i.e, if answers = ['No','Yes','No'], that means Respondant 1 answers no, Respondent 2 answer yes, Respondent 3 answer no)
+Return result as a JSON object with the format: [{"question":question.text,"analysis": analysis content}, ...]`;
+      
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: "You are a data analyst providing thoughtful survey analysis." },
+          { role: "user", content: prompt },
+        ],
+      });
+      const rawResponse = response.choices[0].message?.content || ""; // Get the AI's response
+
+      console.log("Raw Response:", rawResponse);
+
+      // Clean up the response if it contains backticks or formatting
+      const cleanedResponse = rawResponse
+        .replace(/```json/g, "") // Remove starting code block marker
+        .replace(/```/g, ""); // Remove ending code block marker
+
+      console.log("Cleaned Response:", cleanedResponse);
+
+      // Parse the response into JSON
+      const report = JSON.parse(cleanedResponse); // Parse cleaned JSON string
+
+      console.log(" CHATGPT Generate analysis with id:", surveyId);
+      res.json(report); // Send the JSON response
+
+    });
     this.expressApp.use("/", router);
     this.expressApp.use("/jquery", express.static(__dirname + '/node_modules/jquery/dist/jquery.min.js'))
     this.expressApp.use("/bootstrap/css", express.static(__dirname + '/node_modules/bootstrap/dist/css/bootstrap.min.css'))

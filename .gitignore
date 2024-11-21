@@ -48,3 +48,5 @@ Thumbs.db
 # Compiled JavaScript files
 *.js
 *.js.map
+
+.env

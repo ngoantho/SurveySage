@@ -3,7 +3,7 @@ import { IQuestionModel } from './IQuestionModel';
 
 interface ISurveyModel extends Document {
   surveyId: number;
-  title: string;
+  name: string;
   description: string;
   owner: string;
   status: string;

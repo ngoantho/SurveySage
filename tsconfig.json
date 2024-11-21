@@ -13,7 +13,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "lib": ["ES2015", "es2018", "dom", "ES6"],
+    "lib": ["ES2015", "es2018", "dom", "ES6", "ESNext"],
     "target": "es6",
     "moduleResolution" : "node",
     "rootDir": "./",
@@ -27,7 +27,7 @@
   "watchOptions": {
     "excludeDirectories": [
       "node_modules",
-      "angular"
+      "surveysage"
     ]
   },
   "includes" : [
@@ -35,6 +35,6 @@
   ],
   "exclude": [
     "node_modules",
-    "angular"
+    "surveysage"
   ]
 }

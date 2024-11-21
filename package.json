@@ -12,8 +12,6 @@
     "async": "^3.2.6",
     "body-parser": "^1.20.0",
     "bootstrap": "^5.3.3",
-    "chai": "^5.1.2",
-    "chai-http": "^5.1.1",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
@@ -37,5 +35,9 @@
     "dev": "npm-run-all --parallel tsc:watch nodemon"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.5.0",
+    "chai-http": "^4.4.0"
+  }
 }

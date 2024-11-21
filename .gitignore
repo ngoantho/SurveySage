@@ -52,4 +52,4 @@ Thumbs.db
 .env
 
 # keep tests
-!tests/*.js
+!test/*.js

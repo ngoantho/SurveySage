@@ -55,3 +55,28 @@ describe('Test Survey Object result', function () {
     expect(response.body).to.not.be.a.string;
   })
 });
+
+describe('Test survey 1 question 1', () => {
+  var requestResult;
+  var response;          // Variables to store the request result and response
+
+  before(function (done) {     // Before hook to make a request before running the tests
+    chai.request("http://localhost:8080")
+      .get("/app/survey/1/question/1")     // Sending a GET request to fetch survey 1
+      .end(function (err, res) {
+        requestResult = res.body;
+        response = res;         // Storing the full response
+        expect(err).to.be.null;
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+  it('Should contain the values questionId, type, isRequired, text, payload', function () {
+    expect(response.body).to.have.property('questionId')
+    expect(response.body).to.have.property('type').and.to.be.a.string
+    expect(response.body).to.have.property('isRequired').and.to.be.a('boolean')
+    expect(response.body).to.have.property('text').and.to.be.a.string
+    expect(response.body).to.have.property('payload').and.to.be.a('array')
+  });
+})

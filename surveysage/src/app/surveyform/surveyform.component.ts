@@ -26,7 +26,6 @@ export class SurveyformComponent {
       this.surveyQuestions = res[0];
       console.log("surveyQuestions:", this.surveyQuestions);
       console.log("surveyQuestions.questions:", this.surveyQuestions?.questions);
-      console.log("surveyQuestions.answers:", this.surveyQuestions?.answers)
     });
   }
 

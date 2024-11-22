@@ -222,6 +222,7 @@ class App {
 
     // SURVEY&ANALYSIS GENERATE ROUTE
 
+    //Generate a complete survey with every questions and answer for each questions
     router.get("/app/survey/:surveyId/generateSurvey", async (req, res) => {
       var surveyId = Number(req.params.surveyId);
       const survey = await this.Surveys.returnSurveyById(surveyId);
@@ -229,7 +230,7 @@ class App {
       
       // Combine survey, questions, and answers
       const surveyDetails = {
-        surveyName: survey.name, // Use 'name' for survey title
+        surveyName: survey.name,
         questions: await Promise.all(
           questionsLoad[0].questions.map(async (question: any) => {
             const answers = await this.Answers.returnAnswersBySurveyQuestion(
@@ -237,8 +238,8 @@ class App {
               question.questionId
             );
             return {
-              question: question.text, // Assuming 'text' is inside the nested objects
-              answers, // Include the answer payload for the question
+              question: question.text,
+              answers,
             };
           })
         ),
@@ -258,7 +259,7 @@ class App {
       
       // Combine survey, questions, and answers
       const surveyDetails = {
-        surveyName: survey.name, // Use 'name' for survey title
+        surveyName: survey.name, 
         questions: await Promise.all(
           questionsLoad[0].questions.map(async (question: any) => {
             const answers = await this.Answers.returnAnswersBySurveyQuestion(
@@ -266,8 +267,8 @@ class App {
               question.questionId
             );
             return {
-              question: question.text, // Assuming 'text' is inside the nested objects
-              answers, // Include the answer payload for the question
+              question: question.text, 
+              answers, // Include the answer for each question
             };
           })
         ),
@@ -281,18 +282,15 @@ Return result as a JSON object with the format: [{question:analysis}, {question:
       const result = await model.generateContent(prompt);
       const rawResponse = await result.response.text();
 
-    console.log("Raw Response:", rawResponse); // Debug raw response
 
-    // Clean up the response by removing the backticks and `json` markers
-    const cleanedResponse = rawResponse
-      .replace(/```json/g, "") // Remove starting code block marker
-      .replace(/```/g, ""); // Remove ending code block marker
+    // Clean up the response by removing the backticks and JSON marks
+    const finalResult = rawResponse
+      .replace(/```json/g, "") 
+      .replace(/```/g, ""); 
 
-    console.log("Cleaned Response:", cleanedResponse); // Debug cleaned response
+    const report = JSON.parse(finalResult);
 
-    const report = JSON.parse(cleanedResponse); // Parse the cleaned response
-
-    res.json(report); // Send JSON response
+    res.json(report); 
     console.log("Generate analysis with id:", surveyId);
     });
 
@@ -304,7 +302,7 @@ Return result as a JSON object with the format: [{question:analysis}, {question:
       
       // Combine survey, questions, and answers
       const surveyDetails = {
-        surveyName: survey.name, // Use 'name' for survey title
+        surveyName: survey.name, 
         questions: await Promise.all(
           questionsLoad[0].questions.map(async (question: any) => {
             const answers = await this.Answers.returnAnswersBySurveyQuestion(
@@ -312,8 +310,8 @@ Return result as a JSON object with the format: [{question:analysis}, {question:
               question.questionId
             );
             return {
-              question: question.text, // Assuming 'text' is inside the nested objects
-              answers, // Include the answer payload for the question
+              question: question.text, 
+              answers,
             };
           })
         ),
@@ -331,18 +329,16 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
           { role: "user", content: prompt },
         ],
       });
-      const rawResponse = response.choices[0].message?.content || ""; // Get the AI's response
+      const rawResponse = response.choices[0].message?.content || "";
 
       console.log("Raw Response:", rawResponse);
 
       // Clean up the response if it contains backticks or formatting
       const cleanedResponse = rawResponse
-        .replace(/```json/g, "") // Remove starting code block marker
-        .replace(/```/g, ""); // Remove ending code block marker
+        .replace(/```json/g, "")
+        .replace(/```/g, ""); 
 
-      console.log("Cleaned Response:", cleanedResponse);
-
-      // Parse the response into JSON
+      
       const report = JSON.parse(cleanedResponse); // Parse cleaned JSON string
 
       console.log(" CHATGPT Generate analysis with id:", surveyId);

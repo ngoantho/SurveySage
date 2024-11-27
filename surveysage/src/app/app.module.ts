@@ -16,6 +16,9 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { AnalysisComponent } from './analysis/analysis.component';
+import { CreateSurveyComponent } from './createsurvey/createsurvey.component';
+
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,8 @@ import { AnalysisComponent } from './analysis/analysis.component';
     WelcomepageComponent,
     SurveylistComponent,
     SurveyformComponent,
-    AnalysisComponent
+    AnalysisComponent,
+    CreateSurveyComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,8 @@ import { AnalysisComponent } from './analysis/analysis.component';
     MatToolbarModule,
     MatIconModule,
     MatMenuModule,
-    MatButtonModule
+    MatButtonModule,
+    ReactiveFormsModule,
   ],
   providers: [provideHttpClient(),SurveyproxyService, provideAnimationsAsync()],
   bootstrap: [AppComponent]

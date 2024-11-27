@@ -5,13 +5,14 @@ import { WelcomepageComponent } from './welcomepage/welcomepage.component';
 import { SurveylistComponent } from './surveylist/surveylist.component';
 import { SurveyformComponent } from './surveyform/surveyform.component';
 import { AnalysisComponent } from './analysis/analysis.component';
+import { CreateSurveyComponent } from './createsurvey/createsurvey.component';
 
 const routes: Routes = [
   { path: '', component: WelcomepageComponent },
   { path: 'surveylist', component: SurveylistComponent },
   { path: 'survey/:id', component: SurveyformComponent},
-  { path: 'survey/:id/analysis', component: AnalysisComponent}
-
+  { path: 'survey/:id/analysis', component: AnalysisComponent},
+  { path: 'createsurvey', component: CreateSurveyComponent },
 ];
 
 @NgModule({

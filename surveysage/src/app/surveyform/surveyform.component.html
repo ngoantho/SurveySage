@@ -21,11 +21,11 @@
         </tr>
       </thead>
       <tbody *ngIf="surveyQuestions?.questions != null">
-        <tr *ngFor="let result of surveyQuestions.questions; let i = index">
+        <tr *ngFor="let result of surveyQuestions?.questions; let i = index">
           <td>{{i + 1}}. {{result.text}}</td>
           <td>{{result.type}}</td>
           <td>
-            <span *ngIf="result.payload?.length > 0">
+            <span *ngIf="result.payload.length > 0">
               {{ result.payload.join(', ') }}
             </span>
             <span *ngIf="result.payload?.length === 0">Text Response</span>

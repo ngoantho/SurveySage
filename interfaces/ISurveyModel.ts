@@ -8,4 +8,5 @@ interface ISurveyModel extends Document {
   owner: string;
   status: string;
 }
-export {ISurveyModel}
+
+export type {ISurveyModel}

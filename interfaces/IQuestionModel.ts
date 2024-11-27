@@ -10,4 +10,5 @@ interface IQuestionModel extends Document {
     payload: string[];
   }];
 }
-export { IQuestionModel }
+
+export type { IQuestionModel }

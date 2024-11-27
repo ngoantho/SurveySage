@@ -2,6 +2,8 @@ import { Observable } from 'rxjs';
 import { Component, OnInit, Input } from '@angular/core';
 import { SurveyproxyService } from '../surveyproxy.service';
 import { ActivatedRoute, Params } from '@angular/router';
+import { IQuestionModel } from '../interfaces';
+
 @Component({
   selector: 'app-surveyform',
   templateUrl: './surveyform.component.html',
@@ -10,7 +12,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 export class SurveyformComponent {
   surveyId: string;
   surveyName: string | undefined;
-  surveyQuestions: any;
+  surveyQuestions: IQuestionModel | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -18,14 +20,14 @@ export class SurveyformComponent {
   ) { 
     this.surveyId = route.snapshot.params['id'];
     
-    this.list$.getSurvey(this.surveyId).subscribe((res:any) => {
+    this.list$.getSurvey(this.surveyId).subscribe((res) => {
       this.surveyName = res.name
     })
 
-    this.list$.getQuestions(this.surveyId).subscribe((res: any) => {
+    this.list$.getQuestions(this.surveyId).subscribe((res) => {
       this.surveyQuestions = res[0];
       console.log("surveyQuestions:", this.surveyQuestions);
-      console.log("surveyQuestions.questions:", this.surveyQuestions?.questions);
+      console.log("surveyQuestions.questions:", this.surveyQuestions.questions);
     });
   }
 

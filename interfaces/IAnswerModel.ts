@@ -1,7 +1,6 @@
 import { Document } from "mongoose";
 
 interface IAnswerModel extends Document {
-
   surveyId: number;
   questionId: number;
   answers: [{
@@ -9,4 +8,5 @@ interface IAnswerModel extends Document {
     payload: string[];
   }];
 }
-export { IAnswerModel }
+
+export type { IAnswerModel };

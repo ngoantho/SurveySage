@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "db",
+			"problemMatcher": [],
+			"label": "express: start db",
+			"detail": "mongod -port 3000 -dbpath ./db"
+		},
+		{
+			"type": "npm",
+			"script": "dev",
+			"problemMatcher": [],
+			"label": "express: start dev",
+			"detail": "npm-run-all --parallel tsc:watch nodemon"
+		}
+	]
+}

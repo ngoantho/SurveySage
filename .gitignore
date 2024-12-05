@@ -53,3 +53,4 @@ Thumbs.db
 
 # keep tests
 !test/*.js
+!createDB/*.js

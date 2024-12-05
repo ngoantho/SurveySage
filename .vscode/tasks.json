@@ -5,15 +5,25 @@
 			"type": "npm",
 			"script": "db",
 			"problemMatcher": [],
-			"label": "express: start db",
+			"isBackground": false,
+			"label": "start database",
 			"detail": "mongod -port 3000 -dbpath ./db"
 		},
 		{
 			"type": "npm",
-			"script": "dev",
+			"script": "tsc:watch",
 			"problemMatcher": [],
-			"label": "express: start dev",
-			"detail": "npm-run-all --parallel tsc:watch nodemon"
+			"isBackground": false,
+			"label": "typescript: watch and compile",
+			"detail": "tsc --watch"
+		},
+		{
+			"type": "npm",
+			"script": "nodemon",
+			"problemMatcher": [],
+			"isBackground": false,
+			"label": "node: monitor for changes",
+			"detail": "nodemon"
 		}
 	]
 }

@@ -5,8 +5,8 @@
     {
       "type": "npm",
       "script": "start",
-      "isBackground": true,
-      "label": "angular: start dev",
+      "isBackground": false,
+      "label": "angular: start server",
       "problemMatcher": {
         "owner": "typescript",
         "pattern": "$tsc",

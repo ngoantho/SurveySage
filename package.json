@@ -26,9 +26,9 @@
     "typescript": "^5.6.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node AppServer.js",
     "nodemon": "nodemon",
+    "build": "tsc",
     "tsc:build": "tsc",
     "tsc:watch": "tsc --watch",
     "db": "mongod -port 3000 -dbpath ./db",

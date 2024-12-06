@@ -31,7 +31,7 @@
     "build": "npm-run-all --serial tsc:build angular:build",
     "tsc:build": "tsc",
     "tsc:watch": "tsc --watch",
-    "angular:build": "cd surveysage && npm run build",
+    "angular:build": "cd surveysage && npm install && npm run build",
     "db": "mongod -port 3000 -dbpath ./db",
     "dev": "npm-run-all --parallel tsc:watch nodemon"
   },

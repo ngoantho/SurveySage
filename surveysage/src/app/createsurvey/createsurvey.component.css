@@ -1,10 +1,27 @@
-/* Container styling with background image */
+/* Ensure the body and html take full height */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Full-screen background image */
+.fullscreen-background {
+  background: linear-gradient(135deg, rgba(167, 219, 216, 0.8), rgba(240, 244, 255, 0.8)), url('/survey.png') no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container styling */
 .survey-container {
   max-width: 800px;
-  margin: 20px auto;
+  width: 200%;
+  margin: 20px;
   padding: 20px;
-  background: linear-gradient(135deg, rgba(167, 219, 216, 0.8), rgba(240, 244, 255, 0.8)),url('/survey.png');
-  background-size: cover;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

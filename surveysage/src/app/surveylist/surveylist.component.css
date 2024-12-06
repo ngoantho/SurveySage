@@ -1,8 +1,27 @@
+/* Main background styling */
+.jb-body {
+    background: url('/survey.png'); /* Add your image path */
+    background-size: cover;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+    padding: 30px;
+    backdrop-filter: blur(5px); /* Adds a subtle blur effect */
+}
+
 /* Container styling */
 .container {
-    padding: 20px;
-    background: linear-gradient(135deg, #a7dbd8, #f0f4ff); /* Light background for the main content */
-    min-height: 100vh;
+    background: rgba(255, 255, 255, 0.9); /* Slight transparency */
+    padding: 50px 60px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    width: 75%;
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 /* Toolbar styling */
@@ -10,10 +29,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #a7dbd8; /* Primary color */
+    background-color: linear-gradient(135deg, rgba(167, 219, 216, 0.8), rgba(240, 244, 255, 0.8));
     color: black;
-    padding: 10px; /* Added padding for better touch target */
-    border-radius: 5px; /* Rounded corners */
+    padding: 10px;
+    border-radius: 5px;
 }
 
 /* Toolbar title */
@@ -34,6 +53,7 @@
     font-size: 1.8em;
     color: #333;
     font-weight: bold;
+    text-align: center;
 }
 
 /* Table styling */
@@ -43,7 +63,7 @@
     background-color: white;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Header cell styling */
@@ -51,7 +71,7 @@
     background-color: #e0e0e0;
     font-weight: bold;
     text-align: left;
-    padding: 12px; /* Added padding for better spacing */
+    padding: 12px;
 }
 
 /* Cell styling */
@@ -62,13 +82,13 @@
 
 /* Survey link styling */
 .survey-link {
-    color: #3f51b5; /* Primary link color */
+    color: #3f51b5;
     text-decoration: none;
     transition: color 0.3s;
 }
 
 .survey-link:hover {
-    color: #303f9f; /* Darker shade on hover */
+    color: #303f9f;
 }
 
 /* Status styling */
@@ -91,16 +111,18 @@
 /* Button styling */
 button[mat-raised-button] {
     margin-top: 10px;
-    background-color: #00A36C; /* Teal color */
-    color: white; /* White text */
+    background-color: #1877f2;
+    color: white;
     border: none;
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Padding for better touch target */
-    transition: background-color 0.3s; /* Smooth transition */
+    border-radius: 6px;
+    padding: 14px 32px;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 button[mat-raised-button]:hover {
-    background-color: #c1e899; /* Light green on hover */
+    background-color: #a7dbd8;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
 }
 
 /* Responsive adjustments */
@@ -115,5 +137,10 @@ button[mat-raised-button]:hover {
 
     .mat-header-cell, .mat-cell {
         padding: 8px;
+    }
+
+    button[mat-raised-button] {
+        padding: 12px 28px;
+        font-size: 1rem;
     }
 }

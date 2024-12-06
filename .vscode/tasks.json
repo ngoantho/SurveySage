@@ -24,6 +24,14 @@
 			"isBackground": false,
 			"label": "node: monitor for changes",
 			"detail": "nodemon"
+		},
+		{
+			"type": "npm",
+			"script": "dev",
+			"problemMatcher": [],
+			"isBackground": false,
+			"label": "watch, compile, and run server",
+			"detail": "npm-run-all --parallel tsc:watch nodemon"
 		}
 	]
 }

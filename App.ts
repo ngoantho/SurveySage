@@ -344,7 +344,67 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
       console.log(" CHATGPT Generate analysis with id:", surveyId);
       res.json(report); // Send the JSON response
 
+    })
+    
+    //ANSWER POSTING ROUTE
+    router.post("/api/survey/:surveyId/answers", async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      const answers = req.body.answers; // Expecting an array of answers
+    
+      console.log(`POST: Adding answers for Survey ID: ${surveyId}`);
+    
+      // Validate incoming data
+      if (!Array.isArray(answers) || answers.length === 0) {
+        res.status(400).json({ error: "Invalid answer format. Answers must be a non-empty array." });
+        return;
+      }
+    
+      try {
+        // Iterate through each answer and update the corresponding question
+        for (const answer of answers) {
+          const { questionId, payload } = answer;
+    
+          // Validate individual answer
+          if (!questionId || !Array.isArray(payload)) {
+            console.error("Invalid answer format:", answer);
+            continue; // Skip invalid answers
+          }
+    
+          // Find the existing answers document for the question
+          const answerDoc = await this.Answers.model.findOne({ surveyId, questionId });
+    
+          if (answerDoc) {
+            // Update the existing document by adding the new answer
+            const newAnswerId = answerDoc.answers.length + 1;
+            answerDoc.answers.push({ answerId: newAnswerId, payload });
+            await answerDoc.save();
+          } else {
+            // Create a new document if no answers exist for this question
+            const newAnswerDoc = {
+              surveyId,
+              questionId,
+              answers: [
+                {
+                  answerId: 1,
+                  payload,
+                },
+              ],
+            };
+            await this.Answers.model.create(newAnswerDoc);
+          }
+        }
+    
+        res.status(201).json({ message: "Answers submitted successfully." });
+      } catch (error) {
+        console.error("Error submitting answers:", error);
+        res.status(500).json({ error: "Internal server error." });
+      }
     });
+    
+    
+    
+    
+    ; // end of code
 
     this.expressApp.use("/", router);
     this.expressApp.use("/jquery", express.static(__dirname + '/node_modules/jquery/dist/jquery.min.js'))

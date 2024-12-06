@@ -1,18 +1,20 @@
 /* Main background styling */
 .jb-body {
-    background: linear-gradient(135deg, #a7dbd8, #f0f4ff); /* Keeping your original colors */
+    background: url('/survey.png'); /* Add your image path */
+    background-size: cover;
     color: #333;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif; /* Professional font stack */
+    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
     padding: 30px;
+    backdrop-filter: blur(5px); /* Adds a subtle blur effect */
 }
 
 /* Jumbotron styling */
 .jumbotron {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.9); /* Slight transparency */
     padding: 50px 60px;
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
@@ -31,7 +33,7 @@
 /* Heading styles */
 .jumbotron h1 {
     font-size: 2.8rem;
-    color: #1877f2; /* Keeping your Meta blue */
+    color: #1877f2;
     margin-bottom: 25px;
     font-weight: 600;
     letter-spacing: -0.5px;
@@ -39,7 +41,7 @@
 }
 
 .jumbotron p {
-    color: #606770; /* Keeping your original text color */
+    color: #606770;
     font-size: 1.25rem;
     margin-bottom: 35px;
     line-height: 1.6;
@@ -47,8 +49,8 @@
 }
 
 /* Button styling */
-.btn-primary {
-    background: #1877f2; /* Keeping your Meta blue */
+.btn-primary, .btn-secondary {
+    background: #1877f2;
     color: #ffffff;
     padding: 14px 32px;
     border-radius: 6px;
@@ -59,10 +61,11 @@
     border: none;
     letter-spacing: 0.3px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
 }
 
-.btn-primary:hover {
-    background: #a7dbd8; /* Keeping your hover color */
+.btn-primary:hover, .btn-secondary:hover {
+    background: #a7dbd8;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
 }
 
@@ -94,7 +97,7 @@
         margin-bottom: 25px;
     }
 
-    .btn-primary {
+    .btn-primary, .btn-secondary {
         padding: 12px 28px;
         font-size: 1rem;
     }
@@ -113,4 +116,8 @@
     .jumbotron p {
         font-size: 1rem;
     }
+}
+
+#welcomepage-p-1 {
+    margin-bottom: 0px;
 }

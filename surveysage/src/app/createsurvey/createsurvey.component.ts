@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { SurveyproxyService } from '../surveyproxy.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-survey',
@@ -18,7 +19,8 @@ export class CreateSurveyComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {
     this.surveyForm = this.fb.group({
       title: ['', Validators.required],
@@ -93,5 +95,9 @@ export class CreateSurveyComponent implements OnInit {
         control?.markAsTouched();
       });
     }
-  }  
+  }
+
+  goBack() {
+    this.router.navigate(['']);
+  }
 }

@@ -351,7 +351,7 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
     this.expressApp.use("/bootstrap/js", express.static(__dirname + '/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'))
     this.expressApp.use("/api/json/", express.static(__dirname + "/api/json"));
     this.expressApp.use("/images", express.static(__dirname + "/img"));
-    this.expressApp.use("/", express.static(__dirname + "/angular/dist/browser"));
+    this.expressApp.use("/", express.static(__dirname + "/surveysage/dist/surveysage/browser"));
   }
 }
 

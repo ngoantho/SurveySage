@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 export class CreateSurveyComponent implements OnInit {
   surveyForm: FormGroup;
   questionTypes = ['multiple-choice', 'text', 'rating'];
-  apiUrl = 'http://localhost:8080/api/survey'; // Replace with your API endpoint
+  apiUrl = '/api/survey'; // Replace with your API endpoint
   isSubmitting = false;
   submitError: string | null = null;
 

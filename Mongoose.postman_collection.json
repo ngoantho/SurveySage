@@ -11,14 +11,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/app/list/",
+					"raw": "http://localhost:8080/api/list/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"app",
+						"api",
 						"list",
 						""
 					]
@@ -32,14 +32,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/app/list/",
+					"raw": "http://localhost:8080/api/list/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"app",
+						"api",
 						"list",
 						""
 					]
@@ -62,14 +62,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/app/list/",
+					"raw": "http://localhost:8080/api/list/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"app",
+						"api",
 						"list",
 						""
 					]
@@ -83,14 +83,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/app/list/1",
+					"raw": "http://localhost:8080/api/list/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"app",
+						"api",
 						"list",
 						"1"
 					]
@@ -104,14 +104,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/app/list/1/count",
+					"raw": "http://localhost:8080/api/list/1/count",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"app",
+						"api",
 						"list",
 						"1",
 						"count"

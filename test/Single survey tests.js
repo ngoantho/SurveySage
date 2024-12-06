@@ -15,7 +15,7 @@ describe("API call for /survey/<number>", () => {
   it("Should return null for survey 123", () => {   // Test case for checking the response of survey 123
     chai
       .request("http://localhost:8080")   // Making a request to the local server
-      .get("/app/survey/123")             // Sending a GET request to the specified endpoint
+      .get("/api/survey/123")             // Sending a GET request to the specified endpoint
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(err).to.be.null; // null is stored in err
@@ -31,7 +31,7 @@ describe('Test Survey Object result', function () {
 
   before(function (done) {     // Before hook to make a request before running the tests
     chai.request("http://localhost:8080")
-      .get("/app/survey/1")     // Sending a GET request to fetch survey 1
+      .get("/api/survey/1")     // Sending a GET request to fetch survey 1
       .end(function (err, res) {
         requestResult = res.body;
         response = res;         // Storing the full response
@@ -62,7 +62,7 @@ describe('Test survey 1 question 1', () => {
 
   before(function (done) {     // Before hook to make a request before running the tests
     chai.request("http://localhost:8080")
-      .get("/app/survey/1/question/1")     // Sending a GET request to fetch survey 1
+      .get("/api/survey/1/question/1")     // Sending a GET request to fetch survey 1
       .end(function (err, res) {
         requestResult = res.body;
         response = res;         // Storing the full response

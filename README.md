@@ -34,5 +34,5 @@ To execute the server db and then the node server with the following commands:
 
 To test server #3, try the following URL on the browser, while the server is running:
 * http://localhost:8080/
-* http://localhost:8080/app/list
-* http://localhost:8080/app/list/1
+* http://localhost:8080/api/list
+* http://localhost:8080/api/list/1

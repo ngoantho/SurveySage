@@ -8,29 +8,29 @@ import { IQuestionModel, ISurveyModel } from './interfaces';
   providedIn: 'root',
 })
 export class SurveyproxyService {
-  hostUrl: string = 'http://localhost:8080/';
+  hostUrl: string = 'http://localhost:8080';
 
   constructor(private httpClient: HttpClient) { }
 
   getListsIndex() {
-    return this.httpClient.get<ISurveyModel[]>(this.hostUrl + 'app/surveys');
+    return this.httpClient.get<ISurveyModel[]>(this.hostUrl + '/api/surveys');
   }
 
   getSurvey(index: string) {
     return this.httpClient.get<ISurveyModel>(
-      this.hostUrl + 'app/survey/' + index
+      this.hostUrl + '/api/survey/' + index
     );
   }
 
   getSurveyResponses(index: string) {
     return this.httpClient.get<number>(
-      `${this.hostUrl}app/survey/${index}/responses`
+      `${this.hostUrl}/api/survey/${index}/responses`
     );
   }
 
   getQuestions(index: string) {
     return this.httpClient.get<IQuestionModel[]>(
-      this.hostUrl + 'app/survey/' + index + '/questions'
+      this.hostUrl + '/api/survey/' + index + '/questions'
     );
   }
 }

@@ -21,7 +21,7 @@ describe("API call for creating survey", () => {
 
     chai
       .request("http://localhost:8080")
-      .post("/app/survey")
+      .post("/api/survey")
       .send(surveyData)
       .end((err, res) => {
         expect(res).to.have.status(200); // Changed from 201 to 200 to match your API
@@ -38,7 +38,7 @@ describe("API call for creating survey", () => {
 
     chai
       .request("http://localhost:8080")
-      .post("/app/survey")
+      .post("/api/survey")
       .send(invalidSurveyData)
       .end((err, res) => {
         expect(res).to.have.status(400);
@@ -69,7 +69,7 @@ describe('Test Created Survey Response', function () {
     };
 
     chai.request("http://localhost:8080")
-      .post("/app/survey")
+      .post("/api/survey")
       .send(newSurvey)
       .end(function (err, res) {
         requestResult = res.body;
@@ -104,7 +104,7 @@ describe('Test Adding Questions to Survey', () => {
     };
 
     chai.request("http://localhost:8080")
-      .post("/app/survey")
+      .post("/api/survey")
       .send(surveyData)
       .end(function (err, res) {
         surveyId = res.body.surveyId;
@@ -121,7 +121,7 @@ describe('Test Adding Questions to Survey', () => {
     };
 
     chai.request("http://localhost:8080")
-      .post(`/app/survey/${surveyId}/questions`) // Updated endpoint
+      .post(`/api/survey/${surveyId}/questions`) // Updated endpoint
       .send(questionData)
       .end(function (err, res) {
         expect(res).to.have.status(200); // Changed from 201 to 200
@@ -138,7 +138,7 @@ describe('Test Adding Questions to Survey', () => {
     };
 
     chai.request("http://localhost:8080")
-      .post(`/app/survey/${surveyId}/questions`) // Updated endpoint
+      .post(`/api/survey/${surveyId}/questions`) // Updated endpoint
       .send(invalidQuestionData)
       .end(function (err, res) {
         expect(res).to.have.status(400);

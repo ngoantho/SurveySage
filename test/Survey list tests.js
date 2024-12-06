@@ -18,7 +18,7 @@ describe('Test Survey lists result', function () {
 // Before hook to make a request before running the tests
 	before(function (done) {
 		chai.request("http://localhost:8080")
-			.get("/app/surveys")
+			.get("/api/surveys")
 			.end(function (err, res) {
 				requestResult = res.body;
 				response = res;

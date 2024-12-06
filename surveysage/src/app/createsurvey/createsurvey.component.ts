@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { SurveyproxyService } from '../surveyproxy.service';
 
 @Component({
   selector: 'app-survey',
@@ -10,7 +11,8 @@ import { HttpClient } from '@angular/common/http';
 export class CreateSurveyComponent implements OnInit {
   surveyForm: FormGroup;
   questionTypes = ['multiple-choice', 'text', 'rating'];
-  apiUrl = '/api/survey'; // Replace with your API endpoint
+  proxy$ = inject(SurveyproxyService);
+  apiUrl = this.proxy$.getAPISurveyRoute() // Replace with your API endpoint
   isSubmitting = false;
   submitError: string | null = null;
 

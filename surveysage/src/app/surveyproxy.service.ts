@@ -8,21 +8,34 @@ import { IQuestionModel, ISurveyModel } from './interfaces';
   providedIn: 'root',
 })
 export class SurveyproxyService {
-  constructor(private httpClient: HttpClient) {}
+  private apiServer?: string;
+
+  constructor(private httpClient: HttpClient) {
+    console.log(location.host)
+    if (location.host == "localhost:4200") {
+      this.apiServer = "http://localhost:8080"
+    } else {
+      this.apiServer = "https://surveysage.azurewebsites.net/"
+    }
+  }
 
   getListsIndex() {
-    return this.httpClient.get<ISurveyModel[]>('/api/surveys');
+    return this.httpClient.get<ISurveyModel[]>(`${this.apiServer}/api/surveys`);
   }
 
   getSurvey(index: string) {
-    return this.httpClient.get<ISurveyModel>(`/api/survey/${index}`);
+    return this.httpClient.get<ISurveyModel>(`${this.apiServer}/api/survey/${index}`);
   }
 
   getSurveyResponses(index: string) {
-    return this.httpClient.get<number>(`/api/survey/${index}/responses`);
+    return this.httpClient.get<number>(`${this.apiServer}/api/survey/${index}/responses`);
   }
 
   getQuestions(index: string) {
-    return this.httpClient.get<IQuestionModel[]>(`/api/survey/${index}/questions`);
+    return this.httpClient.get<IQuestionModel[]>(`${this.apiServer}/api/survey/${index}/questions`);
+  }
+
+  getAPISurveyRoute() {
+    return `${this.apiServer}/api/survey`
   }
 }

@@ -54,6 +54,3 @@ Thumbs.db
 # keep tests
 !test/*.js
 !createDB/*.js
-
-# keep angular build
-!surveysage/dist/surveysage/browser

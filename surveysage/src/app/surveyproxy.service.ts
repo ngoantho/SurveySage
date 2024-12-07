@@ -38,4 +38,8 @@ export class SurveyproxyService {
   getAPISurveyRoute() {
     return `${this.apiServer}/api/survey`
   }
+
+  postAnswers(surveyId: string, answers: any[]) {
+    return this.httpClient.post(`${this.apiServer}/api/survey/${surveyId}/answers`, { answers });
+  }
 }

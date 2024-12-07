@@ -400,11 +400,7 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
         res.status(500).json({ error: "Internal server error." });
       }
     });
-    
-    // Fallback routes to angular
-    router.get('*', (req, res) => {
-      res.sendFile(__dirname + '/surveysage/dist/surveysage/browser/index.html');
-    });
+    // end of router
 
     this.expressApp.use("/", router);
     this.expressApp.use("/jquery", express.static(__dirname + '/node_modules/jquery/dist/jquery.min.js'))
@@ -413,6 +409,7 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
     this.expressApp.use("/api/json/", express.static(__dirname + "/api/json"));
     this.expressApp.use("/images", express.static(__dirname + "/img"));
     this.expressApp.use('/', express.static(__dirname + "/surveysage/dist/surveysage/browser"));
+    this.expressApp.use('*', express.static(__dirname + "/surveysage/dist/surveysage/browser/index.html"));
   }
 }
 

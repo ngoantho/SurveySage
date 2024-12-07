@@ -15,7 +15,7 @@ export class SurveyproxyService {
     if (location.host == "localhost:4200") {
       this.apiServer = "http://localhost:8080"
     } else {
-      this.apiServer = "https://surveysage.azurewebsites.net"
+      this.apiServer = ""
     }
   }
 

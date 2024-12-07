@@ -1,0 +1,59 @@
+<div *ngIf="loading" class="loading">
+    <p>Loading survey...</p>
+  </div>
+  
+  <div *ngIf="!loading && errorMessage" class="error">
+    <p>{{ errorMessage }}</p>
+  </div>
+  
+  <div *ngIf="!loading && survey && survey.status === 'active'">
+    <h1>{{ survey.name }}</h1>
+    <p>{{ survey.description }}</p>
+    <form [formGroup]="responseForm" (ngSubmit)="submitResponses()">
+      <div *ngFor="let question of survey.questions">
+        <div class="question">
+          <label>{{ question.text }}</label>
+  
+          <!-- Text Response -->
+          <input
+            *ngIf="question.type === 'text-response'"
+            formControlName="question{{ question.questionId }}"
+            type="text"
+            placeholder="Type your answer"
+          />
+  
+          <!-- Single Choice -->
+          <div *ngIf="question.type === 'single-choice'">
+            <label *ngFor="let option of question.payload">
+              <input
+                type="radio"
+                [value]="option"
+                [formControlName]="'question' + question.questionId"
+              />
+              {{ option }}
+            </label>
+          </div>
+  
+          <!-- Multiple Choice -->
+          <div *ngIf="question.type === 'multiple-choice'">
+            <label *ngFor="let option of question.payload">
+              <input
+                type="checkbox"
+                [value]="option"
+                (change)="onCheckboxChange($event, question.questionId)"
+              />
+              {{ option }}
+            </label>
+          </div>
+        </div>
+      </div>
+      <button
+        type="submit"
+        [disabled]="!responseForm.valid"
+        [ngClass]="{ 'ready-to-submit': responseForm.valid }"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+  

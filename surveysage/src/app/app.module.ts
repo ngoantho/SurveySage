@@ -19,6 +19,7 @@ import { AnalysisComponent } from './analysis/analysis.component';
 import { CreateSurveyComponent } from './createsurvey/createsurvey.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { RespondentComponent } from './respondent/respondent.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     SurveylistComponent,
     SurveyformComponent,
     AnalysisComponent,
-    CreateSurveyComponent
+    CreateSurveyComponent,
+    RespondentComponent
   ],
   imports: [
     BrowserModule,

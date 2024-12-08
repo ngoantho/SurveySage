@@ -3,9 +3,10 @@ import { SurveyproxyService } from '../surveyproxy.service';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { ISurvey } from '../interfaces';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 interface IResponses {
-  [key: string]: number | null;
+  [key: string]: number;
 }
 
 @Component({
@@ -14,7 +15,7 @@ interface IResponses {
   styleUrl: './surveylist.component.css',
 })
 export class SurveylistComponent {
-  displayedColumns = ['name', 'description', 'owner', 'responses'];
+  displayedColumns:string[] = ['name', 'description', 'owner'];
   proxy$ = inject(SurveyproxyService);
   responses: IResponses = {};
   surveys: ISurvey[] = [];
@@ -31,18 +32,16 @@ export class SurveylistComponent {
         this.endedSurveys.data = this.getEndedSurveys();
 
         result.forEach((survey) => {
-          if (survey.status == 'published' || survey.status == 'ended') {
-            let surveyId = String(survey.surveyId);
-            this.proxy$.getSurveyResponses(surveyId).subscribe(
-              (result) => {
-                this.responses[surveyId] = result;
-              },
-              () => {
-                console.log(`Error fetching responses for survey: ${surveyId}`);
-                this.responses[surveyId] = null;
-              }
-            );
-          }
+          let surveyId = String(survey.surveyId);
+          this.proxy$.getSurveyResponses(surveyId).subscribe(
+            (result) => {
+              this.responses[surveyId] = result;
+            },
+            () => {
+              console.log(`Error fetching responses for survey: ${surveyId}`);
+              this.responses[surveyId] = 0;
+            }
+          );
         });
       },
       () => {
@@ -55,6 +54,17 @@ export class SurveylistComponent {
 
   clickEvent(): void {
     this.router.navigate(['']);
+  }
+
+  onTabChanged(tabChangeEvent: MatTabChangeEvent) {
+    console.log('tab change:', tabChangeEvent.tab.textLabel)
+    if (tabChangeEvent.tab.textLabel === "Draft") {
+      this.displayedColumns = ['name', 'description', 'owner'];
+    } else if (tabChangeEvent.tab.textLabel === "Published") {
+      this.displayedColumns = ['name', 'description', 'owner', 'responses'];
+    } else if (tabChangeEvent.tab.textLabel === "Ended") {
+      this.displayedColumns = ['name', 'description', 'owner', 'responses'];
+    }
   }
 
   getDraftSurveys() {

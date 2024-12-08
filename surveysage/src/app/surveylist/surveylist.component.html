@@ -27,7 +27,7 @@
 
     <!-- Table -->
     <div class="panel panel-default">
-      <mat-tab-group>
+      <mat-tab-group (selectedTabChange)="onTabChanged($event)">
         <mat-tab label="Draft">
           <ng-template matTabContent>
             <table
@@ -68,7 +68,7 @@
               <ng-container matColumnDef="responses">
                 <th mat-header-cell *matHeaderCellDef>Responses</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ responses[element.surveyId] ?? "n/a" }}
+                  {{ responses[element.surveyId] }}
                 </td>
               </ng-container>
 
@@ -171,6 +171,9 @@
                   {{ responses[element.surveyId] }}
                 </td>
               </ng-container>
+
+              <!-- Analysis -->
+              
 
               <!-- Header and Rows -->
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

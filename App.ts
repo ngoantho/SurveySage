@@ -170,7 +170,7 @@ class App {
       const surveyId = Number(req.params.surveyId);
       const questions = req.body.questions; // Expecting an array of answers
     
-      console.log(`POST: Adding answers for Survey ID: ${surveyId}`);
+      console.log(`POST: Adding questions for Survey ID: ${surveyId}`);
     
       // Validate incoming data
       if (!Array.isArray(questions) || questions.length === 0) {

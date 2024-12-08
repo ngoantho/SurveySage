@@ -27,7 +27,7 @@ export class RespondentComponent {
         (survey) => {
           this.survey = survey;
 
-          if (this.survey && this.survey.status === 'active') {
+          if (this.survey && this.survey.status === 'published') {
             // Step 2: Fetch survey questions
             this.surveyProxy.getQuestions(surveyId).subscribe(
               (response) => {
@@ -46,7 +46,7 @@ export class RespondentComponent {
               }
             );
           } else {
-            this.errorMessage = 'The survey is not currently active.';
+            this.errorMessage = 'The survey is not currently published.';
             this.loading = false;
           }
         },

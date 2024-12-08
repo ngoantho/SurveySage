@@ -3,17 +3,17 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { SurveyproxyService } from '../surveyproxy.service';
 import { Router } from '@angular/router';
+import { ISurvey } from '../interfaces';
 
 @Component({
   selector: 'app-survey',
   templateUrl: './createsurvey.component.html',
-  styleUrls: ['./createsurvey.component.css']
+  styleUrls: ['./createsurvey.component.css'],
 })
 export class CreateSurveyComponent implements OnInit {
   surveyForm: FormGroup;
-  questionTypes = ['multiple-choice', 'text-response', 'single-choice']; // Updated to match respondent types
+  questionTypes = ['multiple-choice', 'text-response', 'single-choice'];
   proxy$ = inject(SurveyproxyService);
-  apiUrl = this.proxy$.getAPISurveyRoute(); // Replace with your API endpoint
   isSubmitting = false;
   submitError: any;
 
@@ -28,7 +28,7 @@ export class CreateSurveyComponent implements OnInit {
       description: ['', Validators.required], // Survey description
       owner: ['', Validators.required], // Survey owner
       status: ['', Validators.required], // Survey status (Active/Inactive)
-      questions: this.fb.array([]) // Array of questions
+      questions: this.fb.array([]),
     });
   }
 
@@ -46,17 +46,21 @@ export class CreateSurveyComponent implements OnInit {
 
   // Helper method to get options controls
   getOptionsFormArray(questionIndex: number) {
-    return ((this.surveyForm.get('questions') as FormArray).at(questionIndex).get('payload') as FormArray).controls;
+    return (
+      (this.surveyForm.get('questions') as FormArray)
+        .at(questionIndex)
+        .get('payload') as FormArray
+    ).controls;
   }
 
   // Add a new question to the survey
   addQuestion() {
     const questionForm = this.fb.group({
-      questionId: [this.generateQuestionId(), Validators.required], // Unique question ID
+      questionId: this.generateId(), // Unique question ID
       text: ['', Validators.required], // Question text
       type: ['', Validators.required], // Question type (e.g., multiple-choice, text-response, single-choice)
-      isRequired: [false], // Whether the question is required
-      payload: this.fb.array([]) // Array of options for multiple-choice or single-choice questions
+      isRequired: true, // Whether the question is required
+      payload: this.fb.array([]), // Array of options for multiple-choice or single-choice questions
     });
 
     this.questions.push(questionForm);
@@ -64,7 +68,9 @@ export class CreateSurveyComponent implements OnInit {
 
   // Add a new option to a specific question
   addOption(questionIndex: number) {
-    const options = this.questions.at(questionIndex).get('payload') as FormArray;
+    const options = this.questions
+      .at(questionIndex)
+      .get('payload') as FormArray;
     options.push(this.fb.control('', Validators.required));
   }
 
@@ -75,52 +81,44 @@ export class CreateSurveyComponent implements OnInit {
 
   // Remove an option from a specific question
   removeOption(questionIndex: number, optionIndex: number) {
-    const options = this.questions.at(questionIndex).get('payload') as FormArray;
+    const options = this.questions
+      .at(questionIndex)
+      .get('payload') as FormArray;
     options.removeAt(optionIndex);
   }
 
-  // Generate a unique question ID
-  generateQuestionId(): number {
+  // Generate a random ID
+  generateId(): number {
     return Date.now() + Math.floor(Math.random() * 1000); // Generate a unique ID based on timestamp
   }
 
   // Submit the survey form
   onSubmit() {
-    console.log('Form submitted');
-    console.log('Form value:', this.surveyForm.value);
-    console.log('Form valid:', this.surveyForm.valid);
+    console.log('Form value', this.surveyForm.value);
+    console.log('Form valid', this.surveyForm.valid);
 
     if (this.surveyForm.valid) {
       this.isSubmitting = true; // Disable the submit button while submitting
 
       // Step 1: Create the survey without questions
-      const surveyData = {
+      const survey: ISurvey = {
         name: this.surveyForm.value.name,
         description: this.surveyForm.value.description,
         owner: this.surveyForm.value.owner,
         status: this.surveyForm.value.status,
+        surveyId: this.generateId(),
       };
 
-      this.http.post(this.apiUrl, surveyData).subscribe(
-        (response: any) => {
-          console.log('Survey created successfully', response);
-
-          // Step 2: Add questions to the survey
-          const surveyId = response.surveyId; // Assuming the backend returns the surveyId
-          const questions = this.surveyForm.value.questions;
-
-          if (questions && questions.length > 0) {
-            this.addQuestionsToSurvey(surveyId, questions);
-          } else {
-            // No questions to add, finish the process
-            this.finalizeSurveyCreation();
-          }
+      this.proxy$.postSurvey(survey).subscribe(
+        (surveyId) => { // on success
+          console.log('Created survey', surveyId);
+          this.submitQuestions(surveyId);
         },
-        (error) => {
+        (error) => { // on error
           console.error('Error creating survey', error);
           this.submitError = 'Failed to create survey. Please try again.';
           this.isSubmitting = false; // Re-enable the submit button
-        }
+        },
       );
     } else {
       console.log('Form is invalid');
@@ -133,31 +131,18 @@ export class CreateSurveyComponent implements OnInit {
   }
 
   // Step 2: Add questions to the survey
-  addQuestionsToSurvey(surveyId: string, questions: any[]) {
-    const questionRequests = questions.map((question) => {
-      const questionData = {
-        questionId: question.questionId,
-        text: question.text,
-        type: question.type,
-        isRequired: question.isRequired,
-        payload: question.payload,
-      };
-
-      // Make a POST request for each question
-      return this.http.post(`${this.apiUrl}/${surveyId}/questions`, questionData).toPromise();
-    });
-
-    // Wait for all question requests to complete
-    Promise.all(questionRequests)
-      .then((responses) => {
-        console.log('All questions added successfully', responses);
-        this.finalizeSurveyCreation();
-      })
-      .catch((error) => {
+  submitQuestions(surveyId: number) {
+    this.proxy$.postQuestions(surveyId, this.questions.value).subscribe(
+      () => {
+        console.log('Submitted questions')
+        this.finalizeSurveyCreation()
+      },
+      (error) => {
         console.error('Error adding questions', error);
         this.submitError = 'Failed to add questions to the survey. Please try again.';
         this.isSubmitting = false; // Re-enable the submit button
-      });
+      }
+    )
   }
 
   // Finalize the survey creation process
@@ -171,5 +156,9 @@ export class CreateSurveyComponent implements OnInit {
   // Navigate back to the welcome page
   goBack() {
     this.router.navigate(['']);
+  }
+
+  logQuestions() {
+    console.log(this.questions.value)
   }
 }

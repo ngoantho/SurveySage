@@ -151,15 +151,17 @@ class App {
 
     //Create new survey
     router.post("/api/survey", async (req, res) => {
-      const hex = crypto.randomBytes(4).toString("hex");
-      const id = parseInt(hex, 16);
-
-      console.log(req.body);
+      console.log('POST /api/survey', req.body);
       var jsonObj = req.body;
-      jsonObj.surveyId = id;
+      if (!jsonObj.surveyId) { // survey Id not present
+        const hex = crypto.randomBytes(4).toString("hex");
+        const id = parseInt(hex, 16);
+        jsonObj.surveyId = id;
+      }
+
       try {
         await this.Surveys.model.create([jsonObj]);
-        res.send('{"id":"' + id + '"}');
+        res.json(jsonObj.surveyId);
       } catch (e) {
         console.error(e);
         console.log("object creation failed");
@@ -167,6 +169,53 @@ class App {
     });
 
     // Questions Route
+    router.post("/api/survey/:surveyId/questions", async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      const questions = req.body.questions; // Expecting an array of answers
+    
+      console.log(`POST: Adding questions for Survey ID: ${surveyId}`);
+    
+      // Validate incoming data
+      if (!Array.isArray(questions) || questions.length === 0) {
+        res.status(400).json({ error: "Invalid question format. Questions must be a non-empty array." });
+        return;
+      }
+    
+      try {
+        // Iterate through each question and update the corresponding question
+        for (const question of questions) {
+          // Validate individual question
+          if (!question.questionId || !Array.isArray(question.payload)) {
+            console.error("Invalid question format:", question);
+            continue; // Skip invalid questions
+          }
+    
+          // Find the existing questions document for the survey
+          const questionDoc = await this.Questions.model.findOne({ surveyId });
+    
+          if (questionDoc) {
+            // Update the existing document by adding the new question
+            questionDoc.questions.push(question);
+            await questionDoc.save();
+          } else {
+            // Create a new document if no questions exist for this survey
+            const newQuestionDoc = {
+              surveyId,
+              questions: [
+                // question
+              ],
+            };
+            await this.Questions.model.create(newQuestionDoc);
+          }
+        }
+    
+        res.status(201).json({ message: "Questions submitted successfully." });
+      } catch (error) {
+        console.error("Error submitting questions:", error);
+        res.status(500).json({ error: "Internal server error." });
+      }
+    });
+
     router.get("/api/survey/:surveyId/questions", async (req, res) => {
       var id = Number(req.params.surveyId);
       console.log("QUESTION: Query for survey " + id);
@@ -188,6 +237,7 @@ class App {
         
         if (!questions || !questions[0]?.questions) {
           res.status(404).json({ error: "No questions found" });
+          return;
         }
     
         let questionId = null;

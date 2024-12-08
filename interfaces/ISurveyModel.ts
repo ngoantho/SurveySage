@@ -1,6 +1,8 @@
 import { Document } from 'mongoose';
 import { IQuestionModel } from './IQuestionModel';
-interface ISurveyModel extends Document {
+
+
+interface ISurvey {
   surveyId: number;
   name: string;
   description: string;
@@ -8,4 +10,6 @@ interface ISurveyModel extends Document {
   status: string;
 }
 
-export type {ISurveyModel}
+interface ISurveyModel extends Document, ISurvey {}
+
+export type { ISurveyModel, ISurvey }

@@ -31,7 +31,7 @@
     "build": "npm-run-all --parallel tsc:build angular:build",
     "tsc:build": "tsc",
     "tsc:watch": "tsc --watch",
-    "angular:dev": "cd surveysage && npm run start",
+    "angular:dev": "cd surveysage && ng serve --proxy-config src/proxy.conf.json",
     "angular:build": "cd surveysage && npm ci && npm run build",
     "db": "mongod -port 3000 -dbpath ./db",
     "dev": "npm-run-all --parallel tsc:watch nodemon"

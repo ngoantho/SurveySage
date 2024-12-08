@@ -26,7 +26,7 @@ describe("API call for creating survey", () => {
       .end((err, res) => {
         expect(res).to.have.status(200); // Changed from 201 to 200 to match your API
         expect(err).to.be.null;
-        expect(res.body).to.have.property('surveyId');
+        expect(res).to.be.a('number');
       });
   });
 

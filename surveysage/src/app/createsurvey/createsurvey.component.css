@@ -1,37 +1,35 @@
-/* Ensure the body and html take full height */
 body, html {
   height: 100%;
   margin: 0;
   font-family: Arial, sans-serif;
 }
 
-/* Full-screen background image */
 .fullscreen-background {
   background: linear-gradient(135deg, rgba(167, 219, 216, 0.8), rgba(240, 244, 255, 0.8)), url('/survey.png') no-repeat center center fixed;
   background-size: cover;
-  height: 100%;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 20px 0;
+  overflow-y: auto;
 }
 
-/* Container styling */
 .survey-container {
   max-width: 800px;
-  width: 200%;
-  margin: 20px;
+  width: 90%;
+  margin: 20px auto;
   padding: 20px;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  scroll-behavior: smooth;
 }
 
-/* Form group styling */
 .form-group {
   margin-bottom: 15px;
 }
 
-/* Form control styling */
 .form-control {
   width: 100%;
   padding: 10px;
@@ -41,7 +39,6 @@ body, html {
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Question container styling */
 .question-container {
   border: 1px solid #ddd;
   padding: 15px;
@@ -50,20 +47,17 @@ body, html {
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-/* Option container styling */
 .option-container {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
 }
 
-/* Button group styling */
 .button-group {
   margin-top: 20px;
   text-align: right;
 }
 
-/* Button styling */
 .btn {
   padding: 10px 20px;
   margin: 5px;
@@ -98,9 +92,41 @@ body, html {
   cursor: not-allowed;
 }
 
-/* Responsive adjustments */
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-control.ng-invalid.ng-touched {
+  border-color: #dc3545;
+}
+
+.form-control.ng-valid.ng-touched {
+  border-color: #28a745;
+}
+
+.alert {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
 @media (max-width: 768px) {
   .survey-container {
-      padding: 15px;
+    padding: 15px;
+    width: 95%;
+  }
+  
+  .option-container {
+    flex-direction: column;
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { SurveyproxyService } from '../surveyproxy.service';
 import { Router } from '@angular/router';
@@ -18,39 +18,64 @@ export class CreateSurveyComponent implements OnInit {
   isSubmitting = false;
   submitError: any;
 
+  // Validation constants
+// Change from private to public
+public readonly MAX_NAME_LENGTH = 100;
+public readonly MAX_DESCRIPTION_LENGTH = 500;
+public readonly MAX_QUESTION_LENGTH = 200;
+public readonly MAX_OPTIONS = 10;
+public readonly MIN_OPTIONS = 2;
+public readonly MAX_QUESTIONS = 50;
+
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router
   ) {
-    // Initialize the form with all required fields
     this.surveyForm = this.fb.group({
-      name: ['', Validators.required], // Survey name
-      description: ['', Validators.required], // Survey description
-      owner: ['', Validators.required], // Survey owner
-      questions: this.fb.array([
-        this.fb.group({
-          text: ['', Validators.required],
-          type: [this.questionTypes, Validators.required],
-          payload: this.fb.array([])
-        })
-      ]),
+      name: ['', [
+        Validators.required,
+        Validators.maxLength(this.MAX_NAME_LENGTH),
+        this.noWhitespaceValidator
+      ]],
+      description: ['', [
+        Validators.required,
+        Validators.maxLength(this.MAX_DESCRIPTION_LENGTH),
+        this.noWhitespaceValidator
+      ]],
+      owner: ['', [
+        Validators.required,
+        this.validateEmail,
+        this.noWhitespaceValidator
+      ]],
+      questions: this.fb.array([])
     });
+
+    this.addQuestion();
   }
 
   ngOnInit() { }
 
-  // Getter for questions FormArray
+  private noWhitespaceValidator(control: AbstractControl): {[key: string]: any} | null {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    return isWhitespace ? { 'whitespace': true } : null;
+  }
+
+  private validateEmail(control: AbstractControl): {[key: string]: any} | null {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const valid = emailRegex.test(control.value);
+    return valid ? null : { 'invalidEmail': true };
+  }
+
   get questions() {
     return this.surveyForm.get('questions') as FormArray;
   }
 
-  // Helper method to get questions controls
   getQuestionsFormArray() {
     return (this.surveyForm.get('questions') as FormArray).controls;
   }
 
-  // Helper method to get options controls
   getOptionsFormArray(questionIndex: number) {
     return (
       (this.surveyForm.get('questions') as FormArray)
@@ -59,111 +84,126 @@ export class CreateSurveyComponent implements OnInit {
     );
   }
 
-  // Add a new question to the survey
   addQuestion() {
+    if (this.questions.length >= this.MAX_QUESTIONS) {
+      this.submitError = `Maximum ${this.MAX_QUESTIONS} questions allowed`;
+      return;
+    }
+
     const questionForm = this.fb.group({
-      text: ['', Validators.required], // Question text
-      type: ['', Validators.required], // Question type (e.g., multiple-choice, text-response, single-choice)
-      isRequired: true, // Whether the question is required
-      payload: this.fb.array([]), // Array of options for multiple-choice or single-choice questions
+      text: ['', [
+        Validators.required,
+        Validators.maxLength(this.MAX_QUESTION_LENGTH),
+        this.noWhitespaceValidator
+      ]],
+      type: ['', [
+        Validators.required,
+        Validators.pattern(`^(${this.questionTypes.join('|')})$`)
+      ]],
+      isRequired: [true],
+      payload: this.fb.array([])
     });
 
     this.questions.push(questionForm);
   }
 
-  // Add a new option to a specific question
   addOption(questionIndex: number) {
-    const options = this.questions
-      .at(questionIndex)
-      .get('payload') as FormArray;
-    options.push(this.fb.control('', Validators.required));
+    const options = this.questions.at(questionIndex).get('payload') as FormArray;
+    
+    if (options.length >= this.MAX_OPTIONS) {
+      this.submitError = `Maximum ${this.MAX_OPTIONS} options allowed`;
+      return;
+    }
+
+    options.push(this.fb.control('', [
+      Validators.required,
+      Validators.maxLength(100),
+      this.noWhitespaceValidator
+    ]));
   }
 
-  // Remove a question from the survey
   removeQuestion(index: number) {
+    if (this.questions.length <= 1) {
+      this.submitError = 'Survey must have at least one question';
+      return;
+    }
     this.questions.removeAt(index);
   }
 
-  // Remove an option from a specific question
   removeOption(questionIndex: number, optionIndex: number) {
-    const options = this.questions
-      .at(questionIndex)
-      .get('payload') as FormArray;
+    const options = this.questions.at(questionIndex).get('payload') as FormArray;
+    if (options.length <= this.MIN_OPTIONS) {
+      this.submitError = `Minimum ${this.MIN_OPTIONS} options required`;
+      return;
+    }
     options.removeAt(optionIndex);
   }
 
-  // Generate a random ID
   generateId(): number {
-    return Date.now() + Math.floor(Math.random() * 1000); // Generate a unique ID based on timestamp
+    return Date.now() + Math.floor(Math.random() * 1000);
   }
 
-  // Submit the survey form
   onSubmit() {
-    console.log('Form value', this.surveyForm.value);
-    console.log('Form valid', this.surveyForm.valid);
-
-    if (this.surveyForm.valid) {
-      this.isSubmitting = true; // Disable the submit button while submitting
-
-      // Step 1: Create the survey without questions
-      const survey: ISurvey = {
-        name: this.surveyForm.value.name,
-        description: this.surveyForm.value.description,
-        owner: this.surveyForm.value.owner,
-        status: 'draft', // default is draft
-        surveyId: this.generateId(),
-      };
-
-      this.proxy$.postSurvey(survey).subscribe(
-        (surveyId) => { // on success
-          console.log('Created survey', surveyId);
-          this.submitQuestions(surveyId);
-        },
-        (error) => { // on error
-          console.error('Error creating survey', error);
-          this.submitError = 'Failed to create survey. Please try again.';
-          this.isSubmitting = false; // Re-enable the submit button
-        },
-      );
-    } else {
-      console.log('Form is invalid');
-      // Mark all fields as touched to trigger validation messages
-      Object.keys(this.surveyForm.controls).forEach((key) => {
-        const control = this.surveyForm.get(key);
-        control?.markAsTouched();
-      });
+    this.submitError = null;
+    
+    if (!this.surveyForm.valid) {
+      this.markFormGroupTouched(this.surveyForm);
+      return;
     }
-  }
 
-  // Step 2: Add questions to the survey
-  submitQuestions(surveyId: number) {
-    this.proxy$.postQuestions(surveyId, this.questions.value).subscribe(
-      () => {
-        console.log('Submitted questions')
-        this.finalizeSurveyCreation()
+    this.isSubmitting = true;
+
+    const survey: ISurvey = {
+      name: this.surveyForm.value.name.trim(),
+      description: this.surveyForm.value.description.trim(),
+      owner: this.surveyForm.value.owner.trim(),
+      status: 'draft',
+      surveyId: this.generateId(),
+    };
+
+    this.proxy$.postSurvey(survey).subscribe({
+      next: (surveyId) => {
+        this.submitQuestions(surveyId);
       },
-      (error) => {
-        console.error('Error adding questions', error);
-        this.submitError = 'Failed to add questions to the survey. Please try again.';
-        this.isSubmitting = false; // Re-enable the submit button
+      error: (error) => {
+        console.error('Error creating survey', error);
+        this.submitError = 'Failed to create survey. Please try again.';
+        this.isSubmitting = false;
       }
-    )
+    });
   }
 
-  // Finalize the survey creation process
+  private markFormGroupTouched(formGroup: FormGroup | FormArray) {
+    Object.values(formGroup.controls).forEach(control => {
+      if (control instanceof FormGroup || control instanceof FormArray) {
+        this.markFormGroupTouched(control);
+      } else {
+        control.markAsTouched();
+      }
+    });
+  }
+
+  submitQuestions(surveyId: number) {
+    this.proxy$.postQuestions(surveyId, this.questions.value).subscribe({
+      next: () => {
+        this.finalizeSurveyCreation();
+      },
+      error: (error) => {
+        console.error('Error adding questions', error);
+        this.submitError = 'Failed to add questions. Please try again.';
+        this.isSubmitting = false;
+      }
+    });
+  }
+
   finalizeSurveyCreation() {
-    this.surveyForm.reset(); // Reset the form
-    this.questions.clear(); // Clear the questions array
-    this.isSubmitting = false; // Re-enable the submit button
-    this.router.navigate(['/surveylist']); // Navigate to the survey list page
+    this.surveyForm.reset();
+    this.questions.clear();
+    this.isSubmitting = false;
+    this.router.navigate(['/surveylist']);
   }
 
-  // Navigate back to the welcome page
   goBack() {
     this.router.navigate(['']);
-  }
-
-  logQuestions() {
-    console.log(this.questions.value)
   }
 }

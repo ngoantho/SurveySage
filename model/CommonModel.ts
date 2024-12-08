@@ -26,7 +26,7 @@ abstract class CommonModel<T> {
 
       return model<T>(this.modelName, this.schema, this.collectionName);
     } catch (e) {
-      console.error(e);
+      throw new Error(e);
     }
   }
 }

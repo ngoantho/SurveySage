@@ -175,12 +175,6 @@ class App {
     
       console.log(`POST: Adding questions for Survey ID: ${surveyId}`);
     
-      // Validate incoming data
-      if (!Array.isArray(questions) || questions.length === 0) {
-        res.status(400).json({ error: "Invalid question format. Questions must be a non-empty array." });
-        return;
-      }
-    
       try {
         // Iterate through each question and update the corresponding question
         for (const question of questions) {

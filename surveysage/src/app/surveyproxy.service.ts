@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs';
 
-import { IQuestionModel, ISurveyModel } from './interfaces';
+import { IQuestionModel, ISurveyModel, IAnalysisModel } from './interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -41,5 +41,13 @@ export class SurveyproxyService {
 
   postAnswers(surveyId: string, answers: any[]) {
     return this.httpClient.post(`${this.apiServer}/api/survey/${surveyId}/answers`, { answers });
+  }
+
+  getAnalysis(index:string){
+    return this.httpClient.get<IAnalysisModel[]>(`${this.apiServer}/api/survey/${index}/getAnalysis`);
+  }
+
+  generateAnalysis(index:string){
+    return this.httpClient.get(`${this.apiServer}/api/survey/${index}/ChatGPTAnalysis/save`);
   }
 }

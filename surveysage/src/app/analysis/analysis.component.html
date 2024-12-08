@@ -1,1 +1,26 @@
-<p>analysis works!</p>
+<div class="analysis-container">
+    <h1>Analysis for Survey : {{ surveyName }}</h1>
+  
+    <div *ngIf="isLoading" class="loading">
+      Loading...
+    </div>
+  
+    <div *ngIf="errorMessage" class="error">
+      {{ errorMessage }}
+    </div>
+  
+    <div *ngIf="analysis && analysis.length > 0">
+      <ul>
+        <li *ngFor="let item of analysis[0].payload">
+          <h3>{{ item.question }}</h3>
+          <p>{{ item.analysis }}</p>
+        </li>
+      </ul>
+      <button (click)="generateAnalysis()">Regenerate Analysis</button>
+    </div>
+  
+    <div *ngIf="!isLoading && !errorMessage && (!analysis || analysis.length === 0)">
+      <p>No analysis available. Generating...</p>
+    </div>
+  </div>
+  

@@ -13,6 +13,7 @@ import { ISurvey } from '../interfaces';
 export class CreateSurveyComponent implements OnInit {
   surveyForm: FormGroup;
   questionTypes = ['multiple-choice', 'text-response', 'single-choice'];
+  optionTypes = ['option1', 'option2', 'option3'];
   proxy$ = inject(SurveyproxyService);
   isSubmitting = false;
   submitError: any;
@@ -27,11 +28,17 @@ export class CreateSurveyComponent implements OnInit {
       name: ['', Validators.required], // Survey name
       description: ['', Validators.required], // Survey description
       owner: ['', Validators.required], // Survey owner
-      questions: this.fb.array([]),
+      questions: this.fb.array([
+        this.fb.group({
+          text: ['', Validators.required],
+          type: [this.questionTypes, Validators.required],
+          payload: this.fb.array([])
+        })
+      ]),
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   // Getter for questions FormArray
   get questions() {
@@ -49,13 +56,12 @@ export class CreateSurveyComponent implements OnInit {
       (this.surveyForm.get('questions') as FormArray)
         .at(questionIndex)
         .get('payload') as FormArray
-    ).controls;
+    );
   }
 
   // Add a new question to the survey
   addQuestion() {
     const questionForm = this.fb.group({
-      questionId: this.generateId(), // Unique question ID
       text: ['', Validators.required], // Question text
       type: ['', Validators.required], // Question type (e.g., multiple-choice, text-response, single-choice)
       isRequired: true, // Whether the question is required

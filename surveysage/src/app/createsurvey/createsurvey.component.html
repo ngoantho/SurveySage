@@ -1,91 +1,96 @@
 <div class="fullscreen-background">
-    <div class="survey-container">
-      <h2>Create Survey</h2>
-  
-      <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
-        <!-- Survey Name -->
-        <div class="form-group">
-          <label for="name">Survey Name</label>
-          <input id="name" type="text" formControlName="name" class="form-control" placeholder="Enter survey name">
-        </div>
-  
-        <!-- Survey Description -->
-        <div class="form-group">
-          <label for="description">Description</label>
-          <textarea id="description" formControlName="description" class="form-control" placeholder="Enter survey description"></textarea>
-        </div>
-  
-        <!-- Survey Owner -->
-        <div class="form-group">
-          <label for="owner">Owner</label>
-          <input id="owner" type="text" formControlName="owner" class="form-control" placeholder="Enter owner name">
-        </div>
-  
-        <!-- Questions Section -->
-        <div formArrayName="questions">
-          <div *ngFor="let question of questions.controls; let i = index" [formGroupName]="i" class="question-container">
-            <h3>Question {{ i + 1 }}</h3>
-  
-            <!-- Question Text -->
-            <div class="form-group">
-              <label>Question Text</label>
-              <input type="text" formControlName="text" class="form-control" placeholder="Enter question text">
-            </div>
-  
-            <!-- Question Type -->
-            <div class="form-group">
-              <label>Question Type</label>
-              <select formControlName="type" class="form-control">
-                <option value="">Select Type</option>
-                <option *ngFor="let type of questionTypes" [value]="type">{{ type }}</option>
-              </select>
-            </div>
-  
-            <!-- Options for Multiple-Choice Questions -->
-            <div *ngIf="question.get('type')?.value === 'multiple-choice'">
-              <div formArrayName="options">
-                <div *ngFor="let option of getOptionsFormArray(i); let j = index" class="option-container">
-                  <input [formControlName]="j" placeholder="Option {{ j + 1 }}" class="form-control">
-                  <button type="button" (click)="removeOption(i, j)" class="btn btn-danger">Remove</button>
-                </div>
-              </div>
-              <button type="button" (click)="addOption(i)" class="btn btn-secondary">Add Option</button>
-            </div>
-  
-            <!-- Remove Question Button -->
-            <button type="button" (click)="removeQuestion(i)" class="btn btn-danger">Remove Question</button>
+  <div class="survey-container">
+    <h2>Create Survey</h2>
+
+    <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
+      <!-- Survey Name -->
+      <div class="form-group">
+        <label for="name">Survey Name</label>
+        <input id="name" type="text" formControlName="name" class="form-control" placeholder="Enter survey name">
+      </div>
+
+      <!-- Survey Description -->
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" formControlName="description" class="form-control"
+          placeholder="Enter survey description"></textarea>
+      </div>
+
+      <!-- Survey Owner -->
+      <div class="form-group">
+        <label for="owner">Owner</label>
+        <input id="owner" type="text" formControlName="owner" class="form-control" placeholder="Enter owner name">
+      </div>
+
+      <!-- Questions Section -->
+      <div formArrayName="questions">
+        <div *ngFor="let question of questions.controls; let i = index" [formGroupName]="i" class="question-container">
+          <h3>Question {{ i + 1 }}</h3>
+
+          <!-- Question Text -->
+          <div class="form-group">
+            <label>Question Text</label>
+            <input type="text" formControlName="text" class="form-control" placeholder="Enter question text">
           </div>
+
+          <!-- Question Type -->
+          <div class="form-group">
+            <label>Question Type</label>
+            <select formControlName="type" class="form-control">
+              <option value="">Select Type</option>
+              <option *ngFor="let type of questionTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+
+          <div *ngIf="question.get('type')?.value === 'multiple-choice' || question.get('type')?.value === 'single-choice'">
+            <div formArrayName="payload">
+              <div *ngFor="let option of getOptionsFormArray(i).controls; let j = index">
+                <input [formControlName]="j" placeholder="Option {{ j + 1 }}" class="form-control" />
+                <button type="button" (click)="removeOption(i, j)" class="btn btn-danger">
+                  Remove
+                </button>
+              </div>
+            </div>
+
+            <button type="button" (click)="addOption(i)" class="btn btn-primary">
+              Add Option
+            </button>
+          </div>
+
+          <!-- Remove Question Button -->
+          <button type="button" (click)="removeQuestion(i)" class="btn btn-danger">Remove Question</button>
         </div>
-  
-        <!-- Add Question Button -->
-        <div class="button-group">
-          <button type="button" (click)="addQuestion()" class="btn btn-primary">Add Question</button>
-        </div>
-  
-        <!-- Submit Button -->
-        <div class="button-group">
-          <button type="submit" [disabled]="!surveyForm.valid || isSubmitting" class="btn btn-success">
-            {{ isSubmitting ? 'Creating...' : 'Create Survey' }}
-          </button>
-          <button type="button" (click)="goBack()" class="btn btn-secondary">Back to Welcome Page</button>
-        </div>
-  
-        <!-- Error Message -->
-        <div *ngIf="submitError" class="alert alert-danger mt-3">
-          {{ submitError }}
-        </div>
-  
-        <!-- Validation Messages -->
-        <div *ngIf="surveyForm.get('name')?.touched && surveyForm.get('name')?.invalid" class="alert alert-danger">
-          Name is required
-        </div>
-        <div *ngIf="surveyForm.get('description')?.touched && surveyForm.get('description')?.invalid" class="alert alert-danger">
-          Description is required
-        </div>
-        <div *ngIf="surveyForm.get('owner')?.touched && surveyForm.get('owner')?.invalid" class="alert alert-danger">
-          Owner is required
-        </div>
-      </form>
-    </div>
+      </div>
+
+      <!-- Add Question Button -->
+      <div class="button-group">
+        <button type="button" (click)="addQuestion()" class="btn btn-primary">Add Question</button>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="button-group">
+        <button type="submit" [disabled]="!surveyForm.valid || isSubmitting" class="btn btn-success">
+          {{ isSubmitting ? 'Creating...' : 'Create Survey' }}
+        </button>
+        <button type="button" (click)="goBack()" class="btn btn-secondary">Back to Welcome Page</button>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="submitError" class="alert alert-danger mt-3">
+        {{ submitError }}
+      </div>
+
+      <!-- Validation Messages -->
+      <div *ngIf="surveyForm.get('name')?.touched && surveyForm.get('name')?.invalid" class="alert alert-danger">
+        Name is required
+      </div>
+      <div *ngIf="surveyForm.get('description')?.touched && surveyForm.get('description')?.invalid"
+        class="alert alert-danger">
+        Description is required
+      </div>
+      <div *ngIf="surveyForm.get('owner')?.touched && surveyForm.get('owner')?.invalid" class="alert alert-danger">
+        Owner is required
+      </div>
+    </form>
   </div>
-  
+</div>

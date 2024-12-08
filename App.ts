@@ -178,6 +178,12 @@ class App {
       try {
         // Iterate through each question and update the corresponding question
         for (const question of questions) {
+          if (!question.questionId) { // survey Id not present
+            const hex = crypto.randomBytes(4).toString("hex");
+            const id = parseInt(hex, 16);
+            question.questionId = id;
+          }
+
           // Validate individual question
           if (!question.questionId || !Array.isArray(question.payload)) {
             console.error("Invalid question format:", question);

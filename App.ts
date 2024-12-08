@@ -7,6 +7,7 @@ import { SurveyModel } from "./model/SurveyModel";
 import { QueuingStrategy } from "stream/web";
 import { QuestionModel } from "./model/QuestionModel";
 import { AnswerModel } from "./model/AnswerModel";
+import { AnalysisModel}  from "./model/AnalysisModel";
 import { isNumberObject } from "util/types";
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { OpenAI} from 'openai';
@@ -33,6 +34,7 @@ class App {
   public Surveys: SurveyModel;
   public Questions: QuestionModel;
   public Answers: AnswerModel;
+  public Analysis: AnalysisModel;
 
   //Run configuration methods on the Express instance.
   constructor(mongoDBConnection: string) {
@@ -44,6 +46,7 @@ class App {
     this.Surveys = new SurveyModel(mongoDBConnection);
     this.Questions = new QuestionModel(mongoDBConnection);
     this.Answers = new AnswerModel(mongoDBConnection);
+    this.Analysis = new AnalysisModel(mongoDBConnection);
   }
 
   // Configure Express middleware.
@@ -251,51 +254,10 @@ class App {
 
     });
 
-    //Gemini Analysis
-    router.get("/api/survey/:surveyId/generateAnalysis", async (req, res) => {
-      var surveyId = Number(req.params.surveyId);
-      const survey = await this.Surveys.returnSurveyById(surveyId);
-      const questionsLoad = await this.Questions.returnSurveyQuestions(surveyId);
-      
-      // Combine survey, questions, and answers
-      const surveyDetails = {
-        surveyName: survey.name, 
-        questions: await Promise.all(
-          questionsLoad[0].questions.map(async (question: any) => {
-            const answers = await this.Answers.returnAnswersBySurveyQuestion(
-              surveyId,
-              question.questionId
-            );
-            return {
-              question: question.text, 
-              answers, // Include the answer for each question
-            };
-          })
-        ),
-      };
-
-      const prompt = `${JSON.stringify(
-        surveyDetails
-      )} Provide the thoughtful analysis for the answers of each question for this survey (Despite the size of the survey sample). For your context, answers are the collection of answers from the responders who completed the survey (i.e, if answers = ['No','Yes','No'], that means Respondant 1 answers no, Respondent 2 answer yes, Respondent 3 answer no)
-Return result as a JSON object with the format: [{question:analysis}, {question:analysis}, ...]`;
-      
-      const result = await model.generateContent(prompt);
-      const rawResponse = await result.response.text();
-
-
-    // Clean up the response by removing the backticks and JSON marks
-    const finalResult = rawResponse
-      .replace(/```json/g, "") 
-      .replace(/```/g, ""); 
-
-    const report = JSON.parse(finalResult);
-
-    res.json(report); 
-    console.log("Generate analysis with id:", surveyId);
-    });
-
     //CHATGPT Analysis
-    router.get("/api/survey/:surveyId/ChatGPTAnalysis", async (req, res) => {
+
+    //Posting Analysis into Database
+    router.get("/api/survey/:surveyId/ChatGPTAnalysis/save", async (req, res) => {
       var surveyId = Number(req.params.surveyId);
       const survey = await this.Surveys.returnSurveyById(surveyId);
       const questionsLoad = await this.Questions.returnSurveyQuestions(surveyId);
@@ -342,9 +304,23 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
       const report = JSON.parse(cleanedResponse); // Parse cleaned JSON string
 
       console.log(" CHATGPT Generate analysis with id:", surveyId);
-      res.json(report); // Send the JSON response
+  
+    const modelInstance = await this.Analysis.createModel();
 
+    // Remove the old instance (if exists) and insert the new one
+    await modelInstance.deleteOne({ surveyId: surveyId }); // Remove old analysis
+    await modelInstance.create({
+      surveyId: surveyId,
+      payload: report, // Save the new analysis
+    });
+    res.json(report);
     })
+
+    router.get("/api/survey/:surveyId/getAnalysis", async (req, res) => {
+      var id = Number(req.params.surveyId);
+      console.log("Query analysis for survey with id: " + id);
+      await this.Analysis.getAnalysisBySurvey(res, id);
+    });
     
     //ANSWER POSTING ROUTE
     router.post("/api/survey/:surveyId/answers", async (req, res) => {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { IQuestionModel, ISurveyModel, IAnalysisModel, ISurvey } from './interfaces';
+import { IQuestionModel, IAnalysisModel, ISurvey } from './interfaces';
 
 @Injectable({
   providedIn: 'root',

@@ -1,5 +1,5 @@
 import { Schema, Model, model } from "mongoose";
-import { CommonModel } from "../utils/CommonModel";
+import { CommonModel } from "./CommonModel";
 import { Response } from "express";
 import { IQuestionModel } from "../interfaces/IQuestionModel";
 
@@ -22,9 +22,12 @@ class QuestionModel extends CommonModel<IQuestionModel> {
     );
   }
 
-  async createModel(): Promise<Model<IQuestionModel>> {
-    await this.connect();
-    return model<IQuestionModel>("QuestionModel", this.schema, "questions");
+  get modelName() {
+    return "QuestionModel"
+  }
+
+  get collectionName() {
+    return "questions"
   }
 
   async getSurveyQuestions(response: Response, surID: number) {

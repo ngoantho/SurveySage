@@ -1,6 +1,4 @@
-import { Document } from "mongoose";
-
-interface IQuestionModel extends Document {
+interface IQuestionModel {
   surveyId: number,
   questions: [{
     questionId: number;

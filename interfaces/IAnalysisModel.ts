@@ -1,6 +1,4 @@
-import { Document } from 'mongoose';
-
-interface IAnalysisModel extends Document {
+interface IAnalysisModel {
   surveyId: number;
   payload: {
     question: string;
@@ -8,4 +6,4 @@ interface IAnalysisModel extends Document {
   }[];
 }
 
-export type {IAnalysisModel}
+export type { IAnalysisModel }

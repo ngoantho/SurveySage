@@ -1,7 +1,7 @@
-import { Schema, Model, connect, model } from "mongoose";
+import { Schema } from "mongoose";
 import { IAnalysisModel } from "../interfaces/IAnalysisModel";
 import { Response } from "express";
-import { CommonModel } from "../utils/CommonModel";
+import { CommonModel } from "./CommonModel";
 
 class AnalysisModel extends CommonModel<IAnalysisModel> {
   createSchema(): Schema {
@@ -19,9 +19,12 @@ class AnalysisModel extends CommonModel<IAnalysisModel> {
     );
   }
 
-  async createModel(): Promise<Model<IAnalysisModel>> {
-    await this.connect()
-    return model<IAnalysisModel>("AnalysisModel", this.schema, "analyses")
+  get modelName() {
+    return "AnalysisModel"
+  }
+  
+  get collectionName() {
+    return "analyses"
   }
 
   async getAnalysisBySurvey(response: Response, surID: number) {

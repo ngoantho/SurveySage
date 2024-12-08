@@ -201,9 +201,7 @@ class App {
             // Create a new document if no questions exist for this survey
             const newQuestionDoc = {
               surveyId,
-              questions: [
-                // question
-              ],
+              questions: [ question ],
             };
             await this.Questions.model.create(newQuestionDoc);
           }

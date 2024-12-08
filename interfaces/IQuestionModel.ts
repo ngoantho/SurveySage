@@ -3,7 +3,7 @@ import { Document } from "mongoose";
 interface IQuestionModel extends Document {
   surveyId: number,
   questions: [{
-    questionId: number,
+    questionId: number;
     type: string;
     isRequired: boolean;
     text: string;

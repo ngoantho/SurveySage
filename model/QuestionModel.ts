@@ -11,7 +11,7 @@ class QuestionModel extends CommonModel<IQuestionModel> {
         questions: [
           {
             questionId: Number,
-            type: String,
+            type: { type: String },
             isRequired: Boolean,
             text: String,
             payload: [String],

@@ -12,6 +12,8 @@
 // Connect to the database
 db = db.getSiblingDB('surveySageSample')
 
+db.createCollection('analyses')
+
 // Create the 'surveys' collection
 db.createCollection('surveys')
 surveysCollection = db.getCollection("surveys")

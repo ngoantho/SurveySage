@@ -21,16 +21,6 @@
           <input id="owner" type="text" formControlName="owner" class="form-control" placeholder="Enter owner name">
         </div>
   
-        <!-- Survey Status -->
-        <div class="form-group">
-          <label for="status">Status</label>
-          <select id="status" formControlName="status" class="form-control">
-            <option value="">Select Status</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-        </div>
-  
         <!-- Questions Section -->
         <div formArrayName="questions">
           <div *ngFor="let question of questions.controls; let i = index" [formGroupName]="i" class="question-container">
@@ -94,9 +84,6 @@
         </div>
         <div *ngIf="surveyForm.get('owner')?.touched && surveyForm.get('owner')?.invalid" class="alert alert-danger">
           Owner is required
-        </div>
-        <div *ngIf="surveyForm.get('status')?.touched && surveyForm.get('status')?.invalid" class="alert alert-danger">
-          Status is required
         </div>
       </form>
     </div>

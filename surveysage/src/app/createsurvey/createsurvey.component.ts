@@ -27,7 +27,6 @@ export class CreateSurveyComponent implements OnInit {
       name: ['', Validators.required], // Survey name
       description: ['', Validators.required], // Survey description
       owner: ['', Validators.required], // Survey owner
-      status: ['', Validators.required], // Survey status (Active/Inactive)
       questions: this.fb.array([]),
     });
   }
@@ -105,7 +104,7 @@ export class CreateSurveyComponent implements OnInit {
         name: this.surveyForm.value.name,
         description: this.surveyForm.value.description,
         owner: this.surveyForm.value.owner,
-        status: this.surveyForm.value.status,
+        status: 'draft', // default is draft
         surveyId: this.generateId(),
       };
 

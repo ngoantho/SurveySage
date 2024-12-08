@@ -26,19 +26,25 @@ export class SurveylistComponent {
   responses: IResponses = {};
 
   constructor(private router: Router) {
-    this.proxy$.getListsIndex().subscribe((result: any[]) => {
+    this.proxy$.getListsIndex().subscribe((result) => {
       this.dataSource = new MatTableDataSource<any>(result);
       //this.dataSource.sort = this.sort;
       console.log('retrieved data from server.');
     });
 
-    this.proxy$.getListsIndex().subscribe(result => {
-      result.forEach(survey => {
-        let surveyId = String(survey.surveyId)
-        this.proxy$.getSurveyResponses(surveyId).subscribe(result => {
-          this.responses[surveyId] = result
-        })
-      })
+    this.proxy$.getListsIndex().subscribe((result) => {
+      result.forEach((survey) => {
+        let surveyId = String(survey.surveyId);
+        this.proxy$.getSurveyResponses(surveyId).subscribe(
+          (result) => {
+            this.responses[surveyId] = result;
+          },
+          (error) => {
+            console.error('Error fetching responses', error)
+            this.responses[surveyId] = 0
+          }
+        );
+      });
     });
   }
 

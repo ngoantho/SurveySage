@@ -1,30 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs';
 
-import { IQuestionModel, ISurveyModel } from './interfaces';
+import { IQuestionModel, ISurvey } from './interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SurveyproxyService {
-  private apiServer?: string;
+  private apiServer: string = "";
 
   constructor(private httpClient: HttpClient) {
     console.log(location.host)
-    if (location.host == "localhost:4200") {
-      this.apiServer = "http://localhost:8080"
-    } else {
-      this.apiServer = ""
-    }
+    // https://angular.dev/tools/cli/serve#proxying-to-a-backend-server
+    // if (location.host == "localhost:4200") {
+    //   this.apiServer = "http://localhost:8080"
+    // } else {
+    //   this.apiServer = ""
+    // }
   }
 
   getListsIndex() {
-    return this.httpClient.get<ISurveyModel[]>(`${this.apiServer}/api/surveys`);
+    return this.httpClient.get<ISurvey[]>(`${this.apiServer}/api/surveys`);
   }
 
   getSurvey(index: string) {
-    return this.httpClient.get<ISurveyModel>(`${this.apiServer}/api/survey/${index}`);
+    return this.httpClient.get<ISurvey>(`${this.apiServer}/api/survey/${index}`);
   }
 
   getSurveyResponses(index: string) {
@@ -35,8 +35,12 @@ export class SurveyproxyService {
     return this.httpClient.get<IQuestionModel[]>(`${this.apiServer}/api/survey/${index}/questions`);
   }
 
-  getAPISurveyRoute() {
-    return `${this.apiServer}/api/survey`
+  postSurvey(survey: ISurvey) {
+    return this.httpClient.post<number>(`${this.apiServer}/api/survey`, survey);
+  }
+
+  postQuestions(index: number, questions: any[]) {
+    return this.httpClient.post(`${this.apiServer}/api/survey/${index}/questions`, { questions });
   }
 
   postAnswers(surveyId: string, answers: any[]) {

@@ -15,7 +15,7 @@ interface IResponses {
   styleUrl: './surveylist.component.css',
 })
 export class SurveylistComponent {
-  displayedColumns:string[] = [];
+  displayedColumns:string[] = ['name', 'description', 'owner'];
   proxy$ = inject(SurveyproxyService);
   responses: IResponses = {};
   surveys: ISurvey[] = [];

@@ -11,6 +11,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { WelcomepageComponent } from './welcomepage/welcomepage.component';
 import { SurveylistComponent } from './surveylist/surveylist.component';
@@ -39,6 +40,7 @@ import { RespondentComponent } from './respondent/respondent.component';
     MatSortModule,
     MatToolbarModule,
     MatIconModule,
+    MatTabsModule,
     MatMenuModule,
     MatButtonModule,
     ReactiveFormsModule,

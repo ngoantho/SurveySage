@@ -11,7 +11,10 @@ class SurveyModel extends CommonModel<ISurvey> {
         name: String,
         description: String,
         owner: String,
-        status: String
+        status: {
+          type: String,
+          enum: ['draft', 'published', 'ended']
+        }
       },
       { collection: "surveys" }
     );

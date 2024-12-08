@@ -26,7 +26,7 @@ surveysCollection.insert(
     name: "Customer Feedback Survey",
     description: "Survey to gather customer feedback on our products and services.",
     owner: "VSomwanshi",
-    status: "active" // Added status field
+    status: "draft" // Added status field
   }
 )
 surveysCollection.insert(
@@ -35,7 +35,7 @@ surveysCollection.insert(
     name: "HVAC Usage Survey",
     description: "Survey to gather customer feedback on their HVAC usage",
     owner: "QTran",
-    status: "active" // Added status field
+    status: "published" // Added status field
   }
 )
 
@@ -45,7 +45,7 @@ surveysCollection.insert(
     name: "Favorite Game Survey",
     description: "Survey to gather customer feedback on their favorite PC games",
     owner: "Anthony Ngo",
-    status: "active" // Added status field
+    status: "ended" // Added status field
   }
 )
 // Create the 'questions' collection

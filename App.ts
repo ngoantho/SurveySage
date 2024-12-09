@@ -71,14 +71,13 @@ class App {
     this.expressApp.use(passport.session());
   }
 
-  private validateAuth(req, res, next): void {
+  private validateAuth(req: express.Request, res: express.Response, next: express.NextFunction): void {
     if (req.isAuthenticated()) {
-      console.log("user is authenticated");
-      console.log(JSON.stringify(req.user));
+      console.log("user is authenticated", req.route);
       return next();
     }
-    console.log("user is not authenticated");
-    res.redirect("/");
+    console.log("user is not authenticated", req.route);
+    res.status(401).send('Unauthorized');
   }
 
   // Configure API endpoints.
@@ -99,13 +98,19 @@ class App {
       "/auth/google/callback",
       passport.authenticate("google", { failureRedirect: "/" }),
       (req, res) => {
-        console.log(
-          "successfully authenticated user and returned to callback page."
-        );
+        console.log("successfully authenticated user and returned to callback page");
         console.log("redirecting to /");
-        res.redirect("/");
+        res.redirect('/');
       }
     );
+
+    router.get(
+      '/auth/login',
+      this.validateAuth,
+      async (req, res) => {
+        res.json(req.user)
+      }
+    )
 
     router.get("/api/list/:listId/count", async (req, res) => {
       var id = Number(req.params.listId);

@@ -24,11 +24,9 @@ class GooglePassport {
         (accessToken, refreshToken, profile, done) => {
           console.log("inside new password google strategy");
           process.nextTick(() => {
-            console.log("validating google profile:" + JSON.stringify(profile));
             console.log("userId:" + profile.id);
             console.log("displayName: " + profile.displayName);
             console.log("retrieve all of the profile info needed");
-            // this.email = profile.emails[0].value;
             return done(null, profile);
           });
         }

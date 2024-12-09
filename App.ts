@@ -88,7 +88,7 @@ class App {
     let router = express.Router();
 
     router.get(
-      "/auth/google",
+      "/auth/login",
       passport.authenticate("google", {
         scope: [
           "https://www.googleapis.com/auth/userinfo.email",
@@ -98,7 +98,7 @@ class App {
     );
 
     router.get(
-      "/auth/google/callback",
+      "/auth/login/callback",
       passport.authenticate("google", { failureRedirect: "/" }),
       (req, res) => {
         console.log(
@@ -113,7 +113,7 @@ class App {
       }
     );
 
-    router.get("/auth/login", async (req, res) => {
+    router.get("/auth/info", async (req, res) => {
       res.json(req["user"] || {});
     });
 

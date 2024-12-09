@@ -19,7 +19,7 @@ class GooglePassport {
         {
           clientID: this.clientId,
           clientSecret: this.secretId,
-          callbackURL: "/auth/google/callback",
+          callbackURL: "/auth/login/callback",
         },
         (accessToken, refreshToken, profile, done) => {
           console.log("inside new password google strategy");

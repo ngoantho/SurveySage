@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { IQuestionModel, IAnalysisModel, ISurvey } from './interfaces';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SurveyproxyService {
-  private apiServer: string = "";
+  private apiServer: string = '';
 
   constructor(private httpClient: HttpClient) {
-    console.log(location.host)
+    console.log(location.host);
     // https://angular.dev/tools/cli/serve#proxying-to-a-backend-server
     // if (location.host == "localhost:4200") {
     //   this.apiServer = "http://localhost:8080"
@@ -24,15 +25,21 @@ export class SurveyproxyService {
   }
 
   getSurvey(index: string) {
-    return this.httpClient.get<ISurvey>(`${this.apiServer}/api/survey/${index}`);
+    return this.httpClient.get<ISurvey>(
+      `${this.apiServer}/api/survey/${index}`
+    );
   }
 
   getSurveyResponses(index: string) {
-    return this.httpClient.get<number>(`${this.apiServer}/api/survey/${index}/responses`);
+    return this.httpClient.get<number>(
+      `${this.apiServer}/api/survey/${index}/responses`
+    );
   }
 
   getQuestions(index: string) {
-    return this.httpClient.get<IQuestionModel[]>(`${this.apiServer}/api/survey/${index}/questions`);
+    return this.httpClient.get<IQuestionModel[]>(
+      `${this.apiServer}/api/survey/${index}/questions`
+    );
   }
 
   postSurvey(survey: ISurvey) {
@@ -43,34 +50,49 @@ export class SurveyproxyService {
     console.log('Patching survey...');
     const url = `${this.apiServer}/api/survey/${index}`;
     const body = { command, payload };
-  
+
     return this.httpClient.patch(url, body);
   }
 
   postQuestions(index: number, questions: any[]) {
-    return this.httpClient.post(`${this.apiServer}/api/survey/${index}/questions`, { questions });
+    return this.httpClient.post(
+      `${this.apiServer}/api/survey/${index}/questions`,
+      { questions }
+    );
   }
 
   postAnswers(surveyId: string, answers: any[]) {
-    return this.httpClient.post(`${this.apiServer}/api/survey/${surveyId}/answers`, { answers });
+    return this.httpClient.post(
+      `${this.apiServer}/api/survey/${surveyId}/answers`,
+      { answers }
+    );
   }
 
-  getAnalysis(index:string) {
-    return this.httpClient.get<IAnalysisModel[]>(`${this.apiServer}/api/survey/${index}/getAnalysis`);
+  getAnalysis(index: string) {
+    return this.httpClient.get<IAnalysisModel[]>(
+      `${this.apiServer}/api/survey/${index}/getAnalysis`
+    );
   }
 
-  generateAnalysis(index:string) {
-    return this.httpClient.get(`${this.apiServer}/api/survey/${index}/ChatGPTAnalysis/save`);
+  generateAnalysis(index: string) {
+    return this.httpClient.get(
+      `${this.apiServer}/api/survey/${index}/ChatGPTAnalysis/save`
+    );
+  }
+
+  getUserId() {
+    return this.httpClient.get<string>(`${this.apiServer}/auth/id`).toPromise()
+  }
+
+  getUserEmail() {
+    return this.httpClient.get<string>(`${this.apiServer}/auth/email`).toPromise()
   }
 
   getLogin() {
-    this.httpClient.get('/auth/login').subscribe({
-      next: (user) => {
-        return user
-      },
-      error: () => {
-        return null
-      }
-    })
+    let returnVal;
+    this.httpClient.get('/auth/login').subscribe((user) => {
+      returnVal = user;
+    });
+    return returnVal;
   }
 }

@@ -44,11 +44,6 @@ public readonly MAX_QUESTIONS = 50;
         Validators.maxLength(this.MAX_DESCRIPTION_LENGTH),
         this.noWhitespaceValidator
       ]],
-      owner: ['', [
-        Validators.required,
-        this.validateEmail,
-        this.noWhitespaceValidator
-      ]],
       questions: this.fb.array([])
     });
 
@@ -143,7 +138,7 @@ public readonly MAX_QUESTIONS = 50;
     return Date.now() + Math.floor(Math.random() * 1000);
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitError = null;
     
     if (!this.surveyForm.valid) {
@@ -156,8 +151,9 @@ public readonly MAX_QUESTIONS = 50;
     const survey: ISurvey = {
       name: this.surveyForm.value.name.trim(),
       description: this.surveyForm.value.description.trim(),
-      owner: this.surveyForm.value.owner.trim(),
+      owner: String(await this.proxy$.getUserEmail()),
       status: 'draft',
+      userId: Number(await this.proxy$.getUserId()),
       surveyId: this.generateId(),
     };
 

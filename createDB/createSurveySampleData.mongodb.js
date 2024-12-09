@@ -23,6 +23,7 @@ surveysCollection.remove({})
 surveysCollection.insert(
   {
     surveyId: 1,
+    userId: 107626639671511030060,
     name: "Customer Feedback Survey",
     description: "Survey to gather customer feedback on our products and services.",
     owner: "VSomwanshi",
@@ -32,6 +33,7 @@ surveysCollection.insert(
 surveysCollection.insert(
   {
     surveyId: 2,
+    userId: 100,
     name: "HVAC Usage Survey",
     description: "Survey to gather customer feedback on their HVAC usage",
     owner: "QTran",
@@ -42,6 +44,7 @@ surveysCollection.insert(
 surveysCollection.insert(
   {
     surveyId: 3,
+    userId: 101,
     name: "Favorite Game Survey",
     description: "Survey to gather customer feedback on their favorite PC games",
     owner: "Anthony Ngo",

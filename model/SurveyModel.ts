@@ -8,6 +8,7 @@ class SurveyModel extends CommonModel<ISurvey> {
     return new Schema(
       {
         surveyId: Number,
+        userId: Number,
         name: String,
         description: String,
         owner: String,
@@ -28,8 +29,8 @@ class SurveyModel extends CommonModel<ISurvey> {
     return "surveys"
   }
 
-  public async getAllSurveys(response: Response) {
-    let query = this.model.find({})
+  public async getAllSurveys(response: Response, id: number) {
+    let query = this.model.find({userId: id})
     try {
       const surveys = await query.exec()
       response.json(surveys)
@@ -38,8 +39,8 @@ class SurveyModel extends CommonModel<ISurvey> {
     }
   }
 
-  public async getSurveyById(response: Response, id: number) {
-    let query = this.model.findOne({surveyId: id})
+  public async getSurveyById(response: Response, surveyId: number, userId: number) {
+    let query = this.model.findOne({surveyId, userId})
     try {
       const survey = await query.exec()
       response.json(survey)

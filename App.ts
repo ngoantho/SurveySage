@@ -14,6 +14,7 @@ import * as passport from "passport";
 import GooglePassportObj from "./GooglePassport";
 import * as session from "express-session";
 import * as cookieParser from "cookie-parser";
+import { UserModel } from "./model/UserModel";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -37,6 +38,7 @@ class App {
   public Questions: QuestionModel;
   public Answers: AnswerModel;
   public Analysis: AnalysisModel;
+  public Users: UserModel;
   public googlePassportObj: GooglePassportObj;
 
   //Run configuration methods on the Express instance.
@@ -51,6 +53,7 @@ class App {
     this.Questions = new QuestionModel(mongoDBConnection);
     this.Answers = new AnswerModel(mongoDBConnection);
     this.Analysis = new AnalysisModel(mongoDBConnection);
+    this.Users = new UserModel(mongoDBConnection);
   }
 
   // Configure Express middleware.
@@ -77,7 +80,7 @@ class App {
       return next();
     }
     console.log("user is not authenticated", req.route);
-    res.redirect('/')
+    res.redirect("/");
   }
 
   // Configure API endpoints.
@@ -98,19 +101,29 @@ class App {
       "/auth/google/callback",
       passport.authenticate("google", { failureRedirect: "/" }),
       (req, res) => {
-        console.log("successfully authenticated user and returned to callback page");
+        console.log(
+          "successfully authenticated user and returned to callback page"
+        );
+
+        console.log("ID: ", req["user"].id);
+        console.log("email: ", req["user"].emails[0].value);
+        
         console.log("redirecting to /");
-        res.redirect('/');
+        res.redirect("/");
       }
     );
 
-    router.get(
-      '/auth/login',
-      this.validateAuth,
-      async (req, res) => {
-        res.json(req['user'])
-      }
-    )
+    router.get("/auth/login", async (req, res) => {
+      res.json(req["user"] || {});
+    });
+
+    router.get("/auth/id", this.validateAuth, async (req, res) => {
+      res.json(req["user"].id);
+    });
+
+    router.get("/auth/email", this.validateAuth, async (req, res) => {
+      res.json(req["user"].emails[0].value);
+    });
 
     router.get("/api/list/:listId/count", async (req, res) => {
       var id = Number(req.params.listId);
@@ -178,15 +191,15 @@ class App {
     //SURVEY ROUTES
 
     //Get survey using surveyId
-    router.get("/api/survey/:surveyId", async (req, res) => {
+    router.get("/api/survey/:surveyId", this.validateAuth, async (req, res) => {
       var id = Number(req.params.surveyId);
       console.log("Query single survey with id: " + id);
-      await this.Surveys.getSurveyById(res, id);
+      await this.Surveys.getSurveyById(res, id, req["user"].id);
     });
 
-    router.get("/api/surveys", async (req, res) => {
+    router.get("/api/surveys", this.validateAuth, async (req, res) => {
       console.log("Get all surveys");
-      await this.Surveys.getAllSurveys(res);
+      await this.Surveys.getAllSurveys(res, req["user"].id);
     });
 
     //Get number of survey

@@ -117,6 +117,13 @@ class App {
       res.json(req["user"] || {});
     });
 
+    router.get('/auth/logout', async (req, res, next) => {
+      req['logout'](function(err) {
+        if (err) { return next(err); }
+        res.redirect('/');
+      });
+    })
+
     router.get("/auth/id", this.validateAuth, async (req, res) => {
       res.json(req["user"].id);
     });

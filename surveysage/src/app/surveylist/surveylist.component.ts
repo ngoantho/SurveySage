@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { ISurvey } from '../interfaces';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface IResponses {
   [key: string]: number;
@@ -23,7 +25,7 @@ export class SurveylistComponent {
   publishedSurveys = new MatTableDataSource<ISurvey>();
   endedSurveys = new MatTableDataSource<ISurvey>();
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private clipboard: Clipboard, private snackBar: MatSnackBar) {
     this.proxy$.getListsIndex().subscribe(
       (result) => {
         this.surveys = result;
@@ -68,12 +70,18 @@ export class SurveylistComponent {
     location.reload()
   }
 
+  copyRespondentURL(surveyId: string) {
+    const url = `${location.host}/responseSubmit/${surveyId}`;
+    this.clipboard.copy(url);
+    this.snackBar.open('URL copied to clipboard!', 'Close', { duration: 1000 });
+  }
+
   onTabChanged(tabChangeEvent: MatTabChangeEvent) {
     console.log('tab change:', tabChangeEvent.tab.textLabel)
     if (tabChangeEvent.tab.textLabel === "Draft") {
       this.displayedColumns = ['name', 'description', 'owner', 'publish'];
     } else if (tabChangeEvent.tab.textLabel === "Published") {
-      this.displayedColumns = ['name', 'description', 'owner', 'responses', 'analysis', 'publish'];
+      this.displayedColumns = ['name', 'description', 'owner', 'responses', 'analysis', 'publish', 'respondURL'];
     } else if (tabChangeEvent.tab.textLabel === "Ended") {
       this.displayedColumns = ['name', 'description', 'owner', 'responses', 'analysis'];
     }

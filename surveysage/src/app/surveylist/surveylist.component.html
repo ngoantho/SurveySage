@@ -154,6 +154,14 @@
                 </td>
               </ng-container>
 
+              <!-- Get Link to Responses -->
+              <ng-container matColumnDef="respondURL">
+                <th mat-header-cell *matHeaderCellDef>RespondURL</th>
+                <td mat-cell *matCellDef="let element">
+                  <button (click)="copyRespondentURL(element.surveyId)">Copy Respondent URL</button>
+                </td>
+              </ng-container>
+
               <!-- Header and Rows -->
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>

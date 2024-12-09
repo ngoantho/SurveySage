@@ -4,6 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
@@ -44,6 +45,7 @@ import { RespondentComponent } from './respondent/respondent.component';
     MatMenuModule,
     MatButtonModule,
     ReactiveFormsModule,
+    ClipboardModule
   ],
   providers: [
     provideHttpClient(),

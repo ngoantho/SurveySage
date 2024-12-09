@@ -78,7 +78,7 @@ class App {
       return next();
     }
     console.log("user is not authenticated");
-    res.redirect("/login");
+    res.redirect("/");
   }
 
   // Configure API endpoints.
@@ -87,12 +87,17 @@ class App {
 
     router.get(
       "/auth/google",
-      passport.authenticate("google", { scope: ["profile"] })
+      passport.authenticate("google", {
+        scope: [
+          "https://www.googleapis.com/auth/userinfo.email",
+          "https://www.googleapis.com/auth/userinfo.profile",
+        ],
+      })
     );
 
     router.get(
       "/auth/google/callback",
-      passport.authenticate("google", { failureRedirect: "/login" }),
+      passport.authenticate("google", { failureRedirect: "/" }),
       (req, res) => {
         console.log(
           "successfully authenticated user and returned to callback page."
@@ -461,11 +466,9 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
 
       // Validate incoming data
       if (!Array.isArray(answers) || answers.length === 0) {
-        res
-          .status(400)
-          .json({
-            error: "Invalid answer format. Answers must be a non-empty array.",
-          });
+        res.status(400).json({
+          error: "Invalid answer format. Answers must be a non-empty array.",
+        });
         return;
       }
 
@@ -515,7 +518,6 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
     });
     // end of router
 
-    this.expressApp.use("/login", this.validateAuth)
     this.expressApp.use("/", router);
     this.expressApp.use(
       "/jquery",

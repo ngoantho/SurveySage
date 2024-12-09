@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AuthproxyService } from '../authproxy.service';
 
 @Component({
   selector: 'app-welcomepage',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './welcomepage.component.css'
 })
 export class WelcomepageComponent {
-
+  authProxy: AuthproxyService = inject(AuthproxyService)
 }

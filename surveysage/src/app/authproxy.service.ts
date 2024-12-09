@@ -8,6 +8,7 @@ export class AuthproxyService {
   userEmail?: string;
   userId?: number;
   displayName?: string;
+  loggedIn?: boolean;
 
   constructor(private httpClient: HttpClient) {
     // note: service isn't created on page load

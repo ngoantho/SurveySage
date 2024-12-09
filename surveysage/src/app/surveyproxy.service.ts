@@ -88,11 +88,7 @@ export class SurveyproxyService {
     return this.httpClient.get<string>(`${this.apiServer}/auth/email`).toPromise()
   }
 
-  getLogin() {
-    let returnVal;
-    this.httpClient.get('/auth/login').subscribe((user) => {
-      returnVal = user;
-    });
-    return returnVal;
+  getUserInfo() {
+    return this.httpClient.get('/auth/info').toPromise()
   }
 }

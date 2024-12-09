@@ -11,45 +11,56 @@ interface IResponses {
   [key: string]: number;
 }
 
+interface IDataSources {
+  [key: string]: MatTableDataSource<ISurvey>;
+}
+
 @Component({
   selector: 'app-surveylist',
   templateUrl: './surveylist.component.html',
   styleUrl: './surveylist.component.css',
 })
 export class SurveylistComponent {
-  displayedColumns:string[] = ['name', 'description', 'owner', 'publish'];
+  displayedColumns: string[] = ['name', 'description', 'owner', 'publish'];
   proxy$ = inject(SurveyproxyService);
   responses: IResponses = {};
   surveys: ISurvey[] = [];
-  draftSurveys = new MatTableDataSource<ISurvey>();
-  publishedSurveys = new MatTableDataSource<ISurvey>();
-  endedSurveys = new MatTableDataSource<ISurvey>();
+  tabOrder = ['Draft', 'Published', 'Ended'];
+  dataSources: IDataSources = {
+    Draft: new MatTableDataSource<ISurvey>(),
+    Published: new MatTableDataSource<ISurvey>(),
+    Ended: new MatTableDataSource<ISurvey>(),
+  };
 
-  constructor(private router: Router, private clipboard: Clipboard, private snackBar: MatSnackBar) {
-    this.proxy$.getListsIndex().subscribe(
-      (result) => {
-        this.surveys = result;
-        this.draftSurveys.data = this.getDraftSurveys();
-        this.publishedSurveys.data = this.getPublishedSurveys();
-        this.endedSurveys.data = this.getEndedSurveys();
+  constructor(
+    private router: Router,
+    private clipboard: Clipboard,
+    private snackBar: MatSnackBar
+  ) {
+    this.proxy$.getListsIndex().subscribe({
+      next: (surveys) => {
+        this.surveys = surveys;
+        this.dataSources['Draft'].data = this.getDraftSurveys();
+        this.dataSources['Published'].data = this.getPublishedSurveys();
+        this.dataSources['Ended'].data = this.getEndedSurveys();
 
-        result.forEach((survey) => {
+        surveys.forEach((survey) => {
           let surveyId = String(survey.surveyId);
-          this.proxy$.getSurveyResponses(surveyId).subscribe(
-            (result) => {
-              this.responses[surveyId] = result;
+          this.proxy$.getSurveyResponses(surveyId).subscribe({
+            next: (responses) => {
+              this.responses[surveyId] = responses;
             },
-            () => {
+            error: () => {
               console.log(`Error fetching responses for survey: ${surveyId}`);
               this.responses[surveyId] = 0;
-            }
-          );
+            },
+          });
         });
       },
-      () => {
+      error: () => {
         console.error('Failed to retrieve surveys');
-      }
-    );
+      },
+    });
   }
 
   ngOnInit() {}
@@ -59,15 +70,15 @@ export class SurveylistComponent {
   }
 
   endPublish(surveyId: string) {
-    console.log('ending publishing for ', surveyId)
-    this.proxy$.patchSurvey(surveyId, 'status', 'ended').subscribe()
-    location.reload()
+    console.log('ending publishing for ', surveyId);
+    this.proxy$.patchSurvey(surveyId, 'status', 'ended').subscribe();
+    location.reload();
   }
 
   startPublish(surveyId: string) {
-    console.log('start publishing for ', surveyId)
-    this.proxy$.patchSurvey(surveyId, 'status', 'published').subscribe()
-    location.reload()
+    console.log('start publishing for ', surveyId);
+    this.proxy$.patchSurvey(surveyId, 'status', 'published').subscribe();
+    location.reload();
   }
 
   copyRespondentURL(surveyId: string) {
@@ -77,13 +88,27 @@ export class SurveylistComponent {
   }
 
   onTabChanged(tabChangeEvent: MatTabChangeEvent) {
-    console.log('tab change:', tabChangeEvent.tab.textLabel)
-    if (tabChangeEvent.tab.textLabel === "Draft") {
+    console.log('tab change:', tabChangeEvent.tab.textLabel);
+    if (tabChangeEvent.tab.textLabel === 'Draft') {
       this.displayedColumns = ['name', 'description', 'owner', 'publish'];
-    } else if (tabChangeEvent.tab.textLabel === "Published") {
-      this.displayedColumns = ['name', 'description', 'owner', 'responses', 'analysis', 'publish', 'respondURL'];
-    } else if (tabChangeEvent.tab.textLabel === "Ended") {
-      this.displayedColumns = ['name', 'description', 'owner', 'responses', 'analysis'];
+    } else if (tabChangeEvent.tab.textLabel === 'Published') {
+      this.displayedColumns = [
+        'name',
+        'description',
+        'owner',
+        'responses',
+        'analysis',
+        'publish',
+        'respondURL',
+      ];
+    } else if (tabChangeEvent.tab.textLabel === 'Ended') {
+      this.displayedColumns = [
+        'name',
+        'description',
+        'owner',
+        'responses',
+        'analysis',
+      ];
     }
   }
 

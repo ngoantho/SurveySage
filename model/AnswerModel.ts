@@ -9,6 +9,7 @@ class AnswerModel extends CommonModel<IAnswerModel> {
       {
         surveyId: Number,
         questionId: Number,
+        userId: Number,
         answers: [
           {
             answerId: Number,
@@ -28,8 +29,8 @@ class AnswerModel extends CommonModel<IAnswerModel> {
     return "answers"
   }
 
-  async getAnswersBySurvey(response: Response, surID: number) {
-    let query = this.model.find({ surveyId: surID });
+  async getAnswersBySurvey(response: Response, surID: number, userID: number) {
+    let query = this.model.find({ surveyId: surID, userId: userID });
     try {
       let answers = await query.lean().exec();
       response.json(answers);
@@ -39,6 +40,49 @@ class AnswerModel extends CommonModel<IAnswerModel> {
   }
 
   async getAnswersBySurveyQuestion(
+    response: Response,
+    surId: number,
+    quesId: number,
+    userID: number,
+  ) {
+    let query = this.model.findOne({ surveyId : surId, questionId : quesId, userId : userID});
+    try {
+      let answerContent = await query.exec();
+      const payload = answerContent.answers.map(answer => answer.payload).flat();
+      response.json(payload);
+    } catch (e) {
+      response.send(e);
+    }
+  }
+  
+  //RETURN INSTEAD OF RESPONSE
+  async returnAnswersBySurveyQuestion(
+    surId: number,
+    quesId: number,
+    userID: number
+  ) {
+    let query = this.model.findOne({ surveyId : surId, questionId : quesId, userId: userID});
+    try {
+      let answerContent = await query.exec();
+      const payload = answerContent.answers.map(answer => answer.payload).flat();
+      return payload;
+    } catch (e) {
+      throw new Error("Failed to retrieve answers");
+    }
+  }
+
+  //TESTING PURPOSE
+  async getAnswersBySurvey_unprotection(response: Response, surID: number) {
+    let query = this.model.find({ surveyId: surID });
+    try {
+      let answers = await query.lean().exec();
+      response.json(answers);
+    } catch (e) {
+      response.send(e);
+    }
+  }
+
+  async getAnswersBySurveyQuestion_unprotection(
     response: Response,
     surId: number,
     quesId: number
@@ -54,7 +98,7 @@ class AnswerModel extends CommonModel<IAnswerModel> {
   }
   
   //RETURN INSTEAD OF RESPONSE
-  async returnAnswersBySurveyQuestion(
+  async returnAnswersBySurveyQuestion_unprotection(
     surId: number,
     quesId: number
   ) {

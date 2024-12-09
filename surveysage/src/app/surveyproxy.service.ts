@@ -26,7 +26,7 @@ export class SurveyproxyService {
 
   getSurvey(index: string) {
     return this.httpClient.get<ISurvey>(
-      `${this.apiServer}/api/survey/${index}`
+      `${this.apiServer}/api/test/survey/${index}`
     );
   }
 

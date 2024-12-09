@@ -168,6 +168,22 @@ class App {
       }
     });
 
+    router.put('/api/survey/:surveyId/', async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      const jsonObj = req.body;
+      console.log(`EDIT survey ${surveyId}`, req.body)
+
+      try {
+        await this.Surveys.model.findOneAndReplace(
+          { surveyId },
+          jsonObj
+        )
+      } catch(e) {
+        console.error(e);
+        console.log("editing failed");
+      }
+    });
+
     router.patch('/api/survey/:surveyId/', async (req, res) => {
       const surveyId = Number(req.params.surveyId);
       const { command, payload } = req.body;
@@ -175,16 +191,16 @@ class App {
 
       try {
         if (command == "status") {
-          let survey = await this.Surveys.model.findOneAndUpdate(
-            { surveyId},
-            {status: payload},
-            {new:true}
+          await this.Surveys.model.findOneAndUpdate(
+            { surveyId },
+            { status: payload },
+            { new:true }
           )
           res.send(200).json();
         }
       } catch (e) {
         console.error(e);
-        console.log("object creation failed");
+        console.log("patching failed");
       }
     })
 

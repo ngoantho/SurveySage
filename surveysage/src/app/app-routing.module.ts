@@ -15,6 +15,7 @@ const routes: Routes = [
   { path: 'survey/:id/analysis', component: AnalysisComponent},
   { path: 'createsurvey', component: CreateSurveyComponent },
   { path: 'responseSubmit/:surveyId', component: RespondentComponent },
+  { path: 'survey/:id/edit', }
 ];
 
 @NgModule({

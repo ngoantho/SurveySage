@@ -17,7 +17,7 @@ interface IResponses {
   styleUrl: './surveylist.component.css',
 })
 export class SurveylistComponent {
-  displayedColumns:string[] = ['name', 'description', 'owner', 'publish'];
+  displayedColumns:string[] = ['name', 'description', 'owner', 'publish', 'edit'];
   proxy$ = inject(SurveyproxyService);
   responses: IResponses = {};
   surveys: ISurvey[] = [];
@@ -79,7 +79,7 @@ export class SurveylistComponent {
   onTabChanged(tabChangeEvent: MatTabChangeEvent) {
     console.log('tab change:', tabChangeEvent.tab.textLabel)
     if (tabChangeEvent.tab.textLabel === "Draft") {
-      this.displayedColumns = ['name', 'description', 'owner', 'publish'];
+      this.displayedColumns = ['name', 'description', 'owner', 'publish', 'edit'];
     } else if (tabChangeEvent.tab.textLabel === "Published") {
       this.displayedColumns = ['name', 'description', 'owner', 'responses', 'analysis', 'publish', 'respondURL'];
     } else if (tabChangeEvent.tab.textLabel === "Ended") {

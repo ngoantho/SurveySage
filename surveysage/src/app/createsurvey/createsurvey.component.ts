@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { AuthproxyService } from '../authproxy.service';
 import { SurveyproxyService } from '../surveyproxy.service';
 import { Router } from '@angular/router';
 import { ISurvey } from '../interfaces';
@@ -13,8 +13,8 @@ import { ISurvey } from '../interfaces';
 export class CreateSurveyComponent implements OnInit {
   surveyForm: FormGroup;
   questionTypes = ['multiple-choice', 'text-response', 'single-choice'];
-  optionTypes = ['option1', 'option2', 'option3'];
-  proxy$ = inject(SurveyproxyService);
+  authProxy = inject(AuthproxyService);
+  surveyProxy = inject(SurveyproxyService);
   isSubmitting = false;
   submitError: any;
 
@@ -30,7 +30,6 @@ public readonly MAX_QUESTIONS = 50;
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private router: Router
   ) {
     this.surveyForm = this.fb.group({
@@ -138,7 +137,7 @@ public readonly MAX_QUESTIONS = 50;
     return Date.now() + Math.floor(Math.random() * 1000);
   }
 
-  async onSubmit() {
+  onSubmit() {
     this.submitError = null;
     
     if (!this.surveyForm.valid) {
@@ -151,13 +150,13 @@ public readonly MAX_QUESTIONS = 50;
     const survey: ISurvey = {
       name: this.surveyForm.value.name.trim(),
       description: this.surveyForm.value.description.trim(),
-      owner: String(await this.proxy$.getUserEmail()),
-      status: 'draft',
-      userId: Number(await this.proxy$.getUserId()),
+      owner: String(this.authProxy.displayName),
+      status: 'draft', // default is draft
+      userId: Number(this.authProxy.userId),
       surveyId: this.generateId(),
     };
 
-    this.proxy$.postSurvey(survey).subscribe({
+    this.surveyProxy.postSurvey(survey).subscribe({
       next: (surveyId) => {
         this.submitQuestions(surveyId);
       },
@@ -180,7 +179,7 @@ public readonly MAX_QUESTIONS = 50;
   }
 
   submitQuestions(surveyId: number) {
-    this.proxy$.postQuestions(surveyId, this.questions.value).subscribe({
+    this.surveyProxy.postQuestions(surveyId, this.questions.value).subscribe({
       next: () => {
         this.finalizeSurveyCreation();
       },

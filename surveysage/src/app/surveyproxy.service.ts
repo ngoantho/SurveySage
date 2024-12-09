@@ -55,11 +55,22 @@ export class SurveyproxyService {
     return this.httpClient.post(`${this.apiServer}/api/survey/${surveyId}/answers`, { answers });
   }
 
-  getAnalysis(index:string){
+  getAnalysis(index:string) {
     return this.httpClient.get<IAnalysisModel[]>(`${this.apiServer}/api/survey/${index}/getAnalysis`);
   }
 
-  generateAnalysis(index:string){
+  generateAnalysis(index:string) {
     return this.httpClient.get(`${this.apiServer}/api/survey/${index}/ChatGPTAnalysis/save`);
+  }
+
+  getLogin() {
+    this.httpClient.get('/auth/login').subscribe({
+      next: (user) => {
+        return user
+      },
+      error: () => {
+        return null
+      }
+    })
   }
 }

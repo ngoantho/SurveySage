@@ -8,6 +8,7 @@ class AnalysisModel extends CommonModel<IAnalysisModel> {
     return new Schema(
         {
             surveyId: { type: Number, required: true },
+            userId: {type: Number, required: true},
             payload: [
               {
                 question: { type: String, required: true },

@@ -22,6 +22,8 @@
     "nodemon": "^3.1.7",
     "npm-run-all": "^4.1.5",
     "openai": "^4.72.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20-with-people-api": "^2.0.0",
     "q": "^2.0.3",
     "typescript": "^5.6.3"
   },

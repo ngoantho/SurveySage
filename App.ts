@@ -321,7 +321,7 @@ class App {
       }
     );
 
-    router.get("/api/survey/:surveyId/responses", async (req, res) => {
+    router.get("/api/survey/:surveyId/responses",this.validateAuth, async (req, res) => {
       try {
         const surveyId = Number(req.params.surveyId);
         const questions = await this.Questions.returnSurveyQuestions(surveyId);
@@ -341,7 +341,8 @@ class App {
 
         let answers = await this.Answers.returnAnswersBySurveyQuestion(
           surveyId,
-          questionId
+          questionId,
+          req["user"].id
         );
         res.json(answers.length);
       } catch (error) {
@@ -353,15 +354,15 @@ class App {
     // ANSWER ROUTE
     //Get all answers of an survey
 
-    router.get("/api/survey/:surveyId/answers", async (req, res) => {
+    router.get("/api/survey/:surveyId/answers",this.validateAuth, async (req, res) => {
       var id = Number(req.params.surveyId);
       console.log("Query all answers for survey with id:  " + id);
-      await this.Answers.getAnswersBySurvey(res, id);
+      await this.Answers.getAnswersBySurvey(res, id, req["user"].id);
     });
 
     //Get all answers of a question in a survey
     router.get(
-      "/api/survey/:surveyId/question/:questionId/answers",
+      "/api/survey/:surveyId/question/:questionId/answers", this.validateAuth,
       async (req, res) => {
         var sid = Number(req.params.surveyId);
         var qid = Number(req.params.questionId);
@@ -371,14 +372,14 @@ class App {
             " from survey with id " +
             sid
         );
-        await this.Answers.getAnswersBySurveyQuestion(res, sid, qid);
+        await this.Answers.getAnswersBySurveyQuestion(res, sid, qid, req["user"].id);
       }
     );
 
     // SURVEY&ANALYSIS GENERATE ROUTE
 
     //Generate a complete survey with every questions and answer for each questions
-    router.get("/api/survey/:surveyId/generateSurvey", async (req, res) => {
+    router.get("/api/survey/:surveyId/generateSurvey",this.validateAuth, async (req, res) => {
       var surveyId = Number(req.params.surveyId);
       const survey = await this.Surveys.returnSurveyById(surveyId);
       const questionsLoad = await this.Questions.returnSurveyQuestions(
@@ -392,7 +393,8 @@ class App {
           questionsLoad[0].questions.map(async (question: any) => {
             const answers = await this.Answers.returnAnswersBySurveyQuestion(
               surveyId,
-              question.questionId
+              question.questionId,
+              req["user"].id
             );
             return {
               question: question.text,
@@ -410,7 +412,7 @@ class App {
 
     //Posting Analysis into Database
     router.get(
-      "/api/survey/:surveyId/ChatGPTAnalysis/save",
+      "/api/survey/:surveyId/ChatGPTAnalysis/save",this.validateAuth,
       async (req, res) => {
         var surveyId = Number(req.params.surveyId);
         const survey = await this.Surveys.returnSurveyById(surveyId);
@@ -425,7 +427,8 @@ class App {
             questionsLoad[0].questions.map(async (question: any) => {
               const answers = await this.Answers.returnAnswersBySurveyQuestion(
                 surveyId,
-                question.questionId
+                question.questionId,
+                req["user"].id
               );
               return {
                 question: question.text,
@@ -486,8 +489,10 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
     router.post("/api/survey/:surveyId/answers", async (req, res) => {
       const surveyId = Number(req.params.surveyId);
       const answers = req.body.answers; // Expecting an array of answers
+      const userId = (await this.Surveys.returnSurveyById(surveyId)).userId;
 
       console.log(`POST: Adding answers for Survey ID: ${surveyId}`);
+      console.log(`POST: Adding answers for Survey ID: ${userId}}`);
 
       // Validate incoming data
       if (!Array.isArray(answers) || answers.length === 0) {
@@ -500,7 +505,7 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
       try {
         // Iterate through each answer and update the corresponding question
         for (const answer of answers) {
-          const { questionId, payload } = answer;
+          const {questionId, payload } = answer;
 
           // Validate individual answer
           if (!questionId || !Array.isArray(payload)) {
@@ -512,6 +517,7 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
           const answerDoc = await this.Answers.model.findOne({
             surveyId,
             questionId,
+            userId
           });
 
           if (answerDoc) {
@@ -524,6 +530,7 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
             const newAnswerDoc = {
               surveyId,
               questionId,
+              userId,
               answers: [
                 {
                   answerId: 1,
@@ -549,12 +556,12 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
       var id = Number(req.params.surveyId);
       console.log("Query single survey with id: " + id);
       await this.Surveys.getSurveyById_unprotection(res, id);
-    });
+    })
 
     router.get("/api/test/surveys", async (req, res) => {
       console.log("Get all surveys");
       await this.Surveys.getAllSurveys_unprotection(res);
-    });;
+    });
     // end of router
 
     this.expressApp.use("/", router);

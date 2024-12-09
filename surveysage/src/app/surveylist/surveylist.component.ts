@@ -15,7 +15,7 @@ interface IResponses {
   styleUrl: './surveylist.component.css',
 })
 export class SurveylistComponent {
-  displayedColumns:string[] = ['name', 'description', 'owner'];
+  displayedColumns:string[] = ['name', 'description', 'owner', 'publish'];
   proxy$ = inject(SurveyproxyService);
   responses: IResponses = {};
   surveys: ISurvey[] = [];
@@ -56,14 +56,26 @@ export class SurveylistComponent {
     this.router.navigate(['']);
   }
 
+  endPublish(surveyId: string) {
+    console.log('ending publishing for ', surveyId)
+    this.proxy$.patchSurvey(surveyId, 'status', 'ended').subscribe()
+    location.reload()
+  }
+
+  startPublish(surveyId: string) {
+    console.log('start publishing for ', surveyId)
+    this.proxy$.patchSurvey(surveyId, 'status', 'published').subscribe()
+    location.reload()
+  }
+
   onTabChanged(tabChangeEvent: MatTabChangeEvent) {
     console.log('tab change:', tabChangeEvent.tab.textLabel)
     if (tabChangeEvent.tab.textLabel === "Draft") {
-      this.displayedColumns = ['name', 'description', 'owner'];
+      this.displayedColumns = ['name', 'description', 'owner', 'publish'];
     } else if (tabChangeEvent.tab.textLabel === "Published") {
-      this.displayedColumns = ['name', 'description', 'owner', 'responses'];
+      this.displayedColumns = ['name', 'description', 'owner', 'responses', 'analysis', 'publish'];
     } else if (tabChangeEvent.tab.textLabel === "Ended") {
-      this.displayedColumns = ['name', 'description', 'owner', 'responses'];
+      this.displayedColumns = ['name', 'description', 'owner', 'responses', 'analysis'];
     }
   }
 

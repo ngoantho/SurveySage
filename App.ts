@@ -168,6 +168,26 @@ class App {
       }
     });
 
+    router.patch('/api/survey/:surveyId/', async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      const { command, payload } = req.body;
+      console.log(`PATCH survey ${surveyId}`, req.body)
+
+      try {
+        if (command == "status") {
+          let survey = await this.Surveys.model.findOneAndUpdate(
+            { surveyId},
+            {status: payload},
+            {new:true}
+          )
+          res.send(200).json();
+        }
+      } catch (e) {
+        console.error(e);
+        console.log("object creation failed");
+      }
+    })
+
     // Questions Route
     router.post("/api/survey/:surveyId/questions", async (req, res) => {
       const surveyId = Number(req.params.surveyId);

@@ -67,8 +67,20 @@
               <!-- Responses -->
               <ng-container matColumnDef="responses">
                 <th mat-header-cell *matHeaderCellDef>Responses</th>
+                <td mat-cell *matCellDef="let element"></td>
+              </ng-container>
+
+              <!-- Analysis -->
+              <ng-container matColumnDef="analysis">
+                <th mat-header-cell *matHeaderCellDef>Analysis</th>
+                <td mat-cell *matCellDef="let element"></td>
+              </ng-container>
+
+              <!-- End Publish -->
+              <ng-container matColumnDef="publish">
+                <th mat-header-cell *matHeaderCellDef>Publish</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ responses[element.surveyId] }}
+                  <button (click)="startPublish(element.surveyId)">Start Publish</button>
                 </td>
               </ng-container>
 
@@ -119,6 +131,26 @@
                 <th mat-header-cell *matHeaderCellDef>Responses</th>
                 <td mat-cell *matCellDef="let element">
                   {{ responses[element.surveyId] }}
+                </td>
+              </ng-container>
+
+              <!-- Analysis -->
+              <ng-container matColumnDef="analysis">
+                <th mat-header-cell *matHeaderCellDef>Analysis</th>
+                <td mat-cell *matCellDef="let element">
+                  <a
+                    [routerLink]="['/survey', element.surveyId, 'analysis']"
+                    class="survey-link"
+                    >Analysis</a
+                  >
+                </td>
+              </ng-container>
+
+              <!-- End Publish -->
+              <ng-container matColumnDef="publish">
+                <th mat-header-cell *matHeaderCellDef>Publish</th>
+                <td mat-cell *matCellDef="let element">
+                  <button (click)="endPublish(element.surveyId)">End Publish</button>
                 </td>
               </ng-container>
 
@@ -173,7 +205,22 @@
               </ng-container>
 
               <!-- Analysis -->
-              
+              <ng-container matColumnDef="analysis">
+                <th mat-header-cell *matHeaderCellDef>Analysis</th>
+                <td mat-cell *matCellDef="let element">
+                  <a
+                    [routerLink]="['/survey', element.surveyId, 'analysis']"
+                    class="survey-link"
+                    >Analysis</a
+                  >
+                </td>
+              </ng-container>
+
+              <!-- End Publish -->
+              <ng-container matColumnDef="publish">
+                <th mat-header-cell *matHeaderCellDef>Publish</th>
+                <td mat-cell *matCellDef="let element"></td>
+              </ng-container>
 
               <!-- Header and Rows -->
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

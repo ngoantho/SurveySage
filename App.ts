@@ -540,7 +540,21 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
         console.error("Error submitting answers:", error);
         res.status(500).json({ error: "Internal server error." });
       }
+    })
+    
+    //TESTING ROUTE (UNPROTECTION)
+
+    //Get survey using surveyId
+    router.get("/api/test/survey/:surveyId", async (req, res) => {
+      var id = Number(req.params.surveyId);
+      console.log("Query single survey with id: " + id);
+      await this.Surveys.getSurveyById_unprotection(res, id);
     });
+
+    router.get("/api/test/surveys", async (req, res) => {
+      console.log("Get all surveys");
+      await this.Surveys.getAllSurveys_unprotection(res);
+    });;
     // end of router
 
     this.expressApp.use("/", router);

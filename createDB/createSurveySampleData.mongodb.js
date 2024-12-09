@@ -23,7 +23,7 @@ surveysCollection.remove({})
 surveysCollection.insert(
   {
     surveyId: 1,
-    userId: 107626639671511030060,
+    userId: 101,
     name: "Customer Feedback Survey",
     description: "Survey to gather customer feedback on our products and services.",
     owner: "VSomwanshi",
@@ -33,7 +33,7 @@ surveysCollection.insert(
 surveysCollection.insert(
   {
     surveyId: 2,
-    userId: 100,
+    userId: 107626639671511030060,
     name: "HVAC Usage Survey",
     description: "Survey to gather customer feedback on their HVAC usage",
     owner: "QTran",
@@ -172,6 +172,7 @@ answersCollection.insert(
   {
     surveyId: 2,
     questionId: 1,
+    userId: 107626639671511030060,
     answers: [
       {
         answerId: 1,
@@ -193,6 +194,7 @@ answersCollection.insert(
   {
     surveyId: 2,
     questionId: 2,
+    userId: 107626639671511030060,
     answers: [
       {
         answerId: 1,
@@ -214,6 +216,7 @@ answersCollection.insert(
   {
     surveyId: 2,
     questionId: 3,
+    userId: 107626639671511030060,
     answers: [
       {
         answerId: 1,
@@ -234,6 +237,7 @@ answersCollection.insert(
   {
     surveyId: 2,
     questionId: 4,
+    userId: 107626639671511030060,
     answers: [
       {
         answerId: 1,
@@ -251,6 +255,7 @@ answersCollection.insert(
   {
     surveyId: 3,
     questionId: 1,
+    userId: 101,
     answers: [
       {
         answerId: 1,
@@ -272,6 +277,7 @@ answersCollection.insert(
   {
     surveyId: 3,
     questionId: 2,
+    userId: 101,
     answers: [
       {
         answerId: 1,
@@ -293,6 +299,7 @@ answersCollection.insert(
   {
     surveyId: 3,
     questionId: 3,
+    userId: 101,
     answers: [
       {
         answerId: 1,
@@ -314,6 +321,7 @@ answersCollection.insert(
   {
     surveyId: 3,
     questionId: 4,
+    userId: 101,
     answers: [
       {
         answerId: 1,

@@ -113,11 +113,11 @@ class App {
       }
     );
 
-    router.get("/auth/info", async (req, res) => {
-      res.json(req["user"] || {});
+    router.get("/auth/status", async (req, res) => {
+      res.json(req["user"] ? true : false);
     });
 
-    router.get('/auth/logout', async (req, res, next) => {
+    router.get('/auth/logout', this.validateAuth, async (req, res, next) => {
       req['logout'](function(err) {
         if (err) { return next(err); }
         res.redirect('/');
@@ -131,6 +131,10 @@ class App {
     router.get("/auth/email", this.validateAuth, async (req, res) => {
       res.json(req["user"].emails[0].value);
     });
+
+    router.get('/auth/displayName', this.validateAuth, async (req, res) => {
+      res.json(req["user"].displayName);
+    })
 
     router.get("/api/list/:listId/count", async (req, res) => {
       var id = Number(req.params.listId);

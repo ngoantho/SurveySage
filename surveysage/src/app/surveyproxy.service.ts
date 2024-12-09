@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { IQuestionModel, IAnalysisModel, ISurvey } from './interfaces';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -78,17 +77,5 @@ export class SurveyproxyService {
     return this.httpClient.get(
       `${this.apiServer}/api/survey/${index}/ChatGPTAnalysis/save`
     );
-  }
-
-  getUserId() {
-    return this.httpClient.get<string>(`${this.apiServer}/auth/id`).toPromise()
-  }
-
-  getUserEmail() {
-    return this.httpClient.get<string>(`${this.apiServer}/auth/email`).toPromise()
-  }
-
-  getUserInfo() {
-    return this.httpClient.get('/auth/info').toPromise()
   }
 }

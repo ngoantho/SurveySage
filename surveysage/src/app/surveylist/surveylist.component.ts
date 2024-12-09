@@ -51,7 +51,6 @@ export class SurveylistComponent {
               this.responses[surveyId] = responses;
             },
             error: () => {
-              console.log(`Error fetching responses for survey: ${surveyId}`);
               this.responses[surveyId] = 0;
             },
           });

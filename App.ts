@@ -71,13 +71,13 @@ class App {
     this.expressApp.use(passport.session());
   }
 
-  private validateAuth(req: express.Request, res: express.Response, next: express.NextFunction): void {
+  private validateAuth(req, res, next: express.NextFunction): void {
     if (req.isAuthenticated()) {
       console.log("user is authenticated", req.route);
       return next();
     }
     console.log("user is not authenticated", req.route);
-    res.status(401).send('Unauthorized');
+    res.redirect('/')
   }
 
   // Configure API endpoints.
@@ -108,7 +108,7 @@ class App {
       '/auth/login',
       this.validateAuth,
       async (req, res) => {
-        res.json(req.user)
+        res.json(req['user'])
       }
     )
 

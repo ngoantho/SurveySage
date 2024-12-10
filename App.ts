@@ -197,11 +197,11 @@ class App {
       await this.Lists.retrieveListCount(res);
     });
 
-    //SURVEYSAGE APP
+    // SURVEYSAGE APP //
 
-    //SURVEY ROUTES
+    // SURVEY ROUTES
 
-    //Get survey using surveyId
+    // Get survey using surveyId
     router.get("/api/survey/:surveyId", this.validateAuth, async (req, res) => {
       var id = Number(req.params.surveyId);
       console.log("Query single survey with id: " + id);
@@ -213,14 +213,14 @@ class App {
       await this.Surveys.getAllSurveys(res, req["user"].id);
     });
 
-    //Get number of survey
+    // Get number of survey
     router.get("/api/surveycount", async (req, res) => {
       console.log("Query the number of survey elements in db");
       await this.Surveys.retrieveSurveyCount(res);
     });
 
     // Create new survey
-    router.post("/api/survey", async (req, res) => {
+    router.post("/api/survey", this.validateAuth, async (req, res) => {
       console.log("POST /api/survey", req.body);
       var jsonObj = req.body;
       if (!jsonObj.surveyId) {
@@ -240,7 +240,7 @@ class App {
     });
 
     // replace survey
-    router.put('/api/survey/:surveyId', async (req, res) => {
+    router.put('/api/survey/:surveyId', this.validateAuth, async (req, res) => {
       const surveyId = Number(req.params.surveyId);
       console.log(`PUT Survey ${surveyId}`, req.body)
 
@@ -256,7 +256,7 @@ class App {
     });
 
     // modify property of survey
-    router.patch("/api/survey/:surveyId", async (req, res) => {
+    router.patch("/api/survey/:surveyId", this.validateAuth, async (req, res) => {
       const surveyId = Number(req.params.surveyId);
       const { command, payload } = req.body;
       console.log(`PATCH survey ${surveyId}`, req.body);
@@ -273,7 +273,7 @@ class App {
     });
 
     // delete survey
-    router.delete('/api/survey/:surveyId', async (req, res) => {
+    router.delete('/api/survey/:surveyId', this.validateAuth, async (req, res) => {
       const surveyId = Number(req.params.surveyId);
       console.log(`DELETE Survey ${surveyId}`)
 
@@ -288,7 +288,7 @@ class App {
     })
 
     // Questions Route
-    router.post("/api/survey/:surveyId/questions", async (req, res) => {
+    router.post("/api/survey/:surveyId/questions", this.validateAuth, async (req, res) => {
       const surveyId = Number(req.params.surveyId);
       const questions = req.body.questions; // Expecting an array of answers
 
@@ -346,8 +346,7 @@ class App {
       await this.Questions.getSurveyQuestions_unprotected(res, id);
     });
 
-
-    //Get Question by id
+    // Get Question by id
     router.get(
       "/api/survey/:surveyId/question/:questionId",
       this.validateAuth,

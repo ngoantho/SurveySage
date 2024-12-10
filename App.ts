@@ -238,8 +238,37 @@ class App {
         await this.Surveys.model.create([jsonObj]);
         res.json(jsonObj.surveyId);
       } catch (e) {
-        console.error(e);
-        console.log("object creation failed");
+        res.status(500).send(e)
+      }
+    });
+
+    // Create a new survey (unprotected)
+    router.post("/api/test/survey", async (req, res) => {
+      console.log("POST /api/test/survey", req.body);
+      var jsonObj = req.body;
+ 
+      // Generate a random surveyId if not provided
+      if (!jsonObj.surveyId) {
+        const hex = crypto.randomBytes(4).toString("hex");
+        const id = parseInt(hex, 16);
+        jsonObj.surveyId = id;
+      }
+
+      // hardcode userId if missing
+      if (!jsonObj.userId) {
+        jsonObj.userId = 107626639671511030060
+      }
+
+      // hardcode owner if missing
+      if (!jsonObj.owner) {
+        jsonObj.owner = "SaaS7_Testing1"
+      }
+ 
+      try {
+        await this.Surveys.model.create([jsonObj]);
+        res.json(jsonObj.surveyId);
+      } catch (e) {
+        res.status(500).send(e)
       }
     });
 

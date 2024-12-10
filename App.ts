@@ -83,6 +83,10 @@ class App {
     res.redirect("/");
   }
 
+  private getUserId(req) {
+    return req["user"].id
+  }
+
   // Configure API endpoints.
   private routes(): void {
     let router = express.Router();
@@ -321,6 +325,7 @@ class App {
             // Create a new document if no questions exist for this survey
             const newQuestionDoc = {
               surveyId,
+              userId: this.getUserId(req),
               questions: [question],
             };
             await this.Questions.model.create(newQuestionDoc);

@@ -59,6 +59,10 @@ export class SurveyproxyService {
     return this.httpClient.patch(url, body);
   }
 
+  deleteSurvey(index: string) {
+    return this.httpClient.delete(`/api/survey/${index}`)
+  }
+
   postQuestions(index: number, questions: any[]) {
     return this.httpClient.post(
       `${this.apiServer}/api/survey/${index}/questions`,

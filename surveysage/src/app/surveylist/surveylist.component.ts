@@ -21,10 +21,11 @@ interface IDataSources {
   styleUrl: './surveylist.component.css',
 })
 export class SurveylistComponent {
-  displayedColumns: string[] = ['name', 'description', 'owner', 'publish'];
+  defaultColumns: string[] = ['name', 'description', 'owner', 'publish', 'deleteBtn'];
+  displayedColumns: string[] = this.defaultColumns;
   proxy$ = inject(SurveyproxyService);
   responses: IResponses = {};
-  surveys: ISurvey[] = [];
+  currentTab: string = 'Draft';
   tabOrder = ['Draft', 'Published', 'Ended'];
   dataSources: IDataSources = {
     Draft: new MatTableDataSource<ISurvey>(),
@@ -37,29 +38,12 @@ export class SurveylistComponent {
     private clipboard: Clipboard,
     private snackBar: MatSnackBar
   ) {
-    this.proxy$.getListsIndex().subscribe({
-      next: (surveys) => {
-        this.surveys = surveys;
-        this.dataSources['Draft'].data = this.getDraftSurveys();
-        this.dataSources['Published'].data = this.getPublishedSurveys();
-        this.dataSources['Ended'].data = this.getEndedSurveys();
-
-        surveys.forEach((survey) => {
-          let surveyId = String(survey.surveyId);
-          this.proxy$.getSurveyResponses(surveyId).subscribe({
-            next: (responses) => {
-              this.responses[surveyId] = responses;
-            },
-            error: () => {
-              this.responses[surveyId] = 0;
-            },
-          });
-        });
-      },
-      error: () => {
-        console.error('Failed to retrieve surveys');
-      },
-    });
+    let getInitialData = async () => {
+      this.dataSources['Draft'].data = await this.getDraftSurveys();
+      this.dataSources['Published'].data = await this.getPublishedSurveys();
+      this.dataSources['Ended'].data = await this.getEndedSurveys();
+    }
+    getInitialData()
   }
 
   ngOnInit() {}
@@ -68,16 +52,45 @@ export class SurveylistComponent {
     this.router.navigate(['']);
   }
 
-  endPublish(surveyId: string) {
-    console.log('ending publishing for ', surveyId);
-    this.proxy$.patchSurvey(surveyId, 'status', 'ended').subscribe();
-    location.reload();
+  async endPublish(surveyId: string) { // published tab
+    console.log('ending publishing for: ', surveyId);
+    this.proxy$.patchSurvey(surveyId, 'status', 'ended').subscribe(
+      async () => {
+        this.dataSources['Published'].data = await this.getPublishedSurveys();
+        this.dataSources['Ended'].data = await this.getEndedSurveys();
+        console.log('ended survey', surveyId)
+      }
+    );
   }
 
-  startPublish(surveyId: string) {
-    console.log('start publishing for ', surveyId);
-    this.proxy$.patchSurvey(surveyId, 'status', 'published').subscribe();
-    location.reload();
+  async startPublish(surveyId: string) { // draft tab
+    console.log('start publishing for: ', surveyId);
+    this.proxy$.patchSurvey(surveyId, 'status', 'published').subscribe(
+      async () => {
+        this.dataSources['Draft'].data = await this.getDraftSurveys();
+        this.dataSources['Published'].data = await this.getPublishedSurveys();
+        console.log('published survey', surveyId)
+      }
+    );
+  }
+
+  deleteSurvey(surveyId: string) {
+    console.log('deleting survey: ', surveyId)
+    this.proxy$.deleteSurvey(surveyId).subscribe(
+      async () => {
+        switch(this.currentTab) {
+          case 'Draft':
+            this.dataSources['Draft'].data = await this.getDraftSurveys();
+            break;
+          case 'Published':
+            this.dataSources['Published'].data = await this.getPublishedSurveys();
+            break;
+          case 'Ended':
+            this.dataSources['Ended'].data = await this.getEndedSurveys();
+            break;
+        }
+      }
+    )
   }
 
   copyRespondentURL(surveyId: string) {
@@ -87,39 +100,68 @@ export class SurveylistComponent {
   }
 
   onTabChanged(tabChangeEvent: MatTabChangeEvent) {
-    console.log('tab change:', tabChangeEvent.tab.textLabel);
-    if (tabChangeEvent.tab.textLabel === 'Draft') {
-      this.displayedColumns = ['name', 'description', 'owner', 'publish'];
-    } else if (tabChangeEvent.tab.textLabel === 'Published') {
-      this.displayedColumns = [
-        'name',
-        'description',
-        'owner',
-        'responses',
-        'analysis',
-        'publish',
-        'respondURL',
-      ];
-    } else if (tabChangeEvent.tab.textLabel === 'Ended') {
-      this.displayedColumns = [
-        'name',
-        'description',
-        'owner',
-        'responses',
-        'analysis',
-      ];
+    this.currentTab = tabChangeEvent.tab.textLabel;
+    switch(this.currentTab) {
+      case 'Draft':
+        this.displayedColumns = this.defaultColumns;
+        break;
+      case 'Published':
+        this.displayedColumns = [
+          'name',
+          'description',
+          'owner',
+          'responses',
+          'analysis',
+          'publish',
+          'respondURL',
+          'deleteBtn'
+        ];
+        break;
+      case 'Ended':
+        this.displayedColumns = [
+          'name',
+          'description',
+          'owner',
+          'responses',
+          'analysis',
+          'deleteBtn'
+        ];
+        break;
     }
   }
 
-  getDraftSurveys() {
-    return this.surveys.filter((survey) => survey.status === 'draft');
+  async getDraftSurveys() {
+    let surveys = await this.proxy$.getListsIndex().toPromise()
+    let filtered = surveys?.filter((survey) => survey.status === 'draft') || [];
+    this.setResponses(filtered)
+    return filtered;
   }
 
-  getPublishedSurveys() {
-    return this.surveys.filter((survey) => survey.status === 'published');
+  async getPublishedSurveys() {
+    let surveys = await this.proxy$.getListsIndex().toPromise()
+    let filtered = surveys?.filter((survey) => survey.status === 'published') || [];
+    this.setResponses(filtered)
+    return filtered;
   }
 
-  getEndedSurveys() {
-    return this.surveys.filter((survey) => survey.status === 'ended');
+  async getEndedSurveys() {
+    let surveys = await this.proxy$.getListsIndex().toPromise()
+    let filtered = surveys?.filter((survey) => survey.status === 'ended') || [];
+    this.setResponses(filtered)
+    return filtered;
+  }
+
+  setResponses(surveys: ISurvey[]) {
+    surveys.forEach((survey) => {
+      let surveyId = String(survey.surveyId);
+      this.proxy$.getSurveyResponses(surveyId).subscribe({
+        next: (responses) => {
+          this.responses[surveyId] = responses;
+        },
+        error: () => {
+          this.responses[surveyId] = 0;
+        },
+      });
+    });
   }
 }

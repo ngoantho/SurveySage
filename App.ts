@@ -219,7 +219,7 @@ class App {
       await this.Surveys.retrieveSurveyCount(res);
     });
 
-    //Create new survey
+    // Create new survey
     router.post("/api/survey", async (req, res) => {
       console.log("POST /api/survey", req.body);
       var jsonObj = req.body;
@@ -239,25 +239,53 @@ class App {
       }
     });
 
-    router.patch("/api/survey/:surveyId/", async (req, res) => {
+    // replace survey
+    router.put('/api/survey/:surveyId', async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      console.log(`PUT Survey ${surveyId}`, req.body)
+
+      try {
+        await this.Surveys.model.findOneAndReplace(
+          { surveyId },
+          req.body
+        )
+        res.sendStatus(200)
+      } catch (e) {
+        res.status(500).send(e)
+      }
+    });
+
+    // modify property of survey
+    router.patch("/api/survey/:surveyId", async (req, res) => {
       const surveyId = Number(req.params.surveyId);
       const { command, payload } = req.body;
       console.log(`PATCH survey ${surveyId}`, req.body);
 
       try {
-        if (command == "status") {
-          let survey = await this.Surveys.model.findOneAndUpdate(
-            { surveyId },
-            { status: payload },
-            { new: true }
-          );
-          res.send(200).json();
-        }
+        await this.Surveys.model.findOneAndUpdate(
+          { surveyId },
+          { [command]: payload }
+        )
+        res.sendStatus(200)
       } catch (e) {
-        console.error(e);
-        console.log("object creation failed");
+        res.status(500).send(e)
       }
     });
+
+    // delete survey
+    router.delete('/api/survey/:surveyId', async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      console.log(`DELETE Survey ${surveyId}`)
+
+      try {
+        await this.Surveys.model.findOneAndDelete(
+          { surveyId }
+        )
+        res.sendStatus(200)
+      } catch (e) {
+        res.status(500).send(e)
+      }
+    })
 
     // Questions Route
     router.post("/api/survey/:surveyId/questions", async (req, res) => {

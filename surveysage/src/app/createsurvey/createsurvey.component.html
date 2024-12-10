@@ -1,6 +1,6 @@
 <div class="fullscreen-background">
   <div class="survey-container">
-    <ng-container *ngIf="route.snapshot.params['id']; else createSurvey">
+    <ng-container *ngIf="editing; else createSurvey">
       <h3>Edit {{ surveyForm.get('name')?.value }}</h3>
     </ng-container>
     <ng-template #createSurvey>
@@ -177,7 +177,7 @@
             [disabled]="!surveyForm.valid || isSubmitting"
             class="btn btn-success"
           >
-            {{ isSubmitting ? "Creating..." : "Create Survey" }}
+            {{ isSubmitting ? "Submitting..." : "Submit Survey" }}
           </button>
           <button type="button" (click)="goBack()" class="btn btn-secondary">
             Back to Welcome Page

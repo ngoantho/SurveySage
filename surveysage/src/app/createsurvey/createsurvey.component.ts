@@ -53,7 +53,7 @@ export class CreateSurveyComponent implements OnInit {
           this.noWhitespaceValidator,
         ],
       ],
-      questions: this.fb.array([this.questionForm]),
+      questions: this.fb.array([]),
     });
 
     let id = this.route.snapshot.params['id'];
@@ -117,6 +117,10 @@ export class CreateSurveyComponent implements OnInit {
 
   get questions() {
     return this.surveyForm.get('questions') as FormArray;
+  }
+
+  get editing() {
+    return this.route.snapshot.params['id'] ? true : false;
   }
 
   get questionForm() {

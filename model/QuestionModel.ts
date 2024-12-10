@@ -8,6 +8,7 @@ class QuestionModel extends CommonModel<IQuestionModel> {
     return new Schema(
       {
         surveyId: Number,
+        userId: Number,
         questions: [
           {
             questionId: Number,
@@ -30,8 +31,8 @@ class QuestionModel extends CommonModel<IQuestionModel> {
     return "questions"
   }
 
-  async getSurveyQuestions(response: Response, surID: number) {
-    let query = this.model.find({ surveyId: surID });
+  async getSurveyQuestions(response: Response, surveyId: number, userId: number) {
+    let query = this.model.find({ surveyId, userId });
     try {
       let questions = await query.lean().exec();
       response.json(questions);
@@ -40,9 +41,9 @@ class QuestionModel extends CommonModel<IQuestionModel> {
     }
   }
 
-  async getQuestionById(response: Response, surveyId: number, questionId: number) {
+  async getQuestionById(response: Response, surveyId: number, userId: number, questionId: number) {
     try {
-      const survey = await this.model.findOne({ surveyId }).lean().exec();
+      const survey = await this.model.findOne({ surveyId, userId }).lean().exec();
       if (survey) {
         const question = survey.questions.find(q => q.questionId === questionId);
         if (question) {

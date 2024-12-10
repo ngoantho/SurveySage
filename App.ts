@@ -306,26 +306,27 @@ class App {
       }
     });
 
-    router.get("/api/survey/:surveyId/questions", async (req, res) => {
+    router.get("/api/survey/:surveyId/questions", this.validateAuth, async (req, res) => {
       var id = Number(req.params.surveyId);
       console.log("QUESTION: Query for survey " + id);
-      await this.Questions.getSurveyQuestions(res, id);
+      await this.Questions.getSurveyQuestions(res, id, req["user"].id);
     });
 
     //Get Question by id
     router.get(
       "/api/survey/:surveyId/question/:questionId",
+      this.validateAuth,
       async (req, res) => {
         const surveyId = Number(req.params.surveyId);
         const questionId = Number(req.params.questionId);
         console.log(
           `Query question with id ${questionId} from survey with id ${surveyId}`
         );
-        await this.Questions.getQuestionById(res, surveyId, questionId);
+        await this.Questions.getQuestionById(res, surveyId, req["user"].id, questionId);
       }
     );
 
-    router.get("/api/survey/:surveyId/responses",this.validateAuth, async (req, res) => {
+    router.get("/api/survey/:surveyId/responses", this.validateAuth, async (req, res) => {
       try {
         const surveyId = Number(req.params.surveyId);
         const questions = await this.Questions.returnSurveyQuestions(surveyId);
@@ -358,7 +359,7 @@ class App {
     // ANSWER ROUTE
     //Get all answers of an survey
 
-    router.get("/api/survey/:surveyId/answers",this.validateAuth, async (req, res) => {
+    router.get("/api/survey/:surveyId/answers", this.validateAuth, async (req, res) => {
       var id = Number(req.params.surveyId);
       console.log("Query all answers for survey with id:  " + id);
       await this.Answers.getAnswersBySurvey(res, id, req["user"].id);

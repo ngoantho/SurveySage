@@ -65,12 +65,9 @@ export class CreateSurveyComponent implements OnInit {
           description: survey.description,
         });
 
-        this.surveyProxy.getQuestions(id).subscribe((questionsArray) => {
+        this.surveyProxy.getQuestions(id).subscribe((questions) => {
           // Clear existing form controls in the questions FormArray
           this.questions.clear();
-          
-          // TODO: fix quirk
-          let questions = questionsArray[0]
 
           // Add form controls for each question
           questions.questions.forEach((question) => {

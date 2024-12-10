@@ -31,8 +31,8 @@ export class RespondentComponent {
             // Step 2: Fetch survey questions
             this.surveyProxy.getQuestions_unprotected(surveyId).subscribe(
               (response) => {
-                if (response && response[0] && response[0].questions) {
-                  this.survey.questions = response[0].questions; // Assign questions to the survey object
+                if (response && response.questions) {
+                  this.survey.questions = response.questions; // Assign questions to the survey object
                   this.initializeForm(); // Initialize form with questions
                 } else {
                   this.errorMessage = 'No questions found for the survey.';

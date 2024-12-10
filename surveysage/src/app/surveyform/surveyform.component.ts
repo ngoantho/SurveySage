@@ -25,7 +25,7 @@ export class SurveyFormComponent {
     })
 
     this.list$.getQuestions(this.surveyId).subscribe((res) => {
-      this.surveyQuestions = res[0];
+      this.surveyQuestions = res;
       console.log("surveyQuestions:", this.surveyQuestions);
       console.log("surveyQuestions.questions:", this.surveyQuestions.questions);
     });

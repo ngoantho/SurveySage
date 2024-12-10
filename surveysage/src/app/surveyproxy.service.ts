@@ -36,13 +36,13 @@ export class SurveyproxyService {
   }
 
   getQuestions(index: string) {
-    return this.httpClient.get<IQuestionModel[]>(
+    return this.httpClient.get<IQuestionModel>(
       `${this.apiServer}/api/survey/${index}/questions`
     );
   }
 
   getQuestions_unprotected(index: string) {
-    return this.httpClient.get<IQuestionModel[]>(
+    return this.httpClient.get<IQuestionModel>(
       `${this.apiServer}/unprotected/survey/${index}/questions`
     );
   }

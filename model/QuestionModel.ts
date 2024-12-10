@@ -32,7 +32,7 @@ class QuestionModel extends CommonModel<IQuestionModel> {
   }
 
   async getSurveyQuestions(response: Response, surveyId: number, userId: number) {
-    let query = this.model.find({ surveyId, userId });
+    let query = this.model.findOne({ surveyId, userId });
     try {
       let questions = await query.lean().exec();
       response.json(questions);
@@ -42,7 +42,7 @@ class QuestionModel extends CommonModel<IQuestionModel> {
   }
 
   async getSurveyQuestions_unprotected(response: Response, surID: number) {
-    let query = this.model.find({ surveyId: surID });
+    let query = this.model.findOne({ surveyId: surID });
     try {
       let questions = await query.lean().exec();
       response.json(questions);

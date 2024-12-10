@@ -79,6 +79,7 @@
                   <a
                     [routerLink]="['/survey', element.surveyId, 'analysis']"
                     class="survey-link"
+                    [disabled] ="responses[element.surveyId] == 0"
                   >
                     <button>Analysis</button>
                   </a>

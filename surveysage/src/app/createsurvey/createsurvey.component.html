@@ -1,11 +1,11 @@
 <div class="fullscreen-background">
   <div class="survey-container">
-    <ng-container *ngIf="survey != undefined">
-      <h3>Edit {{ survey.name }}</h3>
+    <ng-container *ngIf="route.snapshot.params['id']; else createSurvey">
+      <h3>Edit {{ surveyForm.get('name')?.value }}</h3>
     </ng-container>
-    <ng-container *ngIf="survey == undefined">
+    <ng-template #createSurvey>
       <h3>Create Survey</h3>
-    </ng-container>
+    </ng-template>
 
     <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
@@ -14,7 +14,6 @@
           id="name"
           type="text"
           formControlName="name"
-          [value]="survey?.name"
           class="form-control"
           placeholder="Enter survey name"
         />

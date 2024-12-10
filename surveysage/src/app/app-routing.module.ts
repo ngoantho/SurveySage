@@ -7,7 +7,6 @@ import { SurveyFormComponent } from './surveyform/surveyform.component';
 import { AnalysisComponent } from './analysis/analysis.component';
 import { CreateSurveyComponent } from './createsurvey/createsurvey.component';
 import { RespondentComponent } from './respondent/respondent.component';
-import { EditSurveyComponent } from './editsurvey/editsurvey.component';
 
 const routes: Routes = [
   { path: '', component: WelcomePageComponent },
@@ -16,7 +15,7 @@ const routes: Routes = [
   { path: 'survey/:id/analysis', component: AnalysisComponent },
   { path: 'createsurvey', component: CreateSurveyComponent },
   { path: 'responseSubmit/:surveyId', component: RespondentComponent },
-  { path: 'edit/:id', component: EditSurveyComponent }
+  { path: 'edit/:id', component: CreateSurveyComponent }
 ];
 
 @NgModule({

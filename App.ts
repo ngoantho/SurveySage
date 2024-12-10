@@ -76,10 +76,10 @@ class App {
 
   private validateAuth(req, res, next: express.NextFunction): void {
     if (req.isAuthenticated()) {
-      console.log("user is authenticated", req.route);
+      console.log(`user is authenticated for ${req.path}`);
       return next();
     }
-    console.log("user is not authenticated", req.route);
+    console.log("user is not authenticated");
     res.redirect("/");
   }
 

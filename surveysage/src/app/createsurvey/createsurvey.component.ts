@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { AuthproxyService } from '../authproxy.service';
 import { SurveyproxyService } from '../surveyproxy.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ISurvey } from '../interfaces';
 
 @Component({
@@ -22,9 +22,9 @@ export class CreateSurveyComponent implements OnInit {
   authProxy = inject(AuthproxyService);
   surveyProxy = inject(SurveyproxyService);
   router = inject(Router);
+  route = inject(ActivatedRoute);
   isSubmitting = false;
   submitError: any;
-  @Input() survey?: ISurvey;
 
   // Validation constants
   // Change from private to public
@@ -53,13 +53,55 @@ export class CreateSurveyComponent implements OnInit {
           this.noWhitespaceValidator,
         ],
       ],
-      questions: this.fb.array([]),
+      questions: this.fb.array([this.questionForm]),
     });
 
-    this.addQuestion();
+    let id = this.route.snapshot.params['id'];
+    if (id) {
+      console.log('updating form with survey info', id);
+      this.surveyProxy.getSurvey(id).subscribe((survey) => {
+        this.surveyForm.patchValue({
+          name: survey.name,
+          description: survey.description,
+        });
+
+        this.surveyProxy.getQuestions(id).subscribe((questionsArray) => {
+          // Clear existing form controls in the questions FormArray
+          this.questions.clear();
+          
+          // TODO: fix quirk
+          let questions = questionsArray[0]
+
+          // Add form controls for each question
+          questions.questions.forEach((question) => {
+            this.questions.push(
+              this.fb.group({
+                text: [
+                  question.text,
+                  [
+                    Validators.required,
+                    Validators.maxLength(this.MAX_QUESTION_LENGTH),
+                    this.noWhitespaceValidator,
+                  ],
+                ],
+                type: [
+                  question.type,
+                  [
+                    Validators.required,
+                    Validators.pattern(`^(${this.questionTypes.join('|')})$`),
+                  ],
+                ],
+                isRequired: [question.isRequired ?? true],
+                payload: this.fb.array(question.payload || []),
+              })
+            );
+          });
+        });
+      });
+    }
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   private noWhitespaceValidator(
     control: AbstractControl
@@ -80,23 +122,8 @@ export class CreateSurveyComponent implements OnInit {
     return this.surveyForm.get('questions') as FormArray;
   }
 
-  getQuestionsFormArray() {
-    return (this.surveyForm.get('questions') as FormArray).controls;
-  }
-
-  getOptionsFormArray(questionIndex: number) {
-    return (this.surveyForm.get('questions') as FormArray)
-      .at(questionIndex)
-      .get('payload') as FormArray;
-  }
-
-  addQuestion() {
-    if (this.questions.length >= this.MAX_QUESTIONS) {
-      this.submitError = `Maximum ${this.MAX_QUESTIONS} questions allowed`;
-      return;
-    }
-
-    const questionForm = this.fb.group({
+  get questionForm() {
+    return this.fb.group({
       text: [
         '',
         [
@@ -115,8 +142,21 @@ export class CreateSurveyComponent implements OnInit {
       isRequired: [true],
       payload: this.fb.array([]),
     });
+  }
 
-    this.questions.push(questionForm);
+  getOptionsFormArray(questionIndex: number) {
+    return (this.surveyForm.get('questions') as FormArray)
+      .at(questionIndex)
+      .get('payload') as FormArray;
+  }
+
+  addQuestion() {
+    if (this.questions.length >= this.MAX_QUESTIONS) {
+      this.submitError = `Maximum ${this.MAX_QUESTIONS} questions allowed`;
+      return;
+    }
+
+    this.questions.push(this.questionForm);
   }
 
   addOption(questionIndex: number) {

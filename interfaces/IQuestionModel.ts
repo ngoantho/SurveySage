@@ -1,13 +1,15 @@
+interface IQuestion {
+  questionId: number;
+  type: string;
+  isRequired: boolean;
+  text: string;
+  payload: string[];
+}
+
 interface IQuestionModel {
   surveyId: number,
   userId: number,
-  questions: [{
-    questionId: number;
-    type: string;
-    isRequired: boolean;
-    text: string;
-    payload: string[];
-  }];
+  questions: IQuestion[]
 }
 
-export type { IQuestionModel }
+export type { IQuestionModel, IQuestion }

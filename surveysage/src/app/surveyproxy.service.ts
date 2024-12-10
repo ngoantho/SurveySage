@@ -51,6 +51,10 @@ export class SurveyproxyService {
     return this.httpClient.post<number>(`${this.apiServer}/api/survey`, survey);
   }
 
+  replaceSurvey(index: string, survey: ISurvey) {
+    return this.httpClient.put(`/api/survey/${index}`, survey);
+  }
+
   patchSurvey(index: string, command: string, payload: any) {
     console.log('Patching survey...');
     const url = `${this.apiServer}/api/survey/${index}`;
@@ -68,6 +72,10 @@ export class SurveyproxyService {
       `${this.apiServer}/api/survey/${index}/questions`,
       { questions }
     );
+  }
+
+  replaceQuestions(index: string, questions: any[]) {
+    return this.httpClient.put(`/api/survey/${index}/questions`, questions)
   }
 
   postAnswers(surveyId: string, answers: any[]) {

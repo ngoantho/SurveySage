@@ -337,7 +337,20 @@ class App {
       }
     })
 
-    // Questions Route
+    // Questions Route //
+
+    router.put('/api/survey/:surveyId/questions', this.validateAuth, async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      console.log(`PUT questions ${req.body} for survey ${surveyId}`)
+      await this.Questions.replaceQuestions(res, surveyId, req["user"].id, req.body);
+    })
+
+    router.put('/unprotected/survey/:surveyId/questions', async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      console.log(`PUT questions ${req.body} for survey ${surveyId}`)
+      await this.Questions.replaceQuestions_unprotected(res, surveyId, req.body);
+    })
+
     router.post("/api/survey/:surveyId/questions", this.validateAuth, async (req, res) => {
       const surveyId = Number(req.params.surveyId);
       const questions = req.body.questions; // Expecting an array of answers
@@ -378,6 +391,16 @@ class App {
           }
         }
 
+        // edge case: allow for empty questions
+        if (questions.length == 0) {
+          const newQuestionDoc = {
+            surveyId,
+            userId: this.getUserId(req),
+            questions: [],
+          };
+          await this.Questions.model.create(newQuestionDoc);
+        }
+
         res.status(201).json({ message: "Questions submitted successfully." });
       } catch (error) {
         console.error("Error submitting questions:", error);
@@ -387,13 +410,13 @@ class App {
 
     router.get("/api/survey/:surveyId/questions", this.validateAuth, async (req, res) => {
       var id = Number(req.params.surveyId);
-      console.log("QUESTION: Query for survey " + id);
+      console.log("Questions for survey " + id);
       await this.Questions.getSurveyQuestions(res, id, req["user"].id);
     });
 
     router.get("/unprotected/survey/:surveyId/questions", async (req, res) => {
       var id = Number(req.params.surveyId);
-      console.log("QUESTION: Query for survey " + id);
+      console.log("Unprotected: Questions for survey " + id);
       await this.Questions.getSurveyQuestions_unprotected(res, id);
     });
 
@@ -410,6 +433,13 @@ class App {
         await this.Questions.getQuestionById(res, surveyId, req["user"].id, questionId);
       }
     );
+
+    router.get('/unprotected/survey/:surveyId/question/:questionId', async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      const questionId = Number(req.params.questionId);
+      console.log(`Unprotected: query question ${questionId} from survey ${surveyId}`)
+      await this.Questions.getQuestionById_unprotected(res, surveyId, questionId)
+    })
 
     router.get("/api/survey/:surveyId/responses", this.validateAuth, async (req, res) => {
       try {

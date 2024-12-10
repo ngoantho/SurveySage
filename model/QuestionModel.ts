@@ -69,6 +69,57 @@ class QuestionModel extends CommonModel<IQuestionModel> {
       response.status(500).send('Internal server error');
     }
   }
+
+  async replaceQuestions(response: Response, surveyId: number, userId:number, questions) {
+    try {
+      const survey = await this.model.findOne({ surveyId, userId });
+      if (survey) {
+        survey.questions = questions;
+        await survey.save()
+      } else {
+        response.status(404).send('Survey not found');
+      }
+    } catch (e) {
+      console.error(e);
+      response.status(500).send(e);
+    }
+    response.status(200).send()
+  }
+
+  async replaceQuestions_unprotected(response: Response, surveyId: number, questions) {
+    try {
+      const survey = await this.model.findOne({ surveyId });
+      if (survey) {
+        survey.questions = questions;
+        await survey.save()
+      } else {
+        response.status(404).send('Survey not found');
+      }
+    } catch (e) {
+      console.error(e);
+      response.status(500).send(e);
+    }
+    response.status(200).send()
+  }
+
+  async getQuestionById_unprotected(response: Response, surveyId: number, questionId: number) {
+    try {
+      const survey = await this.model.findOne({ surveyId }).lean().exec();
+      if (survey) {
+        const question = survey.questions.find(q => q.questionId === questionId);
+        if (question) {
+          response.json(question);
+        } else {
+          response.status(404).send('Question not found');
+        }
+      } else {
+        response.status(404).send('Survey not found');
+      }
+    } catch (e) {
+      console.error(e);
+      response.status(500).send('Internal server error');
+    }
+  }
   
   //RETURN INSTEAD OF RESPONSE
   async returnSurveyQuestions( surID: number) {

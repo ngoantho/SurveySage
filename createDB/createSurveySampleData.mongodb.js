@@ -60,6 +60,7 @@ questionsCollection.remove({})
 questionsCollection.insert(
   {
     surveyId: 1,
+    userId: 101,
     questions: [
       {
         questionId: 1,
@@ -132,6 +133,7 @@ questionsCollection.insert(
 questionsCollection.insert(
   {
     surveyId: 3,
+    userId: 103,
     questions: [
       {
         questionId: 1,

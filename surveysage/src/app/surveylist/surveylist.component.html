@@ -79,9 +79,10 @@
                   <a
                     [routerLink]="['/survey', element.surveyId, 'analysis']"
                     class="survey-link"
-                    [disabled] ="responses[element.surveyId] == 0"
                   >
-                    <button>Analysis</button>
+                    <button [disabled]="responses[element.surveyId] == 0">
+                      Analysis
+                    </button>
                   </a>
                 </td>
               </ng-container>
@@ -90,10 +91,16 @@
               <ng-container matColumnDef="publish">
                 <th mat-header-cell *matHeaderCellDef>Publish</th>
                 <td mat-cell *matCellDef="let element">
-                  <button (click)="startPublish(element.surveyId)" *ngIf="element.status == 'draft'">
+                  <button
+                    (click)="startPublish(element.surveyId)"
+                    *ngIf="element.status == 'draft'"
+                  >
                     Start
                   </button>
-                  <button (click)="endPublish(element.surveyId)" *ngIf="element.status == 'published'">
+                  <button
+                    (click)="endPublish(element.surveyId)"
+                    *ngIf="element.status == 'published'"
+                  >
                     End
                   </button>
                 </td>

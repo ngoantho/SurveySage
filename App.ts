@@ -340,6 +340,13 @@ class App {
       await this.Questions.getSurveyQuestions(res, id, req["user"].id);
     });
 
+    router.get("/unprotected/survey/:surveyId/questions", async (req, res) => {
+      var id = Number(req.params.surveyId);
+      console.log("QUESTION: Query for survey " + id);
+      await this.Questions.getSurveyQuestions_unprotected(res, id);
+    });
+
+
     //Get Question by id
     router.get(
       "/api/survey/:surveyId/question/:questionId",

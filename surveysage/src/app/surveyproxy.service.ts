@@ -41,6 +41,12 @@ export class SurveyproxyService {
     );
   }
 
+  getQuestions_unprotected(index: string) {
+    return this.httpClient.get<IQuestionModel[]>(
+      `${this.apiServer}/unprotected/survey/${index}/questions`
+    );
+  }
+
   postSurvey(survey: ISurvey) {
     return this.httpClient.post<number>(`${this.apiServer}/api/survey`, survey);
   }

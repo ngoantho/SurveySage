@@ -253,7 +253,7 @@ class App {
           { surveyId },
           req.body
         )
-        res.sendStatus(200)
+        res.status(200).send()
       } catch (e) {
         res.status(500).send(e)
       }
@@ -270,7 +270,24 @@ class App {
           { surveyId },
           { [command]: payload }
         )
-        res.sendStatus(200)
+        res.status(200).send()
+      } catch (e) {
+        res.status(500).send(e)
+      }
+    });
+
+    // modify property, unprotected
+    router.patch("/unprotected/survey/:surveyId", async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      const { command, payload } = req.body;
+      console.log(`PATCH survey ${surveyId}`, req.body);
+
+      try {
+        await this.Surveys.model.findOneAndUpdate(
+          { surveyId },
+          { [command]: payload }
+        )
+        res.status(200).send()
       } catch (e) {
         res.status(500).send(e)
       }
@@ -285,7 +302,7 @@ class App {
         await this.Surveys.model.findOneAndDelete(
           { surveyId }
         )
-        res.sendStatus(200)
+        res.status(200).send()
       } catch (e) {
         res.status(500).send(e)
       }

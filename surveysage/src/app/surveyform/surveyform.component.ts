@@ -9,7 +9,7 @@ import { IQuestionModel } from '../interfaces';
   templateUrl: './surveyform.component.html',
   styleUrl: './surveyform.component.css'
 })
-export class SurveyformComponent {
+export class SurveyFormComponent {
   surveyId: string;
   surveyName: string | undefined;
   surveyQuestions: IQuestionModel | undefined;

@@ -6,6 +6,6 @@ import { AuthproxyService } from '../authproxy.service';
   templateUrl: './welcomepage.component.html',
   styleUrl: './welcomepage.component.css'
 })
-export class WelcomepageComponent {
+export class WelcomePageComponent {
   authProxy: AuthproxyService = inject(AuthproxyService)
 }

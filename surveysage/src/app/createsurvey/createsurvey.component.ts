@@ -1,12 +1,18 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl } from '@angular/forms';
+import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { AuthproxyService } from '../authproxy.service';
 import { SurveyproxyService } from '../surveyproxy.service';
 import { Router } from '@angular/router';
 import { ISurvey } from '../interfaces';
 
 @Component({
-  selector: 'app-survey',
+  selector: 'app-createsurvey',
   templateUrl: './createsurvey.component.html',
   styleUrls: ['./createsurvey.component.css'],
 })
@@ -15,35 +21,39 @@ export class CreateSurveyComponent implements OnInit {
   questionTypes = ['multiple-choice', 'text-response', 'single-choice'];
   authProxy = inject(AuthproxyService);
   surveyProxy = inject(SurveyproxyService);
+  router = inject(Router);
   isSubmitting = false;
   submitError: any;
+  @Input() survey?: ISurvey;
 
   // Validation constants
-// Change from private to public
-public readonly MAX_NAME_LENGTH = 100;
-public readonly MAX_DESCRIPTION_LENGTH = 500;
-public readonly MAX_QUESTION_LENGTH = 200;
-public readonly MAX_OPTIONS = 10;
-public readonly MIN_OPTIONS = 2;
-public readonly MAX_QUESTIONS = 50;
+  // Change from private to public
+  public readonly MAX_NAME_LENGTH = 100;
+  public readonly MAX_DESCRIPTION_LENGTH = 500;
+  public readonly MAX_QUESTION_LENGTH = 200;
+  public readonly MAX_OPTIONS = 10;
+  public readonly MIN_OPTIONS = 2;
+  public readonly MAX_QUESTIONS = 50;
 
-
-  constructor(
-    private fb: FormBuilder,
-    private router: Router
-  ) {
+  constructor(private fb: FormBuilder) {
     this.surveyForm = this.fb.group({
-      name: ['', [
-        Validators.required,
-        Validators.maxLength(this.MAX_NAME_LENGTH),
-        this.noWhitespaceValidator
-      ]],
-      description: ['', [
-        Validators.required,
-        Validators.maxLength(this.MAX_DESCRIPTION_LENGTH),
-        this.noWhitespaceValidator
-      ]],
-      questions: this.fb.array([])
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(this.MAX_NAME_LENGTH),
+          this.noWhitespaceValidator,
+        ],
+      ],
+      description: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(this.MAX_DESCRIPTION_LENGTH),
+          this.noWhitespaceValidator,
+        ],
+      ],
+      questions: this.fb.array([]),
     });
 
     this.addQuestion();
@@ -51,15 +61,19 @@ public readonly MAX_QUESTIONS = 50;
 
   ngOnInit() { }
 
-  private noWhitespaceValidator(control: AbstractControl): {[key: string]: any} | null {
+  private noWhitespaceValidator(
+    control: AbstractControl
+  ): { [key: string]: any } | null {
     const isWhitespace = (control.value || '').trim().length === 0;
-    return isWhitespace ? { 'whitespace': true } : null;
+    return isWhitespace ? { whitespace: true } : null;
   }
 
-  private validateEmail(control: AbstractControl): {[key: string]: any} | null {
+  private validateEmail(
+    control: AbstractControl
+  ): { [key: string]: any } | null {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     const valid = emailRegex.test(control.value);
-    return valid ? null : { 'invalidEmail': true };
+    return valid ? null : { invalidEmail: true };
   }
 
   get questions() {
@@ -71,11 +85,9 @@ public readonly MAX_QUESTIONS = 50;
   }
 
   getOptionsFormArray(questionIndex: number) {
-    return (
-      (this.surveyForm.get('questions') as FormArray)
-        .at(questionIndex)
-        .get('payload') as FormArray
-    );
+    return (this.surveyForm.get('questions') as FormArray)
+      .at(questionIndex)
+      .get('payload') as FormArray;
   }
 
   addQuestion() {
@@ -85,35 +97,45 @@ public readonly MAX_QUESTIONS = 50;
     }
 
     const questionForm = this.fb.group({
-      text: ['', [
-        Validators.required,
-        Validators.maxLength(this.MAX_QUESTION_LENGTH),
-        this.noWhitespaceValidator
-      ]],
-      type: ['', [
-        Validators.required,
-        Validators.pattern(`^(${this.questionTypes.join('|')})$`)
-      ]],
+      text: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(this.MAX_QUESTION_LENGTH),
+          this.noWhitespaceValidator,
+        ],
+      ],
+      type: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(`^(${this.questionTypes.join('|')})$`),
+        ],
+      ],
       isRequired: [true],
-      payload: this.fb.array([])
+      payload: this.fb.array([]),
     });
 
     this.questions.push(questionForm);
   }
 
   addOption(questionIndex: number) {
-    const options = this.questions.at(questionIndex).get('payload') as FormArray;
-    
+    const options = this.questions
+      .at(questionIndex)
+      .get('payload') as FormArray;
+
     if (options.length >= this.MAX_OPTIONS) {
       this.submitError = `Maximum ${this.MAX_OPTIONS} options allowed`;
       return;
     }
 
-    options.push(this.fb.control('', [
-      Validators.required,
-      Validators.maxLength(100),
-      this.noWhitespaceValidator
-    ]));
+    options.push(
+      this.fb.control('', [
+        Validators.required,
+        Validators.maxLength(100),
+        this.noWhitespaceValidator,
+      ])
+    );
   }
 
   removeQuestion(index: number) {
@@ -125,7 +147,9 @@ public readonly MAX_QUESTIONS = 50;
   }
 
   removeOption(questionIndex: number, optionIndex: number) {
-    const options = this.questions.at(questionIndex).get('payload') as FormArray;
+    const options = this.questions
+      .at(questionIndex)
+      .get('payload') as FormArray;
     if (options.length <= this.MIN_OPTIONS) {
       this.submitError = `Minimum ${this.MIN_OPTIONS} options required`;
       return;
@@ -139,7 +163,7 @@ public readonly MAX_QUESTIONS = 50;
 
   onSubmit() {
     this.submitError = null;
-    
+
     if (!this.surveyForm.valid) {
       this.markFormGroupTouched(this.surveyForm);
       return;
@@ -164,12 +188,12 @@ public readonly MAX_QUESTIONS = 50;
         console.error('Error creating survey', error);
         this.submitError = 'Failed to create survey. Please try again.';
         this.isSubmitting = false;
-      }
+      },
     });
   }
 
   private markFormGroupTouched(formGroup: FormGroup | FormArray) {
-    Object.values(formGroup.controls).forEach(control => {
+    Object.values(formGroup.controls).forEach((control) => {
       if (control instanceof FormGroup || control instanceof FormArray) {
         this.markFormGroupTouched(control);
       } else {
@@ -187,7 +211,7 @@ public readonly MAX_QUESTIONS = 50;
         console.error('Error adding questions', error);
         this.submitError = 'Failed to add questions. Please try again.';
         this.isSubmitting = false;
-      }
+      },
     });
   }
 

@@ -1,43 +1,92 @@
 <div class="fullscreen-background">
   <div class="survey-container">
-    <h2>Create Survey</h2>
+    <ng-container *ngIf="survey != undefined">
+      <h3>Edit {{ survey.name }}</h3>
+    </ng-container>
+    <ng-container *ngIf="survey == undefined">
+      <h3>Create Survey</h3>
+    </ng-container>
 
     <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="name">Survey Name</label>
-        <input id="name" type="text" formControlName="name" class="form-control" placeholder="Enter survey name">
-        <div class="error-message" *ngIf="surveyForm.get('name')?.touched && surveyForm.get('name')?.errors">
-          <div *ngIf="surveyForm.get('name')?.errors?.['required']">Name is required</div>
-          <div *ngIf="surveyForm.get('name')?.errors?.['maxlength']">Name cannot exceed {{MAX_NAME_LENGTH}} characters
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          [value]="survey?.name"
+          class="form-control"
+          placeholder="Enter survey name"
+        />
+        <div
+          class="error-message"
+          *ngIf="
+            surveyForm.get('name')?.touched && surveyForm.get('name')?.errors
+          "
+        >
+          <div *ngIf="surveyForm.get('name')?.errors?.['required']">
+            Name is required
+          </div>
+          <div *ngIf="surveyForm.get('name')?.errors?.['maxlength']">
+            Name cannot exceed {{ MAX_NAME_LENGTH }} characters
           </div>
         </div>
       </div>
 
       <div class="form-group">
         <label for="description">Description</label>
-        <textarea id="description" formControlName="description" class="form-control"
-          placeholder="Enter survey description"></textarea>
-        <div class="error-message"
-          *ngIf="surveyForm.get('description')?.touched && surveyForm.get('description')?.errors">
-          <div *ngIf="surveyForm.get('description')?.errors?.['required']">Description is required</div>
-          <div *ngIf="surveyForm.get('description')?.errors?.['maxlength']">Description cannot exceed
-            {{MAX_DESCRIPTION_LENGTH}} characters</div>
+        <textarea
+          id="description"
+          formControlName="description"
+          class="form-control"
+          placeholder="Enter survey description"
+        ></textarea>
+        <div
+          class="error-message"
+          *ngIf="
+            surveyForm.get('description')?.touched &&
+            surveyForm.get('description')?.errors
+          "
+        >
+          <div *ngIf="surveyForm.get('description')?.errors?.['required']">
+            Description is required
+          </div>
+          <div *ngIf="surveyForm.get('description')?.errors?.['maxlength']">
+            Description cannot exceed {{ MAX_DESCRIPTION_LENGTH }} characters
+          </div>
         </div>
       </div>
 
       <div class="form-group">
         <div formArrayName="questions">
-          <div *ngFor="let question of questions.controls; let i = index" [formGroupName]="i"
-            class="question-container">
-            <h3>Question {{ i + 1 }}</h3>
+          <div
+            *ngFor="let question of questions.controls; let i = index"
+            [formGroupName]="i"
+            class="question-container"
+          >
+            <h4>Question {{ i + 1 }}</h4>
 
             <div class="form-group">
               <label>Question Text</label>
-              <input type="text" formControlName="text" class="form-control" placeholder="Enter question text">
-              <div class="error-message" *ngIf="question.get('text')?.touched && question.get('text')?.errors">
-                <div *ngIf="question.get('text')?.errors?.['required']">Question text is required</div>
-                <div *ngIf="question.get('text')?.errors?.['maxlength']">Question text cannot exceed
-                  {{MAX_QUESTION_LENGTH}} characters</div>
+              <input
+                type="text"
+                formControlName="text"
+                class="form-control"
+                placeholder="Enter question text"
+              />
+              <div
+                class="error-message"
+                *ngIf="
+                  question.get('text')?.touched && question.get('text')?.errors
+                "
+              >
+                <div *ngIf="question.get('text')?.errors?.['required']">
+                  Question text is required
+                </div>
+                <div *ngIf="question.get('text')?.errors?.['maxlength']">
+                  Question text cannot exceed
+                  {{ MAX_QUESTION_LENGTH }} characters
+                </div>
               </div>
             </div>
 
@@ -45,48 +94,101 @@
               <label>Question Type</label>
               <select formControlName="type" class="form-control">
                 <option value="">Select Type</option>
-                <option *ngFor="let type of questionTypes" [value]="type">{{ type }}</option>
+                <option *ngFor="let type of questionTypes" [value]="type">
+                  {{ type }}
+                </option>
               </select>
-              <div class="error-message"
-                *ngIf="question.get('type')?.touched && question.get('type')?.errors?.['required']">
+              <div
+                class="error-message"
+                *ngIf="question.get('type')?.touched && question.get('type')?.errors?.['required']"
+              >
                 Question type is required
               </div>
             </div>
 
             <div
-              *ngIf="question.get('type')?.value === 'multiple-choice' || question.get('type')?.value === 'single-choice'">
+              *ngIf="
+                question.get('type')?.value === 'multiple-choice' ||
+                question.get('type')?.value === 'single-choice'
+              "
+            >
               <div formArrayName="payload">
-                <div *ngFor="let option of getOptionsFormArray(i).controls; let j = index">
+                <div
+                  *ngFor="
+                    let option of getOptionsFormArray(i).controls;
+                    let j = index
+                  "
+                >
                   <div class="option-container">
-                    <input [formControlName]="j" placeholder="Option {{ j + 1 }}" class="form-control" />
-                    <button type="button" (click)="removeOption(i, j)" class="btn btn-danger">Remove</button>
+                    <input
+                      [formControlName]="j"
+                      placeholder="Option {{ j + 1 }}"
+                      class="form-control"
+                    />
+                    <button
+                      type="button"
+                      (click)="removeOption(i, j)"
+                      class="btn btn-danger"
+                    >
+                      Remove
+                    </button>
                   </div>
-                  <div class="error-message" *ngIf="option.touched && option.errors">
-                    <div *ngIf="option.errors?.['required']">Option text is required</div>
-                    <div *ngIf="option.errors?.['maxlength']">Option text is too long</div>
+                  <div
+                    class="error-message"
+                    *ngIf="option.touched && option.errors"
+                  >
+                    <div *ngIf="option.errors?.['required']">
+                      Option text is required
+                    </div>
+                    <div *ngIf="option.errors?.['maxlength']">
+                      Option text is too long
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <button type="button" (click)="addOption(i)" class="btn btn-primary">Add Option</button>
+              <button
+                type="button"
+                (click)="addOption(i)"
+                class="btn btn-primary"
+              >
+                Add Option
+              </button>
             </div>
 
-            <button type="button" (click)="removeQuestion(i)" class="btn btn-danger">Remove Question</button>
+            <button
+              type="button"
+              (click)="removeQuestion(i)"
+              class="btn btn-danger"
+            >
+              Remove Question
+            </button>
           </div>
         </div>
 
         <div class="button-group">
-          <button type="button" (click)="addQuestion()" class="btn btn-primary">Add Question</button>
+          <button type="button" (click)="addQuestion()" class="btn btn-primary">
+            Add Question
+          </button>
         </div>
 
         <div class="button-group">
-          <button type="submit" [disabled]="!surveyForm.valid || isSubmitting" class="btn btn-success">
-            {{ isSubmitting ? 'Creating...' : 'Create Survey' }}
+          <button
+            type="submit"
+            [disabled]="!surveyForm.valid || isSubmitting"
+            class="btn btn-success"
+          >
+            {{ isSubmitting ? "Creating..." : "Create Survey" }}
           </button>
-          <button type="button" (click)="goBack()" class="btn btn-secondary">Back to Welcome Page</button>
+          <button type="button" (click)="goBack()" class="btn btn-secondary">
+            Back to Welcome Page
+          </button>
         </div>
 
         <div *ngIf="submitError" class="alert alert-danger mt-3">
           {{ submitError }}
         </div>
       </div>
+    </form>
+  </div>
+</div>

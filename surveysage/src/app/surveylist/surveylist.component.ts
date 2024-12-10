@@ -20,8 +20,8 @@ interface IDataSources {
   templateUrl: './surveylist.component.html',
   styleUrl: './surveylist.component.css',
 })
-export class SurveylistComponent {
-  defaultColumns: string[] = ['name', 'description', 'owner', 'publish', 'deleteBtn'];
+export class SurveyListComponent {
+  defaultColumns: string[] = ['name', 'description', 'owner', 'publish', 'editBtn', 'deleteBtn'];
   displayedColumns: string[] = this.defaultColumns;
   proxy$ = inject(SurveyproxyService);
   responses: IResponses = {};

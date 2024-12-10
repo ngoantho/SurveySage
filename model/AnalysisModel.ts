@@ -28,8 +28,8 @@ class AnalysisModel extends CommonModel<IAnalysisModel> {
     return "analyses"
   }
 
-  async getAnalysisBySurvey(response: Response, surID: number) {
-    let query = this.model.find({ surveyId: surID });
+  async getAnalysisBySurvey(response: Response, surID: number, userID: number) {
+    let query = this.model.find({ surveyId: surID, userId: userID });
     try {
       let analysis = await query.lean().exec();
       response.json(analysis);

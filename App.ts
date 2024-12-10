@@ -306,26 +306,27 @@ class App {
       }
     });
 
-    router.get("/api/survey/:surveyId/questions", async (req, res) => {
+    router.get("/api/survey/:surveyId/questions", this.validateAuth, async (req, res) => {
       var id = Number(req.params.surveyId);
       console.log("QUESTION: Query for survey " + id);
-      await this.Questions.getSurveyQuestions(res, id);
+      await this.Questions.getSurveyQuestions(res, id, req["user"].id);
     });
 
     //Get Question by id
     router.get(
       "/api/survey/:surveyId/question/:questionId",
+      this.validateAuth,
       async (req, res) => {
         const surveyId = Number(req.params.surveyId);
         const questionId = Number(req.params.questionId);
         console.log(
           `Query question with id ${questionId} from survey with id ${surveyId}`
         );
-        await this.Questions.getQuestionById(res, surveyId, questionId);
+        await this.Questions.getQuestionById(res, surveyId, req["user"].id, questionId);
       }
     );
 
-    router.get("/api/survey/:surveyId/responses",this.validateAuth, async (req, res) => {
+    router.get("/api/survey/:surveyId/responses", this.validateAuth, async (req, res) => {
       try {
         const surveyId = Number(req.params.surveyId);
         const questions = await this.Questions.returnSurveyQuestions(surveyId);
@@ -358,7 +359,7 @@ class App {
     // ANSWER ROUTE
     //Get all answers of an survey
 
-    router.get("/api/survey/:surveyId/answers",this.validateAuth, async (req, res) => {
+    router.get("/api/survey/:surveyId/answers", this.validateAuth, async (req, res) => {
       var id = Number(req.params.surveyId);
       console.log("Query all answers for survey with id:  " + id);
       await this.Answers.getAnswersBySurvey(res, id, req["user"].id);
@@ -477,16 +478,18 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
         await modelInstance.deleteOne({ surveyId: surveyId }); // Remove old analysis
         await modelInstance.create({
           surveyId: surveyId,
+          userId : req["user"].id,
           payload: report, // Save the new analysis
         });
         res.json(report);
       }
     );
 
-    router.get("/api/survey/:surveyId/getAnalysis", async (req, res) => {
+    router.get("/api/survey/:surveyId/getAnalysis", this.validateAuth, async (req, res) => {
       var id = Number(req.params.surveyId);
+      var userID = Number(req["user"].id)
       console.log("Query analysis for survey with id: " + id);
-      await this.Analysis.getAnalysisBySurvey(res, id);
+      await this.Analysis.getAnalysisBySurvey(res, id, userID);
     });
 
     //ANSWER POSTING ROUTE

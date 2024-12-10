@@ -41,6 +41,16 @@ class QuestionModel extends CommonModel<IQuestionModel> {
     }
   }
 
+  async getSurveyQuestions_unprotected(response: Response, surID: number) {
+    let query = this.model.find({ surveyId: surID });
+    try {
+      let questions = await query.lean().exec();
+      response.json(questions);
+    } catch (e) {
+      response.send(e);
+    }
+  }
+  
   async getQuestionById(response: Response, surveyId: number, userId: number, questionId: number) {
     try {
       const survey = await this.model.findOne({ surveyId, userId }).lean().exec();

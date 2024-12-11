@@ -229,9 +229,7 @@ class App {
       var jsonObj = req.body;
       if (!jsonObj.surveyId) {
         // survey Id not present
-        const hex = crypto.randomBytes(4).toString("hex");
-        const id = parseInt(hex, 16);
-        jsonObj.surveyId = id;
+        jsonObj.surveyId = generateId();
       }
 
       try {
@@ -249,9 +247,7 @@ class App {
  
       // Generate a random surveyId if not provided
       if (!jsonObj.surveyId) {
-        const hex = crypto.randomBytes(4).toString("hex");
-        const id = parseInt(hex, 16);
-        jsonObj.surveyId = id;
+        jsonObj.surveyId = generateId();
       }
 
       // hardcode userId if missing
@@ -577,7 +573,7 @@ class App {
         const prompt = `${JSON.stringify(
           surveyDetails
         )} Provide the thoughtful analysis for the answers of each question for this survey (Despite the size of the survey sample). For your context, answers are the collection of answers from the responders who completed the survey (i.e, if answers = ['No','Yes','No'], that means Respondant 1 answers no, Respondent 2 answer yes, Respondent 3 answer no)
-Return result as a JSON object with the format: [{"question":question.text,"analysis": analysis content}, ...]`;
+Return result as a JSON object with the format: [{"question":question.text,"analysis": analysis content}, ...], don't put any comments after the JSON object`;
 
         const response = await openai.chat.completions.create({
           model: "gpt-4o-mini",
@@ -734,4 +730,10 @@ Return result as a JSON object with the format: [{"question":question.text,"anal
   }
 }
 
-export { App };
+function generateId() {
+  const hex = crypto.randomBytes(4).toString("hex");
+  const id = parseInt(hex, 16);
+  return id;
+}
+
+export { App, generateId };

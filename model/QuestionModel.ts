@@ -2,6 +2,7 @@ import { Schema, Model, model } from "mongoose";
 import { CommonModel } from "./CommonModel";
 import { Response } from "express";
 import { IQuestionModel } from "../interfaces/IQuestionModel";
+import { generateId } from "../App";
 
 class QuestionModel extends CommonModel<IQuestionModel> {
   createSchema(): Schema {
@@ -74,6 +75,11 @@ class QuestionModel extends CommonModel<IQuestionModel> {
     try {
       let survey = await this.model.findOne({ surveyId, userId });
       if (survey) {
+        questions.forEach(question => {
+          if (!question.questionId) {
+            question.questionId = generateId()
+          }
+        });
         survey.questions = questions;
         await survey.save()
       } else {
@@ -90,6 +96,11 @@ class QuestionModel extends CommonModel<IQuestionModel> {
     try {
       let survey = await this.model.findOne({ surveyId });
       if (survey) {
+        questions.forEach(question => {
+          if (!question.questionId) {
+            question.questionId = generateId()
+          }
+        });
         survey.questions = questions;
         await survey.save()
       } else {

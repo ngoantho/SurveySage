@@ -171,10 +171,6 @@ export class CreateSurveyComponent implements OnInit {
   }
 
   removeQuestion(index: number) {
-    if (this.questions.length <= 1) {
-      this.submitError = 'Survey must have at least one question';
-      return;
-    }
     this.questions.removeAt(index);
   }
 

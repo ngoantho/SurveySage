@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,7 +9,7 @@ import {
 import { AuthproxyService } from '../authproxy.service';
 import { SurveyproxyService } from '../surveyproxy.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ISurvey } from '../interfaces';
+import { IQuestion, ISurvey } from '../interfaces';
 
 @Component({
   selector: 'app-createsurvey',
@@ -70,29 +70,16 @@ export class CreateSurveyComponent implements OnInit {
           this.questions.clear();
 
           // Add form controls for each question
-          questions.questions.forEach((question) => {
-            this.questions.push(
-              this.fb.group({
-                text: [
-                  question.text,
-                  [
-                    Validators.required,
-                    Validators.maxLength(this.MAX_QUESTION_LENGTH),
-                    this.noWhitespaceValidator,
-                  ],
-                ],
-                type: [
-                  question.type,
-                  [
-                    Validators.required,
-                    Validators.pattern(`^(${this.questionTypes.join('|')})$`),
-                  ],
-                ],
-                isRequired: [question.isRequired ?? true],
-                payload: this.fb.array(question.payload || []),
-              })
-            );
-          });
+          if (questions) {
+            questions.questions.forEach((question) => {
+              this.questions.push(this.getQuestionForm(question));
+            });
+          } else {
+            console.log('survey was created with no questions, posting...');
+            this.surveyProxy.postQuestions(this.surveyId, []).subscribe(() => {
+              console.log('created missing questions!')
+            })
+          }
         });
       });
     }
@@ -123,10 +110,14 @@ export class CreateSurveyComponent implements OnInit {
     return this.route.snapshot.params['id'] ? true : false;
   }
 
-  get questionForm() {
+  get surveyId() {
+    return this.route.snapshot.params['id'] || null;
+  }
+
+  getQuestionForm(question: IQuestion | null) {
     return this.fb.group({
       text: [
-        '',
+        question?.text || '',
         [
           Validators.required,
           Validators.maxLength(this.MAX_QUESTION_LENGTH),
@@ -134,14 +125,14 @@ export class CreateSurveyComponent implements OnInit {
         ],
       ],
       type: [
-        '',
+        question?.type || '',
         [
           Validators.required,
           Validators.pattern(`^(${this.questionTypes.join('|')})$`),
         ],
       ],
-      isRequired: [true],
-      payload: this.fb.array([]),
+      isRequired: [question?.isRequired || true],
+      payload: this.fb.array(question?.payload || []),
     });
   }
 
@@ -157,7 +148,7 @@ export class CreateSurveyComponent implements OnInit {
       return;
     }
 
-    this.questions.push(this.questionForm);
+    this.questions.push(this.getQuestionForm(null));
   }
 
   addOption(questionIndex: number) {
@@ -198,10 +189,6 @@ export class CreateSurveyComponent implements OnInit {
     options.removeAt(optionIndex);
   }
 
-  generateId(): number {
-    return Date.now() + Math.floor(Math.random() * 1000);
-  }
-
   onSubmit() {
     this.submitError = null;
 
@@ -218,19 +205,32 @@ export class CreateSurveyComponent implements OnInit {
       owner: String(this.authProxy.displayName),
       status: 'draft', // default is draft
       userId: Number(this.authProxy.userId),
-      surveyId: this.generateId(),
+      surveyId: this.surveyId, // present if editing, generated on post
     };
 
-    this.surveyProxy.postSurvey(survey).subscribe({
-      next: (surveyId) => {
-        this.submitQuestions(surveyId);
-      },
-      error: (error) => {
-        console.error('Error creating survey', error);
-        this.submitError = 'Failed to create survey. Please try again.';
-        this.isSubmitting = false;
-      },
-    });
+    if (this.editing) {
+      this.surveyProxy.replaceSurvey(this.surveyId, survey).subscribe({
+        next: () => {
+          this.replaceQuestions();
+        },
+        error: (error) => {
+          console.error('Error editing survey', error);
+          this.submitError = 'Failed to edit survey. Please try again.';
+          this.isSubmitting = false;
+        },
+      });
+    } else {
+      this.surveyProxy.postSurvey(survey).subscribe({
+        next: (surveyId) => {
+          this.postQuestions(surveyId);
+        },
+        error: (error) => {
+          console.error('Error creating survey', error);
+          this.submitError = 'Failed to create survey. Please try again.';
+          this.isSubmitting = false;
+        },
+      });
+    }
   }
 
   private markFormGroupTouched(formGroup: FormGroup | FormArray) {
@@ -243,17 +243,32 @@ export class CreateSurveyComponent implements OnInit {
     });
   }
 
-  submitQuestions(surveyId: number) {
+  postQuestions(surveyId: number) {
     this.surveyProxy.postQuestions(surveyId, this.questions.value).subscribe({
       next: () => {
         this.finalizeSurveyCreation();
       },
       error: (error) => {
-        console.error('Error adding questions', error);
-        this.submitError = 'Failed to add questions. Please try again.';
+        console.error('Error posting questions', error);
+        this.submitError = 'Failed to post questions. Please try again.';
         this.isSubmitting = false;
       },
     });
+  }
+
+  replaceQuestions() {
+    this.surveyProxy
+      .replaceQuestions(this.surveyId, this.questions.value)
+      .subscribe({
+        next: () => {
+          this.finalizeSurveyCreation();
+        },
+        error: (error) => {
+          console.error('Error replacing questions', error);
+          this.submitError = 'Failed to replace questions. Please try again.';
+          this.isSubmitting = false;
+        },
+      });
   }
 
   finalizeSurveyCreation() {

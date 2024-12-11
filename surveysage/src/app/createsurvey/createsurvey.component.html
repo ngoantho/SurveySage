@@ -7,7 +7,7 @@
       <h3>Create Survey</h3>
     </ng-template>
 
-    <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="surveyForm">
       <div class="form-group">
         <label for="name">Survey Name</label>
         <input
@@ -176,6 +176,7 @@
             type="submit"
             [disabled]="!surveyForm.valid || isSubmitting"
             class="btn btn-success"
+            (click)="onSubmit()"
           >
             {{ isSubmitting ? "Submitting..." : "Submit Survey" }}
           </button>

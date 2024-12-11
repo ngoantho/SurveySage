@@ -17,7 +17,7 @@
     "target": "es6",
     "moduleResolution" : "node",
     "rootDir": "./",
-    "sourceMap": true,
+    "sourceMap": false,
     "types":["node"],
     "typeRoots": [
       "node_modules/@types"

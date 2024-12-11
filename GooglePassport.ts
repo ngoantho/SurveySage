@@ -1,5 +1,5 @@
 import * as passport from "passport";
-import * as dotenv from "dotenv";
+import { hostname } from "os";
 
 //let GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 let GoogleStrategy =
@@ -19,7 +19,7 @@ class GooglePassport {
         {
           clientID: this.clientId,
           clientSecret: this.secretId,
-          callbackURL: "/auth/login/callback",
+          callbackURL: process.env.AZURE ? "https://surveysage1-a8dkf7hcccbzcab5.westus-01.azurewebsites.net/auth/login/callback" : "/auth/login/callback",
         },
         (accessToken, refreshToken, profile, done) => {
           console.log("inside new password google strategy");

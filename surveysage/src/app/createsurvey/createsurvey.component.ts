@@ -26,6 +26,13 @@ export class CreateSurveyComponent implements OnInit {
   isSubmitting = false;
   submitError: any;
 
+  isDropdownVisible = false;
+
+  toggleDropdown(): void {
+    
+    this.isDropdownVisible = !this.isDropdownVisible;
+    console.log('Dropdown Toggled!', this.isDropdownVisible);
+  }
   // Validation constants
   // Change from private to public
   public readonly MAX_NAME_LENGTH = 100;

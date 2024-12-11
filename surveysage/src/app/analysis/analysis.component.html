@@ -1,3 +1,30 @@
+<header class="header" *ngIf="authProxy.loggedIn == true">
+  <div class="header-container">
+    <!-- Logo -->
+    <div class="logo">
+      <a [routerLink]="''" class="logo-link">SurveySage</a>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="header-right">
+      <!-- Logout Button -->
+      <a href="/auth/logout" class="btn-logout">Logout</a>
+
+      <!-- Dropdown Menu -->
+      <div class="dropdown">
+        <button class="dropdown-toggle" (click)="toggleDropdown()">
+          Profile
+        </button>
+        <div class="dropdown-menu" *ngIf="isDropdownVisible">
+          <p><strong>ID:</strong> {{ authProxy.userId || 'Unavailable' }}</p>
+          <p><strong>Email:</strong> {{ authProxy.userEmail || 'Unavailable' }}</p>
+          <p><strong>Name:</strong> {{ authProxy.displayName || 'Unavailable' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
 <div class="analysis-container">
     <h1>Analysis for Survey : {{ surveyName }}</h1>
   

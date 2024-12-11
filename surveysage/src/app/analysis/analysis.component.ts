@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SurveyproxyService } from '../surveyproxy.service';
 import { IAnalysisModel } from '../interfaces';
+
+import { AuthproxyService } from '../authproxy.service';
 
 @Component({
   selector: 'app-analysis',
@@ -14,7 +16,15 @@ export class AnalysisComponent {
   isLoading: boolean = false;
   errorMessage: string | null = null;
   surveyName: string | undefined;
+  authProxy: AuthproxyService = inject(AuthproxyService);
+  isDropdownVisible = false;
 
+  toggleDropdown(): void {
+    
+    this.isDropdownVisible = !this.isDropdownVisible;
+    console.log('Dropdown Toggled!', this.isDropdownVisible);
+  }
+  
   constructor(
     private route: ActivatedRoute,
     private surveyProxy: SurveyproxyService

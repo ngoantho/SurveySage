@@ -12,7 +12,7 @@ describe('Test Unprotected Survey Routes', function () {
         var response;
 
         before(function (done) {
-            chai.request("https://surveysage1-a8dkf7hcccbzcab5.westus-01.azurewebsites.net") 
+            chai.request("https://surveysage.azurewebsites.net") 
                 .get("/api/test/surveys")
                 .end(function (err, res) {
                     requestResult = res.body;
@@ -50,7 +50,7 @@ describe('Test Unprotected Survey Routes', function () {
         it('Should return the survey data for a valid surveyId', function (done) {
             const validSurveyId = 1; 
 
-            chai.request("https://surveysage1-a8dkf7hcccbzcab5.westus-01.azurewebsites.net")
+            chai.request("https://surveysage.azurewebsites.net")
                 .get(`/api/test/survey/${validSurveyId}`)
                 .end(function (err, res) {
                     expect(err).to.be.null; 
@@ -68,7 +68,7 @@ describe('Test Unprotected Survey Routes', function () {
 
         // Test case for an invalid surveyId
         it('Should return a response for an invalid surveyId', function (done) {
-            chai.request("https://surveysage1-a8dkf7hcccbzcab5.westus-01.azurewebsites.net")
+            chai.request("https://surveysage.azurewebsites.net")
                 .get(`/api/test/survey/${invalidSurveyId}`)
                 .end(function (err, res) {
                     expect(err).to.be.null; 

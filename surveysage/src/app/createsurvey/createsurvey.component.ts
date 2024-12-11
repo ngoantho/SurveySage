@@ -131,7 +131,7 @@ export class CreateSurveyComponent implements OnInit {
           Validators.pattern(`^(${this.questionTypes.join('|')})$`),
         ],
       ],
-      isRequired: [question?.isRequired || true],
+      isRequired: [question?.isRequired ?? true],
       payload: this.fb.array(question?.payload || []),
     });
   }

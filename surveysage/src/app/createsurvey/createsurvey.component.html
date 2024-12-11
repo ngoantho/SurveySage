@@ -1,7 +1,7 @@
 <div class="fullscreen-background">
   <div class="survey-container">
     <ng-container *ngIf="editing; else createSurvey">
-      <h3>Edit {{ surveyForm.get('name')?.value }}</h3>
+      <h3>Edit {{ surveyForm.get("name")?.value }}</h3>
     </ng-container>
     <ng-template #createSurvey>
       <h3>Create Survey</h3>
@@ -103,6 +103,15 @@
               >
                 Question type is required
               </div>
+            </div>
+
+            <div class="form-group">
+              <label>Required?</label>
+              <span style="margin-right: 0.5rem"></span>
+              <input
+                type="checkbox"
+                formControlName="isRequired"
+              />
             </div>
 
             <div

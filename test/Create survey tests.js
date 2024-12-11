@@ -23,7 +23,7 @@ describe("API call for creating survey",function (){
   };
   before (function(done) {
     chai
-      .request("http://localhost:8080")
+      .request("https://surveysage1-a8dkf7hcccbzcab5.westus-01.azurewebsites.net/")
       .post("/api/test/survey")
       .send(surveyData)
       .end(function(err, res){
@@ -43,7 +43,7 @@ describe("API call for creating survey",function (){
 
   after (function (done){
     chai
-    .request("http://localhost:8080")
+    .request("https://surveysage1-a8dkf7hcccbzcab5.westus-01.azurewebsites.net/")
       .delete(`/api/test/survey/${respBody.surveyId}`)
       .end(function (err,res){
         expect(err).to.be.null;

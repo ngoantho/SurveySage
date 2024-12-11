@@ -23,7 +23,7 @@ describe("API call for creating survey",function (){
   };
   before (function(done) {
     chai
-      .request("https://surveysage1-a8dkf7hcccbzcab5.westus-01.azurewebsites.net/")
+      .request("https://surveysage.azurewebsites.net/")
       .post("/api/test/survey")
       .send(surveyData)
       .end(function(err, res){
@@ -36,14 +36,32 @@ describe("API call for creating survey",function (){
       });
   });
   
-  it('Should contain surveyId', function () {
+  it('Should contain return status 200 and validate surveyId', function () {
     expect(response).to.have.status(200);
     expect(respBody).to.have.property('surveyId').that.is.equals(1001);
   });
 
+  it('Should post the correct properties to the new created survey object', function(){
+    expect(respBody).to.have.property('surveyId');
+    expect(respBody).to.have.property('name');
+    expect(respBody).to.have.property('userId');
+    expect(respBody).to.have.property('description');
+    expect(respBody).to.have.property('owner');
+    expect(respBody).to.have.property('status');
+  });
+
+  it('Should have the correct details for all the properties to the new created survey object', function(){
+
+    expect(respBody).to.have.property('name').and.to.equal('Customer Feedback Survey');
+    expect(respBody).to.have.property('userId').that.is.equals(100);
+    expect(respBody).to.have.property('description').and.to.equal('Survey to gather customer feedback');
+    expect(respBody).to.have.property('owner').and.to.equal('VSomwanshi');
+    expect(respBody).to.have.property('status').and.to.equal('draft');
+  });
+
   after (function (done){
     chai
-    .request("https://surveysage1-a8dkf7hcccbzcab5.westus-01.azurewebsites.net/")
+    .request("https://surveysage.azurewebsites.net/")
       .delete(`/api/test/survey/${respBody.surveyId}`)
       .end(function (err,res){
         expect(err).to.be.null;

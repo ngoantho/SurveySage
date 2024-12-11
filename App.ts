@@ -266,7 +266,9 @@ class App {
  
       try {
         await this.Surveys.model.create([jsonObj]);
-        res.json(jsonObj.surveyId);
+        
+        const returnObj = await this.Surveys.model.findOne({surveyId :jsonObj.surveyId})
+        res.json(returnObj);
       } catch (e) {
         res.status(500).send(e)
       }
@@ -324,6 +326,20 @@ class App {
 
     // delete survey
     router.delete('/api/survey/:surveyId', this.validateAuth, async (req, res) => {
+      const surveyId = Number(req.params.surveyId);
+      console.log(`DELETE Survey ${surveyId}`)
+
+      try {
+        await this.Surveys.model.findOneAndDelete(
+          { surveyId }
+        )
+        res.status(200).send()
+      } catch (e) {
+        res.status(500).send(e)
+      }
+    })
+    //delete (UNPROTECT)
+    router.delete('/api/test/survey/:surveyId', async (req, res) => {
       const surveyId = Number(req.params.surveyId);
       console.log(`DELETE Survey ${surveyId}`)
 

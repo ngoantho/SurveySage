@@ -36,7 +36,7 @@ surveysCollection.insert(
     userId: 107626639671511030060,
     name: "HVAC Usage Survey",
     description: "Survey to gather customer feedback on their HVAC usage",
-    owner: "QTran",
+    owner: "saasTesting1",
     status: "published" // Added status field
   }
 )
@@ -44,10 +44,10 @@ surveysCollection.insert(
 surveysCollection.insert(
   {
     surveyId: 3,
-    userId: 101,
+    userId: 107626639671511030060,
     name: "Favorite Game Survey",
     description: "Survey to gather customer feedback on their favorite PC games",
-    owner: "Anthony Ngo",
+    owner: "saasTesting1",
     status: "ended" // Added status field
   }
 )
@@ -133,7 +133,7 @@ questionsCollection.insert(
 questionsCollection.insert(
   {
     surveyId: 3,
-    userId: 103,
+    userId: 107626639671511030060,
     questions: [
       {
         questionId: 1,
@@ -258,7 +258,7 @@ answersCollection.insert(
   {
     surveyId: 3,
     questionId: 1,
-    userId: 101,
+    userId: 107626639671511030060,
     answers: [
       {
         answerId: 1,
@@ -280,7 +280,7 @@ answersCollection.insert(
   {
     surveyId: 3,
     questionId: 2,
-    userId: 101,
+    userId: 107626639671511030060,
     answers: [
       {
         answerId: 1,
@@ -302,7 +302,7 @@ answersCollection.insert(
   {
     surveyId: 3,
     questionId: 3,
-    userId: 101,
+    userId: 107626639671511030060,
     answers: [
       {
         answerId: 1,
@@ -324,7 +324,7 @@ answersCollection.insert(
   {
     surveyId: 3,
     questionId: 4,
-    userId: 101,
+    userId: 107626639671511030060,
     answers: [
       {
         answerId: 1,

@@ -72,7 +72,7 @@ class QuestionModel extends CommonModel<IQuestionModel> {
 
   async replaceQuestions(response: Response, surveyId: number, userId:number, questions) {
     try {
-      const survey = await this.model.findOne({ surveyId, userId });
+      let survey = await this.model.findOne({ surveyId, userId });
       if (survey) {
         survey.questions = questions;
         await survey.save()
@@ -88,7 +88,7 @@ class QuestionModel extends CommonModel<IQuestionModel> {
 
   async replaceQuestions_unprotected(response: Response, surveyId: number, questions) {
     try {
-      const survey = await this.model.findOne({ surveyId });
+      let survey = await this.model.findOne({ surveyId });
       if (survey) {
         survey.questions = questions;
         await survey.save()

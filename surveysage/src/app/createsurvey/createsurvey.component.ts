@@ -271,6 +271,7 @@ export class CreateSurveyComponent implements OnInit {
     this.surveyForm.reset();
     this.questions.clear();
     this.isSubmitting = false;
+    sessionStorage.setItem('previousTab', 'Draft');
     this.router.navigate(['/surveylist']);
   }
 

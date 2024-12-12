@@ -25,7 +25,7 @@ export class SurveyListComponent {
   displayedColumns: string[] = this.defaultColumns;
   @ViewChild('tabGroup') tabGroup!: MatTabGroup;
   responses: IResponses = {};
-  currentTab: string = localStorage.getItem('previousTab') ?? 'Draft';
+  currentTab: string = sessionStorage.getItem('previousTab') ?? 'Draft';
   tabOrder = ['Draft', 'Published', 'Ended'];
   dataSources: IDataSources = {
     Draft: new MatTableDataSource<ISurvey>(),
@@ -112,10 +112,10 @@ export class SurveyListComponent {
     switch(this.currentTab) {
       case 'Draft':
         this.displayedColumns = this.defaultColumns;
-        localStorage.setItem('previousTab', 'Draft');
+        sessionStorage.setItem('previousTab', 'Draft');
         break;
       case 'Published':
-        localStorage.setItem('previousTab', 'Published');
+        sessionStorage.setItem('previousTab', 'Published');
         this.displayedColumns = [
           'name',
           'description',
@@ -128,7 +128,7 @@ export class SurveyListComponent {
         ];
         break;
       case 'Ended':
-        localStorage.setItem('previousTab', 'Ended');
+        sessionStorage.setItem('previousTab', 'Ended');
         this.displayedColumns = [
           'name',
           'description',

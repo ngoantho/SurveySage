@@ -65,7 +65,6 @@ describe('Test Unprotected Survey Routes', function () {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
                     expect(res.body).to.be.an('object');
-                    expect(res.body).to.be.an('object');
                     expect(res.body).to.have.property('surveyId').and.to.equal(validSurveyId);
                     expect(res.body).to.have.property('userId').and.to.be.a('number');
                     expect(res.body).to.have.property('name').and.to.be.a('string');
@@ -84,7 +83,6 @@ describe('Test Unprotected Survey Routes', function () {
                 .end(function (err, res) {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
-                    expect(res.body).to.be.an('object');
                     expect(res.body).to.be.an('object');
                     expect(res.body).to.have.property('surveyId', 1).that.is.a('number');
                     expect(res.body).to.have.property('name', 'Customer Feedback Survey');

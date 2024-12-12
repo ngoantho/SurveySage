@@ -1,5 +1,10 @@
 <header class="header" *ngIf="authProxy.loggedIn == true">
   <div class="header-container">
+    <div class="header-left">
+      <a routerLink="/surveylist" class="btn">Surveys</a>
+      <a routerLink="/createsurvey" class="btn">Create Survey</a>
+    </div>
+    
     <!-- Logo -->
     <div class="logo">
       <a [routerLink]="''" class="logo-link">SurveySage</a>
@@ -8,7 +13,7 @@
     <!-- Right Controls -->
     <div class="header-right">
       <!-- Logout Button -->
-      <a href="/auth/logout" class="btn-logout">Logout</a>
+      <a href="/auth/logout" class="btn">Logout</a>
 
       <!-- Dropdown Menu -->
       <div class="dropdown">

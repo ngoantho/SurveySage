@@ -29,6 +29,14 @@
   padding: 0 10px; /* Add padding to prevent overlap with the white background */
 }
 
+.header-left {
+  position: absolute;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 /* Right Controls Styling */
 .header-right {
   position: absolute;
@@ -40,7 +48,7 @@
 }
 
 /* Logout Button */
-.btn-logout {
+.btn {
   background: #1877f2; /* Matches button styles */
   color: #ffffff;
   padding: 8px 16px;
@@ -52,7 +60,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Matches button shadow */
 }
 
-.btn-logout:hover {
+.btn:hover {
   background: #a7dbd8; /* Matches hover effect */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
 }

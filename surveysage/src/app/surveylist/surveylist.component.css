@@ -111,18 +111,92 @@
 /* Button styling */
 button[mat-raised-button] {
     margin-top: 10px;
-    background-color: #1877f2;
+    background-color: #3f51b5;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 20px;
     padding: 14px 32px;
     transition: background-color 0.2s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+    transition: all 0.3s ease-in-out;
 }
 
 button[mat-raised-button]:hover {
-    background-color: #a7dbd8;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
+    background-color: #303f9f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Disabled button styling */
+button[mat-raised-button][disabled] {
+    background-color: #e0e0e0; /* Subtle gray */
+    color: #9e9e9e;
+    cursor: not-allowed;
+    box-shadow: none; /* Remove shadow for disabled state */
+}
+
+/* Styling for action buttons (Publish, Edit, Delete) */
+button.action-button {
+    background-color: #3f51b5; /* Rich blue color */
+    color: white;
+    border: none;
+    border-radius: 12px; /* Slightly rounded corners */
+    padding: 8px 16px; /* Balanced padding */
+    font-size: 0.85rem; /* Slightly smaller font size for compact look */
+    font-weight: 500; /* Medium weight for clarity */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out; /* Smooth hover effect */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Hover effect */
+button.action-button:hover {
+    background-color: #303f9f; /* Darker blue for hover */
+    transform: translateY(-1px); /* Slight lift effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Slightly more prominent shadow */
+}
+
+/* Disabled buttons */
+button.action-button:disabled {
+    background-color: #e0e0e0; /* Light gray for disabled state */
+    color: #9e9e9e;
+    cursor: not-allowed;
+    box-shadow: none; /* Remove shadow for disabled buttons */
+}
+
+/* Edit button specifically */
+button.edit-button {
+    background-color: #fbc02d; /* Yellow for edit to make it distinct */
+}
+
+button.edit-button:hover {
+    background-color: #f9a825; /* Darker yellow on hover */
+}
+
+/* Delete button specifically */
+button.delete-button {
+    background-color: #d32f2f; /* Red for delete */
+}
+
+button.delete-button:hover {
+    background-color: #b71c1c; /* Darker red on hover */
+}
+
+button.copyURL-button{
+    background-color: #319842;
+}
+
+button.copyURL-button:hover{
+    background-color: #228032;
+}
+
+button.analysis-button{
+    background-color: #c6e12c;
+}
+
+button.analysis-button:hover{
+    background-color: #a8c025;
 }
 
 /* Responsive adjustments */

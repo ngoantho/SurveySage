@@ -1,5 +1,5 @@
 <app-header />
-<mat-tab-group (selectedTabChange)="onTabChanged($event)">
+<mat-tab-group (selectedTabChange)="onTabChanged($event)" #tabGroup [selectedIndex]="tabIndex">
   <mat-tab *ngFor="let tabLabel of tabOrder" [label]="tabLabel">
     <ng-template matTabContent>
       <table

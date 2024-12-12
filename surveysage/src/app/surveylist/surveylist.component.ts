@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { SurveyproxyService } from '../surveyproxy.service';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { ISurvey } from '../interfaces';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -23,9 +23,9 @@ interface IDataSources {
 export class SurveyListComponent {
   defaultColumns: string[] = ['name', 'description', 'owner', 'publish', 'editBtn', 'deleteBtn'];
   displayedColumns: string[] = this.defaultColumns;
-  proxy$ = inject(SurveyproxyService);
+  @ViewChild('tabGroup') tabGroup!: MatTabGroup;
   responses: IResponses = {};
-  currentTab: string = 'Draft';
+  currentTab: string = localStorage.getItem('previousTab') ?? 'Draft';
   tabOrder = ['Draft', 'Published', 'Ended'];
   dataSources: IDataSources = {
     Draft: new MatTableDataSource<ISurvey>(),
@@ -36,7 +36,8 @@ export class SurveyListComponent {
   constructor(
     private router: Router,
     private clipboard: Clipboard,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private proxy$: SurveyproxyService
   ) {
     let getInitialData = async () => {
       this.dataSources['Draft'].data = await this.getDraftSurveys();
@@ -44,12 +45,19 @@ export class SurveyListComponent {
       this.dataSources['Ended'].data = await this.getEndedSurveys();
     }
     getInitialData()
+    console.log('previous tab', this.currentTab)
   }
 
   ngOnInit() {}
 
-  clickEvent(): void {
-    this.router.navigate(['']);
+  get tabIndex() {
+    if (!this.tabGroup) return 0;
+    for (let i = 0; i < this.tabGroup._tabs.length; i++) {
+      if (this.tabGroup._tabs.get(i)?.textLabel === this.currentTab) {
+        return i;
+      }
+    }
+    return;
   }
 
   async endPublish(surveyId: string) { // published tab
@@ -104,8 +112,10 @@ export class SurveyListComponent {
     switch(this.currentTab) {
       case 'Draft':
         this.displayedColumns = this.defaultColumns;
+        localStorage.setItem('previousTab', 'Draft');
         break;
       case 'Published':
+        localStorage.setItem('previousTab', 'Published');
         this.displayedColumns = [
           'name',
           'description',
@@ -118,6 +128,7 @@ export class SurveyListComponent {
         ];
         break;
       case 'Ended':
+        localStorage.setItem('previousTab', 'Ended');
         this.displayedColumns = [
           'name',
           'description',

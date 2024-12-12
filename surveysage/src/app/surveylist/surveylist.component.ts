@@ -6,7 +6,7 @@ import { ISurvey } from '../interfaces';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthproxyService } from '../authproxy.service';
+
 interface IResponses {
   [key: string]: number;
 }
@@ -32,14 +32,6 @@ export class SurveyListComponent {
     Published: new MatTableDataSource<ISurvey>(),
     Ended: new MatTableDataSource<ISurvey>(),
   };
-  authProxy: AuthproxyService = inject(AuthproxyService);
-  isDropdownVisible = false;
-
-  toggleDropdown(): void {
-    
-    this.isDropdownVisible = !this.isDropdownVisible;
-    console.log('Dropdown Toggled!', this.isDropdownVisible);
-  }
 
   constructor(
     private router: Router,

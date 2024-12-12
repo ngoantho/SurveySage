@@ -1,9 +1,8 @@
 import { Observable } from 'rxjs';
-import { Component, OnInit, Input, inject } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SurveyproxyService } from '../surveyproxy.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { IQuestionModel } from '../interfaces';
-import { AuthproxyService } from '../authproxy.service';
 
 @Component({
   selector: 'app-surveyform',
@@ -14,14 +13,6 @@ export class SurveyFormComponent {
   surveyId: string;
   surveyName: string | undefined;
   surveyQuestions: IQuestionModel | undefined;
-  authProxy: AuthproxyService = inject(AuthproxyService);
-  isDropdownVisible = false;
-
-  toggleDropdown(): void {
-    
-    this.isDropdownVisible = !this.isDropdownVisible;
-    console.log('Dropdown Toggled!', this.isDropdownVisible);
-  }
 
   constructor(
     private route: ActivatedRoute,

@@ -7,12 +7,5 @@ import { AuthproxyService } from '../authproxy.service';
   styleUrl: './welcomepage.component.css'
 })
 export class WelcomePageComponent {
-  authProxy: AuthproxyService = inject(AuthproxyService);
-  isDropdownVisible = false;
-
-  toggleDropdown(): void {
-    
-    this.isDropdownVisible = !this.isDropdownVisible;
-    console.log('Dropdown Toggled!', this.isDropdownVisible);
-  }
+  authProxy: AuthproxyService = inject(AuthproxyService)
 }

@@ -28,6 +28,7 @@ import { RespondentComponent } from './respondent/respondent.component';
 // our services
 import { SurveyproxyService } from './surveyproxy.service';
 import { AuthproxyService } from './authproxy.service';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AuthproxyService } from './authproxy.service';
     AnalysisComponent,
     CreateSurveyComponent,
     RespondentComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,

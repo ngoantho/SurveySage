@@ -75,6 +75,7 @@ describe('Test Unprotected Survey Routes', function () {
                 });
         });
 
+          // Test case to check if the survey data has correct values for a valid surveyId
         it('Should return the survey data with properties with correct values for a valid surveyId', function (done) {
             const validSurveyId = 1;
 

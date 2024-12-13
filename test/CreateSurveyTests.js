@@ -36,11 +36,13 @@ describe("API call for creating survey",function (){
       });
   });
   
+  // Test case to check if the response status is 200 and validate surveyId
   it('Should contain return status 200 and validate surveyId', function () {
     expect(response).to.have.status(200);
     expect(respBody).to.have.property('surveyId').that.is.equals(1001);
   });
 
+    // Test case to check if the response contains the correct properties
   it('Should post the correct properties to the new created survey object', function(){
     expect(respBody).to.have.property('surveyId');
     expect(respBody).to.have.property('name');
@@ -50,6 +52,7 @@ describe("API call for creating survey",function (){
     expect(respBody).to.have.property('status');
   });
 
+   // Test case to check if the response contains the correct details for all properties
   it('Should have the correct details for all the properties to the new created survey object', function(){
 
     expect(respBody).to.have.property('name').and.to.equal('Customer Feedback Survey');
@@ -59,6 +62,7 @@ describe("API call for creating survey",function (){
     expect(respBody).to.have.property('status').and.to.equal('draft');
   });
 
+   // After running the tests, made a DELETE request to clean up by deleting the created survey
   after (function (done){
     chai
     .request("https://surveysage.azurewebsites.net/")

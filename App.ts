@@ -83,6 +83,7 @@ class App {
     res.redirect("/");
   }
 
+  // Helper function to get user ID from request
   private getUserId(req) {
     return req["user"].id
   }
@@ -91,6 +92,7 @@ class App {
   private routes(): void {
     let router = express.Router();
 
+  // Google authentication routes
     router.get(
       "/auth/login",
       passport.authenticate("google", {
@@ -140,6 +142,7 @@ class App {
       res.json(req["user"].displayName);
     })
 
+    // List routes
     router.get("/api/list/:listId/count", async (req, res) => {
       var id = Number(req.params.listId);
       console.log("Query single list with id: " + id);

@@ -1,5 +1,5 @@
-import * as passport from "passport"; // Import Passport for authentication
-import { hostname } from "os"; // Import hostname from the OS module
+import * as passport from "passport"; 
+import { hostname } from "os"; 
 
 // Import Google OAuth strategy
 let GoogleStrategy =

@@ -30,7 +30,7 @@ describe("API call for creating survey",function (){
         response = res;
         respBody = res.body;
         console.log(respBody)
-        expect(res).to.have.status(200); // Changed from 201 to 200 to match your API
+        expect(res).to.have.status(200); 
         expect(err).to.be.null;
         done();
       });
